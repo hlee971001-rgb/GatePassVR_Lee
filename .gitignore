@@ -1,0 +1,62 @@
+# Unity 자동 생성 폴더 (Unity를 열면 다시 만들어짐)
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/[Mm]emoryCaptures/
+/[Rr]ecordings/
+
+# Asset Store 도구 업로드 설정
+/[Aa]ssets/AssetStoreTools*
+
+# IDE 자동 생성 파일
+.vs/
+.vscode/
+.idea/
+.gradle/
+ExportedObj/
+.consulo/
+*.csproj
+*.unityproj
+*.sln
+*.slnx
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# 빌드 결과물
+*.apk
+*.aab
+*.unitypackage
+*.app
+crashlytics-build.properties
+sysinfo.txt
+
+# 디버그 심볼 패키지 (Unity 생성 메타 파일은 제외하지 않음)
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+
+# Burst 디버그 정보
+/[Ll]ibrary/[Bb]urstCache/
+*_BurstDebugInformation_DoNotShip/
+
+# OS 파일
+.DS_Store
+Thumbs.db
+
+# Sketchfab 공항 에셋 (Free Standard 라이선스: 원본 파일 재배포 금지)
+# .meta 파일은 올려서 Scene 연결 ID를 유지한다. README.md의 다운로드 안내 참고.
+/Assets/Environments/source/Airport7_FINALc_EscenaMontada.fbx
+/Assets/Environments/textures/Texture_airport256b.png

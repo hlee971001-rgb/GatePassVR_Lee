@@ -181,7 +181,63 @@ namespace GatePassVR.EditorTools
                 }
             }
 
+            // 4. 다음 구역 이동 표지판이 보이는지 (MoveSigns가 있을 때만)
+            warnings += CheckMoveSign(dest, report);
+
             report.AppendLine();
+            return warnings;
+        }
+
+        const string MoveSignRootName = "MoveSigns";
+        const float EyeHeight = 1.6f;
+        const float SignMaxAngle = 45f;
+        const float SignMinDistance = 2f;
+        const float SignMaxDistance = 6f;
+
+        // 정면 좌우 45° 안, 수평 2~6m, 눈높이에서 표지판 중심까지 가리는 Collider가 없어야 한다.
+        static int CheckMoveSign(Transform dest, StringBuilder report)
+        {
+            var signRoot = GameObject.Find(MoveSignRootName);
+            if (signRoot == null)
+            {
+                return 0;
+            }
+
+            var sign = signRoot.transform.Find($"MoveSign_{dest.name}");
+            if (sign == null)
+            {
+                report.AppendLine($"  ! 경고: 이동 표지판 MoveSign_{dest.name} 없음");
+                return 1;
+            }
+
+            int warnings = 0;
+            var eye = dest.position + Vector3.up * EyeHeight;
+            var flat = sign.position - eye;
+            flat.y = 0f;
+            float angle = Vector3.SignedAngle(dest.forward, flat, Vector3.up);
+            float distance = flat.magnitude;
+            string label = sign.GetComponentInChildren<TMPro.TMP_Text>()?.text ?? sign.name;
+            report.AppendLine($"- 이동 표지판 '{label}': 거리 {distance:0.0}m, 정면 기준 {angle:+0;-0;0}°");
+
+            if (Mathf.Abs(angle) > SignMaxAngle)
+            {
+                warnings++;
+                report.AppendLine($"  ! 경고: 표지판이 정면 ±{SignMaxAngle:0}° 밖에 있음");
+            }
+            // 0.01m는 소수점 계산 오차 여유 (표지판 도구가 정확히 2m에 둔 경우 1.999m로 계산될 수 있음)
+            if (distance < SignMinDistance - 0.01f || distance > SignMaxDistance + 0.01f)
+            {
+                warnings++;
+                report.AppendLine($"  ! 경고: 표지판 거리가 {SignMinDistance}~{SignMaxDistance}m 밖임");
+            }
+
+            var toCenter = sign.position - eye;
+            if (Physics.Raycast(eye, toCenter.normalized, out var hit, toCenter.magnitude + 0.1f, ~0, QueryTriggerInteraction.Ignore)
+                && hit.transform != sign)
+            {
+                warnings++;
+                report.AppendLine($"  ! 경고: 표지판이 {Describe(hit.collider)}에 가려짐 (눈에서 {hit.distance:0.0}m)");
+            }
             return warnings;
         }
 

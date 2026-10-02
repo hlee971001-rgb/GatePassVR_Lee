@@ -116,3 +116,15 @@
 ### 주의점
 - 표지판은 바닥에 세우지 않고 2.0m 높이에 거는 형태로 한다. 카운터 위로 기둥이 지나가지 않게 하기 위해서다.
 - 집는 물건의 임시 Grab은 XRI 기본 XRGrabInteractable만 쓴다(§16.1). 동작 방식 확정은 김씨.
+
+### ① 이동 표지판 7개 (GatePass > Signs > Build Move Signs)
+- MoveSigns 아래 MoveSign_<지점이름>. 남색 판 1.2 x 0.45m, 바닥에서 2.0m, 흰 글씨 Noto Sans KR, Box Collider.
+  판 Material은 Assets/_GatePassVR/Art/Temp/M_TempSignBoard.mat 하나를 공유한다.
+- 위치는 MoveSignBuilder의 표(지점, 문구, 정면 기준 각도, 거리)로 정한다. 표의 위치가 가려지면
+  정면 ±40°, 2~6m 안에서 가장 가까운 빈자리를 자동으로 찾는다(판 가운데와 네 모서리가 보이고 다른 Collider와 겹치지 않음).
+  Collider가 없는 장식(운항 정보판 등)은 피하지 못하므로 _fwd 캡처로 확인한다.
+- 결과: Start 체크인 +30° 4m / CheckIn 보안검색 -40° 2.5m / Security 탑승구 -15° 2m(게이트에 가려 자동 조정) /
+  Boarding 탑승하기 +35° 2m(부스에 가려 자동 조정) / Arrival 입국심사 -40° 4m /
+  Immigration 수하물 찾는 곳 -40° 3m / Baggage 출구 -30° 4m. Validate 경고 0개, _fwd 사진 7장 모두 읽힘.
+- Validate의 표지판 거리 검사에는 0.01m 계산 오차 여유를 둔다(2.0m에 둔 표지판이 1.999m로 계산되는 문제).
+- 폰트(NotoSansKR-Medium SDF)는 Dynamic 모드라 Unity가 글자를 쓸 때마다 파일이 바뀐다. 실행 시 다시 만들어지므로 커밋하지 않는다.

@@ -15,8 +15,8 @@ namespace GatePassVR.EditorTools
         const int Width = 1280;
         const int Height = 720;
 
-        // 결과: 프로젝트 루트/LayoutCaptures/{지점이름}_{000|090|180|270|top}.png
-        // 000은 +Z(북쪽), 090은 +X 방향. top 이미지는 위쪽이 +Z다.
+        // 결과: 프로젝트 루트/LayoutCaptures/{지점이름}_{000|090|180|270|fwd|top}.png
+        // 000은 +Z(북쪽), 090은 +X 방향, fwd는 지점이 바라보는 방향. top 이미지는 위쪽이 +Z다.
         [MenuItem("GatePass/Capture Dest Views")]
         static void CaptureAll()
         {
@@ -48,6 +48,10 @@ namespace GatePassVR.EditorTools
                         cam.transform.SetPositionAndRotation(dest.position + Vector3.up * EyeHeight, Quaternion.Euler(0f, yaw, 0f));
                         Save(cam, renderTexture, $"{dest.name}_{yaw:000}.png");
                     }
+
+                    // 지점이 실제로 바라보는 방향 (이동 후 플레이어가 처음 보는 화면)
+                    cam.transform.SetPositionAndRotation(dest.position + Vector3.up * EyeHeight, Quaternion.Euler(0f, dest.eulerAngles.y, 0f));
+                    Save(cam, renderTexture, $"{dest.name}_fwd.png");
 
                     cam.orthographic = true;
                     cam.orthographicSize = TopDownHalfSize;

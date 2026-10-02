@@ -73,5 +73,18 @@
 - 템플릿 XR Origin에 이동(Move/Teleport) 기능과 Teleport Area Setup이 남아 있다.
   CLAUDE.md §13(자유 이동 금지)과 맞지 않지만 김씨 담당(XR/이동)이라 건드리지 않았다. 김씨에게 공유 필요.
 
+### ③ 동선 점검 (Play 모드, XR Device Simulator)
+- 점검 도구: GatePass > Layout > Dest Tour Window (Play 중 7개 지점을 FadeMoveController로 순서대로 이동).
+- 1차 점검 피드백(이씨)과 조치
+  - CheckIn, Boarding, Immigration: 카운터·부스가 너무 가깝다 → 뒤로 물림.
+    CheckIn X 37.6 → 37.4 (약 0.77m), Boarding·Immigration X 40.9 → 40.75 (약 0.98m).
+    Boarding·Immigration은 손 닿는 거리 기준 1m를 유지하려고 0.2m가 아니라 0.15m만 물렸다(이씨 결정).
+  - Arrival: 비행기를 바라보게 → 방향 340° → 90° (탑승 계단·동체 방향).
+  - Baggage: 컨베이어 위 가방이 Boarding처럼 정면에 보이게 → 위치 (25.64, 0.46, 8.17), 방향 103°.
+    배낭 위치는 위에서 찍은 사진으로 계산한 값이라 _fwd 캡처로 확인 필요.
+- 주의: 거리감은 모니터의 시뮬레이터 화면 기준이다. 헤드셋에서는 다르게 느껴질 수 있으므로
+  Quest 실기기 테스트 때 CheckIn·Boarding·Immigration·Baggage 거리를 다시 확인한다.
+- Capture Dest Views에 지점이 실제로 바라보는 방향 사진(_fwd)을 추가했다.
+
 ### 다음 세션이 알아야 할 것
-- 다음 작업은 checklist ③: Play 모드에서 7개 지점을 순서대로 이동하며 점검.
+- checklist ③ 진행 중. 위 조치 후 Validate와 _fwd 캡처로 확인, 이어서 Dest Tour로 2차 점검.

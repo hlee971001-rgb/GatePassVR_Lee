@@ -60,3 +60,6 @@ Thumbs.db
 # .meta 파일은 올려서 Scene 연결 ID를 유지한다. README.md의 다운로드 안내 참고.
 /Assets/Environments/source/Airport7_FINALc_EscenaMontada.fbx
 /Assets/Environments/textures/Texture_airport256b.png
+
+# 배치 점검용 캡처 이미지 (GatePass > Capture Dest Views 결과)
+/LayoutCaptures/

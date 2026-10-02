@@ -128,3 +128,14 @@
   Immigration 수하물 찾는 곳 -40° 3m / Baggage 출구 -30° 4m. Validate 경고 0개, _fwd 사진 7장 모두 읽힘.
 - Validate의 표지판 거리 검사에는 0.01m 계산 오차 여유를 둔다(2.0m에 둔 표지판이 1.999m로 계산되는 문제).
 - 폰트(NotoSansKR-Medium SDF)는 Dynamic 모드라 Unity가 글자를 쓸 때마다 파일이 바뀐다. 실행 시 다시 만들어지므로 커밋하지 않는다.
+
+### ② 구역 이름 표지판 (GatePass > Signs > Build Zone Signs)
+- 이동 표지판과 같은 도구로 합쳤다(MoveSignBuilder → AirportSignBuilder). 종류별로 모양만 다르다.
+  구역 표지판: 노란 판 2.0 x 0.6m, 검은 글씨, 높이 3.0m(가려지면 3.5/4.0m), Collider 없음(Point & Hold Ray를 막지 않게).
+- 표에 표지판마다 높이를 적는다. Security "보안검색"은 바로 아래 이동 표지판 "탑승구"와 붙어 보여 3.5m로 올렸다.
+- 출구 구역 표지판은 뺐다(이씨 결정). Baggage의 이동 표지판 "출구"와 위아래로 겹쳐 같은 말이 두 번 보였고,
+  실제 EXIT 위치가 아직 정해지지 않았다. EXIT 처리를 김씨와 정한 뒤 그 자리에 추가한다.
+- 표지판 판 Material 2개(M_TempSignBoard, M_TempZoneSignBoard)는 URP Unlit이다.
+  조명 때문에 노란색이 겨자색으로 탁해 보여서 바꿨다. 실제 공항의 빛나는 안내판처럼 보이고 계산도 가볍다.
+- 결과: CheckIn 체크인 / Security 보안검색(3.5m) / Boarding 탑승구(2m로 자동 조정) /
+  Immigration 입국심사(2m로 자동 조정) / Baggage 수하물 찾는 곳. Validate 경고 0개, _fwd 사진으로 구별·겹침 없음 확인.

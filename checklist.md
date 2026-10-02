@@ -21,9 +21,9 @@ Unity에서 실제로 확인한 항목만 체크한다. 추측으로 체크하�
 - [x] 점검 메뉴(Validate Colliders) 실행 결과 경고 0개
 
 ## ③ START~EXIT 동선으로 이동하며 막힘·불필요 공간 점검
-- [ ] Play 모드에서 7개 지점 순서대로 이동 (임시로 Btn_NextArea 또는 점검 메뉴 사용)
-- [ ] 각 지점에서 다음 목적지가 보이는지 확인
-- [ ] 각 지점에서 상호작용 대상에 손이 닿는지 확인
-- [ ] Arrival 이후 출국 구역이 보이는지 확인
-- [ ] 문제를 context-notes.md에 기록하고 수정 후 다시 확인
-- [ ] 커밋, GitHub Push
+- [x] Play 모드에서 7개 지점 순서대로 이동 (Dest Tour Window 사용)
+- [x] 각 지점에서 다음 목적지가 보이는지 확인
+- [x] 각 지점에서 상호작용 대상에 손이 닿는지 확인 (Baggage 배낭은 장식이라 제외, context-notes 참고)
+- [x] Arrival 이후 출국 구역이 보이는지 확인
+- [x] 문제를 context-notes.md에 기록하고 수정 후 다시 확인 (1차 피드백 반영, 2차 점검 문제없음)
+- [x] 커밋, GitHub Push

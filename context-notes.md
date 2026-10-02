@@ -90,5 +90,13 @@
   이 배낭은 공항 모델의 장식용 물체(Collider·Grab 없음)라 그대로 둔다(이씨 결정).
   → 오브젝트 배치 작업 때 집을 수 있는 가방을 따로 만들어 컨베이어 가장자리, 서는 지점에서 1m 안에 놓는다.
 
+- 조치 후 Validate 경고 0개, _fwd 캡처로 Arrival(비행기)·Baggage(배낭) 정면 확인.
+- 2차 점검(Dest Tour, 이씨): 7개 지점 모두 문제없음. checklist ①~③ 완료.
+
 ### 다음 세션이 알아야 할 것
-- checklist ③ 진행 중. 위 조치 후 Validate와 _fwd 캡처로 확인, 이어서 Dest Tour로 2차 점검.
+- "공항 기본 공간 구성" 업무는 시뮬레이터 기준으로 완료. 남은 것은 Scanner·EXIT 처리 방식 김씨와 협의(이씨).
+- Quest 실기기에서 다시 볼 것: CheckIn·Boarding·Immigration·Baggage 거리감, Mesh Collider 21개(삼각형 88,357개) 성능.
+- 김씨에게 공유할 것: 템플릿 XR Origin의 Move/Teleport 기능과 Teleport Area Setup(§13 자유 이동 금지와 충돌),
+  FadeMoveController.cs 한글 주석 인코딩(EUC-KR).
+- 팀 저장소로 옮길 때: feature/lee-airport-layout 브랜치, 공항 모델 .fbx·.png 제외(.meta만), Packages 폴더는 옮기지 않음.
+- 다음 이씨 업무 후보: 오브젝트·표지판·이동 포인트 배치(집을 수 있는 가방은 Baggage 컨베이어 가장자리 1m 안).

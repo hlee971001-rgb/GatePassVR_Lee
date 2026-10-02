@@ -19,8 +19,15 @@ namespace GatePassVR.EditorTools
         const float BodyRadius = 0.25f;
         const float BodyBottom = 0.3f;
         const float BodyTop = 1.7f;
+        // 손이 닿는 범위: 정면 좌우 30°, 높이 0.5~1.3m, 거리 1m
         const float ReachDistance = 1.0f;
-        static readonly float[] ReachHeights = { 0.5f, 0.8f, 1.0f, 1.2f };
+        const float ReachHalfAngle = 30f;
+        const float ReachMinHeight = 0.5f;
+        const float ReachMaxHeight = 1.3f;
+        // 손 닿는 범위에 대상이 없을 때 지점을 옮길 근거를 찾는 탐색 범위
+        const float SearchDistance = 3f;
+        const float SearchHalfAngle = 90f;
+        const float SearchMinHeight = 0.2f;
         static readonly HashSet<string> NoInteraction = new HashSet<string> { "Dest_Start", "Dest_Arrival" };
 
         // 현재 Scene에 실제로 있는 Collider만으로 검사한다. ② 완료 기준: 경고 0개.
@@ -117,9 +124,11 @@ namespace GatePassVR.EditorTools
             report.AppendLine($"## {dest.name}  위치 {p}  방향 {dest.eulerAngles.y:0}°");
 
             // 1. 발밑 바닥
+            Collider floorCollider = null;
             if (Physics.Raycast(p + Vector3.up * FloorSearchUp, Vector3.down, out var floor,
                     FloorSearchUp + FloorSearchDown, ~0, QueryTriggerInteraction.Ignore))
             {
+                floorCollider = floor.collider;
                 float gap = p.y - floor.point.y;
                 report.AppendLine($"- 바닥: {Describe(floor.collider)}, 바닥 높이 {floor.point.y:0.00}, 지점과 차이 {gap:0.00}m");
                 if (Mathf.Abs(gap) > FloorTolerance)
@@ -148,32 +157,67 @@ namespace GatePassVR.EditorTools
                 report.AppendLine($"  ! 경고: 몸과 겹침: {string.Join(", ", names)}");
             }
 
-            // 3. 바라보는 방향 1m 안의 상호작용 대상 (높이 0.5 / 0.8 / 1.0 / 1.2m, 0.5m는 수하물 컨베이어용)
+            // 3. 손이 닿는 범위(정면 좌우 30°, 높이 0.5~1.3m, 1m)의 상호작용 대상
             if (!NoInteraction.Contains(dest.name))
             {
-                bool found = false;
-                foreach (float height in ReachHeights)
+                if (SweepNearest(dest, floorCollider, ReachDistance, ReachHalfAngle, ReachMinHeight, ReachMaxHeight,
+                        out var reach, out float reachAngle))
                 {
-                    if (Physics.Raycast(p + Vector3.up * height, dest.forward, out var hit,
-                            ReachDistance, ~0, QueryTriggerInteraction.Ignore))
+                    report.AppendLine($"- 손 닿는 대상: {DescribeHit(dest, reach, reachAngle)}");
+                }
+                else
+                {
+                    warnings++;
+                    report.AppendLine($"  ! 경고: 손 닿는 범위(정면 ±{ReachHalfAngle:0}°, {ReachDistance}m) 안에 상호작용 대상 Collider 없음");
+                    if (SweepNearest(dest, floorCollider, SearchDistance, SearchHalfAngle, SearchMinHeight, ReachMaxHeight,
+                            out var nearest, out float nearestAngle))
                     {
-                        found = true;
-                        report.AppendLine($"- 앞 {height:0.0}m 높이: {Describe(hit.collider)}, 거리 {hit.distance:0.00}m, 맞은 점 높이 {hit.point.y:0.00}");
+                        report.AppendLine($"  - 주변 탐색: 가장 가까운 대상 {DescribeHit(dest, nearest, nearestAngle)}");
                     }
                     else
                     {
-                        report.AppendLine($"- 앞 {height:0.0}m 높이: 1m 안에 없음");
+                        report.AppendLine($"  - 주변 탐색: 정면 ±{SearchHalfAngle:0}°, {SearchDistance}m 안에 대상 없음");
                     }
-                }
-                if (!found)
-                {
-                    warnings++;
-                    report.AppendLine("  ! 경고: 손 닿는 거리(1m) 안에 상호작용 대상 Collider 없음");
                 }
             }
 
             report.AppendLine();
             return warnings;
+        }
+
+        // 정면 기준 부채꼴을 높이 0.1m, 각도 5° 간격으로 훑어 바닥을 뺀 가장 가까운 Collider를 찾는다.
+        static bool SweepNearest(Transform dest, Collider floorCollider, float distance, float halfAngle,
+            float minHeight, float maxHeight, out RaycastHit nearest, out float nearestAngle)
+        {
+            nearest = default;
+            nearestAngle = 0f;
+            bool found = false;
+            for (float height = minHeight; height <= maxHeight + 0.001f; height += 0.1f)
+            {
+                for (float angle = -halfAngle; angle <= halfAngle + 0.001f; angle += 5f)
+                {
+                    var direction = Quaternion.Euler(0f, angle, 0f) * dest.forward;
+                    var hits = Physics.RaycastAll(dest.position + Vector3.up * height, direction,
+                        distance, ~0, QueryTriggerInteraction.Ignore);
+                    foreach (var hit in hits)
+                    {
+                        if (hit.collider == floorCollider || (found && hit.distance >= nearest.distance))
+                        {
+                            continue;
+                        }
+                        nearest = hit;
+                        nearestAngle = angle;
+                        found = true;
+                    }
+                }
+            }
+            return found;
+        }
+
+        static string DescribeHit(Transform dest, RaycastHit hit, float angle)
+        {
+            return $"{Describe(hit.collider)}, 거리 {hit.distance:0.00}m, 정면 기준 {angle:+0;-0;0}° 방향, " +
+                   $"바닥에서 {hit.point.y - dest.position.y:0.00}m 높이";
         }
 
         static string Describe(Collider collider)

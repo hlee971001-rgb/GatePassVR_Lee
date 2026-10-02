@@ -55,5 +55,23 @@
   표지판 작업 때 "입국" 안내를 눈에 띄게 해서 보완한다.
 - Capture Dest Views는 동서남북 4방향만 찍는다. Arrival(340°), Baggage(66°)는 가까운 방향 사진으로 확인했다.
 
+### ② 충돌 설정 (Collider)
+- 점검 도구: GatePass > Layout > Validate Colliders (실제 Collider로 검사),
+  Analyze Model (Temporary Colliders) (모델 전체에 임시 Collider를 만들어 측정, Scene 변경 없음).
+  결과는 LayoutCaptures/LayoutReport_*.txt (Git 제외).
+- 측정 결과 1층 바닥 0.43, 2층 바닥 5.66. Dest_ Local Y를 1층 0.46, 2층 5.69로 맞췄다(부모 Y -0.03).
+- Collider 방식은 Box 대신 Mesh Collider로 결정(이씨 확인). 이유: 카운터 모양이 복잡해 Box로는
+  윗면 높이를 맞추기 어렵다. 필요한 시설에만 붙인다(GatePass > Layout > Add Model Colliders).
+  대상: 07.Modulo1(1·2층 바닥·벽), 08.CheckInDesk, 09.SecurityCheck, 11.BoardingAreaDesk ×5, BaggageClaimBand ×13
+  → 21개, 삼각형 88,357개(모델 전체 230만 개의 약 4%). Quest 성능 점검 때 다시 확인할 항목.
+- Arrival 바닥은 템플릿 Environment/Grid의 Box Collider다.
+- 손 닿는 범위 검사는 정면 일직선이 아니라 정면 ±30°, 높이 0.5~1.3m, 1m 안으로 한다.
+  이유: 수하물 컨베이어처럼 휘어 있거나 윗면이 얇은 대상은 일직선 검사에 걸리지 않는다.
+- Dest_Baggage는 컨베이어까지 1.15m라서 0.45m 당기고 방향을 61°로 바꿨다 → Local (25.69, 0.46, 8.02).
+- Validate 결과 경고 0개. 손 닿는 대상까지 거리: CheckIn 0.57, Security 0.55, Boarding 0.83,
+  Immigration 0.84, Baggage 0.63m.
+- 템플릿 XR Origin에 이동(Move/Teleport) 기능과 Teleport Area Setup이 남아 있다.
+  CLAUDE.md §13(자유 이동 금지)과 맞지 않지만 김씨 담당(XR/이동)이라 건드리지 않았다. 김씨에게 공유 필요.
+
 ### 다음 세션이 알아야 할 것
-- 다음 작업은 checklist ②: 공항 모델에 Collider가 없으므로 지점 주변 바닥·카운터에 Box Collider 배치와 점검 도구 작성.
+- 다음 작업은 checklist ③: Play 모드에서 7개 지점을 순서대로 이동하며 점검.

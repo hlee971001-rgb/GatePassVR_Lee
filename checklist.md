@@ -14,11 +14,11 @@ Unity에서 실제로 확인한 항목만 체크한다. 추측으로 체크하�
 - [ ] Scanner(Boarding 구역), EXIT(Baggage 구역) 연결 방식 김씨와 협의
 
 ## ② 플레이어 이동 폭·충돌·진입 가능 구역 확인
-- [ ] AirportLayoutValidator 작성 (지점 아래 바닥 Collider, 지점 겹침, 다음 지점 가림 여부 검사)
-- [ ] Compile Error 0개 확인
-- [ ] 7개 구역 바닥에 단순 Collider(Box) 배치
-- [ ] 체크인 카운터, 보안검색대, 입국심사 부스 위에 Collider 배치
-- [ ] 점검 메뉴 실행 결과 경고 0개
+- [x] AirportLayoutValidator 작성 (지점 아래 바닥, 몸 겹침, 손 닿는 범위의 상호작용 대상 검사)
+- [x] Compile Error 0개 확인
+- [x] 1·2층 바닥 Collider 배치 (Box 대신 07.Modulo1 Mesh Collider, context-notes 참고)
+- [x] 체크인 카운터, 보안검색대, 심사 부스, 수하물 컨베이어에 Mesh Collider 배치
+- [x] 점검 메뉴(Validate Colliders) 실행 결과 경고 0개
 
 ## ③ START~EXIT 동선으로 이동하며 막힘·불필요 공간 점검
 - [ ] Play 모드에서 7개 지점 순서대로 이동 (임시로 Btn_NextArea 또는 점검 메뉴 사용)

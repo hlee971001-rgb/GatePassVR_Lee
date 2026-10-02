@@ -62,15 +62,18 @@ namespace GatePassVR.EditorTools
 
         // (서 있는 지점, 문구, 정면 기준 각도(+는 오른쪽), 수평 거리 m, 바닥에서 판 가운데 높이 m)
         // 표의 위치가 가려지면 범위 안에서 가장 가까운 빈자리를 찾는다. 표만 고치고 다시 실행하면 된다.
+        // 이동 표지판 문구는 모두 같다(이씨 결정). 가는 곳은 구역 표지판과 GuideManager 안내로 알린다.
+        const string NextAreaText = "다음 구역으로 이동";
+
         static readonly (string from, string text, float yawOffset, float distance, float height)[] MoveSigns =
         {
-            ("Dest_Start", "체크인", 30f, 4f, 2.0f),
-            ("Dest_CheckIn", "보안검색", -30f, 2.5f, 2.0f),
-            ("Dest_Security", "탑승구", -15f, 3.5f, 2.0f),
-            ("Dest_Boarding", "탑승하기", 30f, 3f, 2.0f),
-            ("Dest_Arrival", "입국심사", -30f, 4f, 2.0f),
-            ("Dest_Immigration", "수하물 찾는 곳", -30f, 3f, 2.0f),
-            ("Dest_Baggage", "출구", -30f, 4f, 2.0f),
+            ("Dest_Start", NextAreaText, 30f, 4f, 2.0f),        // → CheckIn
+            ("Dest_CheckIn", NextAreaText, -30f, 2.5f, 2.0f),    // → Security
+            ("Dest_Security", NextAreaText, -15f, 3.5f, 2.0f),    // → Boarding
+            ("Dest_Boarding", NextAreaText, 30f, 3f, 2.0f),       // → 비행(Fade) 후 Arrival
+            ("Dest_Arrival", NextAreaText, -30f, 4f, 2.0f),       // → Immigration
+            ("Dest_Immigration", NextAreaText, -30f, 3f, 2.0f),   // → Baggage
+            ("Dest_Baggage", NextAreaText, -30f, 4f, 2.0f),       // → EXIT, 완료 화면
         };
 
         // 출구(EXIT) 구역 표지판은 EXIT 위치를 김씨와 정한 뒤 추가한다(지금은 이동 표지판 "출구"와 겹침).

@@ -94,6 +94,7 @@ Airport_Lee Scene의 Dest_ 7개 지점에 다음 세 가지를 배치한다.
 | Dest_Immigration | 수하물 찾는 곳 | Baggage |
 | Dest_Baggage | 출구 | EXIT, 완료 화면 |
 
+- 표지판 문구는 7개 모두 "다음 구역으로 이동"으로 통일(이씨 결정, 위 표의 문구는 처음 계획). 가는 곳은 구역 표지판과 안내로 알린다.
 - 판 1.2m x 0.45m, 바닥에서 2.0m 높이에 거는 형태, Noto Sans KR 큰 글씨, Box Collider(Ray용).
 - 서 있는 지점에서 정면 좌우 45° 안, 2~6m 거리, 가리는 물체 없이 보이는 곳.
 - Editor 도구로 생성해 수치만 바꿔 다시 만들 수 있게 한다.

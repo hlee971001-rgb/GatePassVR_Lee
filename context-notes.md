@@ -159,3 +159,8 @@
   가는 곳은 노란 구역 표지판과 GuideManager 안내(김씨)로 알린다. 표의 각 줄 옆 주석에 가는 곳을 남겼다.
   문구가 길어져 글씨가 작아졌다. 가장 먼 4m 표지판도 Quest 3S 시야 사진에서 읽히지만, 실기기에서 다시 확인한다.
 - Start에서는 기존 Btn_NextArea(초록 버튼, 같은 문구)와 새 이동 표지판이 함께 보인다. Point & Hold가 붙으면 Btn_NextArea 정리 필요.
+- 기존 초록 버튼 WorldUI_CheckIn/Btn_NextArea를 삭제했다(이씨 결정). 다른 오브젝트의 참조가 없음을 확인했고,
+  Play 중 이동 테스트는 Dest Tour 창으로 한다(같은 FadeMoveController 사용).
+- Dest_ 오브젝트의 Scene 뷰 이름표(아이콘)는 편집 화면에서만 보이고 게임에는 나오지 않는다. Game 뷰에서는 Gizmos를 꺼서 숨긴다.
+  Dest_를 비활성화해서 숨기면 안 된다: GameObject.Find가 꺼진 오브젝트를 찾지 못해 도구가 멈춘다.
+  (한 번 꺼졌다가 다시 켰다. Dest Tour 창은 DestinationPoints 아래에서 찾도록 고쳐 꺼져 있어도 동작한다.)

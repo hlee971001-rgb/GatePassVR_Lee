@@ -76,7 +76,9 @@ namespace GatePassVR.EditorTools
 
         void Go(FadeMoveController mover, int index)
         {
-            var dest = GameObject.Find(TourOrder[index]);
+            // GameObject.Find는 꺼진 오브젝트를 찾지 못하므로 DestinationPoints 아래에서 이름으로 찾는다.
+            var root = GameObject.Find("DestinationPoints");
+            var dest = root != null ? root.transform.Find(TourOrder[index]) : null;
             if (dest == null)
             {
                 Debug.LogError($"[DestTourWindow] '{TourOrder[index]}' 지점을 찾을 수 없습니다.");

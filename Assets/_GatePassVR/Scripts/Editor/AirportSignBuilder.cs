@@ -12,7 +12,7 @@ namespace GatePassVR.EditorTools
         const string DestRootName = "DestinationPoints";
         const string FontPath = "Assets/Fonts/NotoSansKR-Medium SDF.asset";
         const string MaterialFolder = "Assets/_GatePassVR/Art/Temp";
-        const float EyeHeight = 1.6f;
+        const float EyeHeight = SignViewRules.StandingEyeHeight;
 
         // 표지판 종류별 모양과 자리 찾기 범위
         class SignStyle
@@ -25,7 +25,6 @@ namespace GatePassVR.EditorTools
             public string MaterialPath;
             public bool AddCollider;
             public float[] Heights;
-            public float MaxYaw;
             public float MinDistance;
             public float MaxDistance;
         }
@@ -41,7 +40,6 @@ namespace GatePassVR.EditorTools
             MaterialPath = MaterialFolder + "/M_TempSignBoard.mat",
             AddCollider = true,
             Heights = new[] { 2.0f },
-            MaxYaw = 40f,
             MinDistance = 2f,
             MaxDistance = 6f,
         };
@@ -56,8 +54,8 @@ namespace GatePassVR.EditorTools
             TextColor = new Color(0.05f, 0.05f, 0.05f),
             MaterialPath = MaterialFolder + "/M_TempZoneSignBoard.mat",
             AddCollider = false,
-            Heights = new[] { 3.0f, 3.5f, 4.0f },
-            MaxYaw = 30f,
+            // 2.1m는 2층 심사 부스처럼 바로 앞이 높은 시설로 막힌 곳용(부스 앞면 안내판 높이).
+            Heights = new[] { 2.1f, 2.6f, 3.0f, 3.5f },
             MinDistance = 2f,
             MaxDistance = 8f,
         };
@@ -67,11 +65,11 @@ namespace GatePassVR.EditorTools
         static readonly (string from, string text, float yawOffset, float distance, float height)[] MoveSigns =
         {
             ("Dest_Start", "체크인", 30f, 4f, 2.0f),
-            ("Dest_CheckIn", "보안검색", -40f, 2.5f, 2.0f),
+            ("Dest_CheckIn", "보안검색", -30f, 2.5f, 2.0f),
             ("Dest_Security", "탑승구", -15f, 3.5f, 2.0f),
-            ("Dest_Boarding", "탑승하기", 35f, 3f, 2.0f),
-            ("Dest_Arrival", "입국심사", -40f, 4f, 2.0f),
-            ("Dest_Immigration", "수하물 찾는 곳", -40f, 3f, 2.0f),
+            ("Dest_Boarding", "탑승하기", 30f, 3f, 2.0f),
+            ("Dest_Arrival", "입국심사", -30f, 4f, 2.0f),
+            ("Dest_Immigration", "수하물 찾는 곳", -30f, 3f, 2.0f),
             ("Dest_Baggage", "출구", -30f, 4f, 2.0f),
         };
 
@@ -79,8 +77,7 @@ namespace GatePassVR.EditorTools
         static readonly (string from, string text, float yawOffset, float distance, float height)[] ZoneSigns =
         {
             ("Dest_CheckIn", "체크인", 0f, 3f, 3.0f),
-            // 바로 아래의 이동 표지판 "탑승구"와 붙어 보이지 않도록 높게 단다.
-            ("Dest_Security", "보안검색", 0f, 3f, 3.5f),
+            ("Dest_Security", "보안검색", 0f, 3f, 3.0f),
             ("Dest_Boarding", "탑승구", 0f, 2.5f, 3.0f),
             ("Dest_Immigration", "입국심사", 0f, 2.5f, 3.0f),
             ("Dest_Baggage", "수하물 찾는 곳", 0f, 4f, 3.0f),
@@ -156,6 +153,8 @@ namespace GatePassVR.EditorTools
         static bool FindClearPlacement(SignStyle style, Transform dest, float preferredYaw, float preferredDistance,
             float preferredHeight, out float yawOffset, out float distance, out float height)
         {
+            // 표의 각도도 편하게 보이는 범위(±MaxYaw) 안으로 맞춘 뒤 시험한다.
+            preferredYaw = Mathf.Clamp(preferredYaw, -SignViewRules.MaxYaw, SignViewRules.MaxYaw);
             var heights = new List<float>(style.Heights);
             if (!heights.Contains(preferredHeight))
             {
@@ -169,7 +168,7 @@ namespace GatePassVR.EditorTools
             foreach (float h in heights)
             {
                 float heightCost = Mathf.Abs(h - preferredHeight) / 0.5f;
-                for (float yaw = -style.MaxYaw; yaw <= style.MaxYaw + 0.01f; yaw += 5f)
+                for (float yaw = -SignViewRules.MaxYaw; yaw <= SignViewRules.MaxYaw + 0.01f; yaw += 5f)
                 {
                     for (float d = style.MinDistance; d <= style.MaxDistance + 0.01f; d += 0.5f)
                     {
@@ -181,11 +180,14 @@ namespace GatePassVR.EditorTools
             candidates.Sort((a, b) => a.cost.CompareTo(b.cost));
 
             Physics.SyncTransforms();
-            var eye = dest.position + Vector3.up * EyeHeight;
+            var standingEye = SignViewRules.Eye(dest, SignViewRules.StandingEyeHeight);
+            var seatedEye = SignViewRules.Eye(dest, SignViewRules.SeatedEyeHeight);
             foreach (var candidate in candidates)
             {
                 GetPlacement(dest, candidate.yaw, candidate.distance, candidate.height, out var position, out var rotation);
-                if (IsClear(style, eye, position, rotation))
+                // 앉은 사용자도 MaxElevation 이하로 올려다보고, 서서·앉아서 모두 가려지지 않아야 한다.
+                if (SignViewRules.Elevation(seatedEye, position) <= SignViewRules.MaxElevation
+                    && IsClear(style, standingEye, position, rotation) && IsClear(style, seatedEye, position, rotation))
                 {
                     yawOffset = candidate.yaw;
                     distance = candidate.distance;
@@ -199,9 +201,12 @@ namespace GatePassVR.EditorTools
             return false;
         }
 
+        static readonly Vector3 Gap = new Vector3(0.2f, 0.1f, 0.1f);
+
         static bool IsClear(SignStyle style, Vector3 eye, Vector3 center, Quaternion rotation)
         {
-            if (Physics.CheckBox(center, style.BoardSize / 2f, rotation, ~0, QueryTriggerInteraction.Ignore))
+            // 판 둘레에 여유(Gap)를 두고 검사해, 다른 표지판(Collider가 있는 이동 표지판)이나 시설과 붙어 보이지 않게 한다.
+            if (Physics.CheckBox(center, style.BoardSize / 2f + Gap, rotation, ~0, QueryTriggerInteraction.Ignore))
             {
                 return false;
             }

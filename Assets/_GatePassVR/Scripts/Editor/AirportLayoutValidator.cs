@@ -193,8 +193,7 @@ namespace GatePassVR.EditorTools
 
         const string ZoneSignRootName = "ZoneSigns";
 
-        // ZoneSign_<지점이름>으로 시작하는 표지판이 정면 ±45° 안에 있고 눈에서 가운데까지 가리는 Collider가 없어야 한다.
-        // 구역 이름 표지판은 Collider가 없으므로 무엇이든 맞으면 가려진 것이다.
+        // ZoneSign_<지점이름>으로 시작하는 표지판이 편하게 보이는 범위에 있고 가려지지 않아야 한다.
         static int CheckZoneSigns(Transform dest, StringBuilder report)
         {
             var root = GameObject.Find(ZoneSignRootName);
@@ -204,42 +203,66 @@ namespace GatePassVR.EditorTools
             }
 
             int warnings = 0;
-            var eye = dest.position + Vector3.up * EyeHeight;
             foreach (Transform sign in root.transform)
             {
-                if (!sign.name.StartsWith($"ZoneSign_{dest.name}"))
+                if (sign.name.StartsWith($"ZoneSign_{dest.name}"))
                 {
-                    continue;
+                    warnings += CheckSignView(dest, sign, "구역 표지판", report);
                 }
+            }
+            return warnings;
+        }
 
-                var flat = sign.position - eye;
-                flat.y = 0f;
-                float angle = Vector3.SignedAngle(dest.forward, flat, Vector3.up);
-                string label = sign.GetComponentInChildren<TMPro.TMP_Text>()?.text ?? sign.name;
-                report.AppendLine($"- 구역 표지판 '{label}': 거리 {flat.magnitude:0.0}m, 정면 기준 {angle:+0;-0;0}°, 높이 {sign.position.y - dest.position.y:0.0}m");
+        // 표지판이 편하게 보이는 범위(SignViewRules)에 있는지, 서서·앉아서 두 눈높이 모두에서 가려지지 않는지 검사한다.
+        // 좌우: 정면 ±MaxYaw, 위: 두 눈높이 모두 MaxElevation 이하.
+        static int CheckSignView(Transform dest, Transform sign, string kind, StringBuilder report)
+        {
+            int warnings = 0;
+            var standing = SignViewRules.Eye(dest, SignViewRules.StandingEyeHeight);
+            var seated = SignViewRules.Eye(dest, SignViewRules.SeatedEyeHeight);
+            var flat = sign.position - standing;
+            flat.y = 0f;
+            float yaw = Vector3.SignedAngle(dest.forward, flat, Vector3.up);
+            float standingElevation = SignViewRules.Elevation(standing, sign.position);
+            float seatedElevation = SignViewRules.Elevation(seated, sign.position);
+            string label = sign.GetComponentInChildren<TMPro.TMP_Text>()?.text ?? sign.name;
+            report.AppendLine($"- {kind} '{label}': 거리 {flat.magnitude:0.0}m, 정면 기준 {yaw:+0;-0;0}°, " +
+                              $"높이 {sign.position.y - dest.position.y:0.0}m, 올려다보는 각도 서서 {standingElevation:0}° / 앉아서 {seatedElevation:0}°");
 
-                if (Mathf.Abs(angle) > SignMaxAngle)
-                {
-                    warnings++;
-                    report.AppendLine($"  ! 경고: 구역 표지판이 정면 ±{SignMaxAngle:0}° 밖에 있음");
-                }
+            // 0.5°는 계산 오차 여유 (표지판 도구가 정확히 30°에 둔 경우 30.0x°로 계산될 수 있음)
+            if (Mathf.Abs(yaw) > SignViewRules.MaxYaw + 0.5f)
+            {
+                warnings++;
+                report.AppendLine($"  ! 경고: {kind}가 정면 ±{SignViewRules.MaxYaw:0}° 밖에 있음 (고개를 돌려야 보임)");
+            }
+            if (Mathf.Max(standingElevation, seatedElevation) > SignViewRules.MaxElevation)
+            {
+                warnings++;
+                report.AppendLine($"  ! 경고: {kind}를 {SignViewRules.MaxElevation:0}°보다 올려다봐야 함 (앉은 사용자 기준 {seatedElevation:0}°)");
+            }
+            foreach (var (eye, who) in new[] { (standing, "서서"), (seated, "앉아서") })
+            {
                 var toCenter = sign.position - eye;
-                if (Physics.Raycast(eye, toCenter.normalized, out var hit, toCenter.magnitude - 0.05f, ~0, QueryTriggerInteraction.Ignore))
+                var hits = Physics.RaycastAll(eye, toCenter.normalized, toCenter.magnitude - 0.05f, ~0, QueryTriggerInteraction.Ignore);
+                foreach (var hit in hits)
                 {
+                    if (hit.transform == sign)
+                    {
+                        continue;
+                    }
                     warnings++;
-                    report.AppendLine($"  ! 경고: 구역 표지판이 {Describe(hit.collider)}에 가려짐 (눈에서 {hit.distance:0.0}m)");
+                    report.AppendLine($"  ! 경고: {who} 볼 때 {kind}가 {Describe(hit.collider)}에 가려짐 (눈에서 {hit.distance:0.0}m)");
+                    break;
                 }
             }
             return warnings;
         }
 
         const string MoveSignRootName = "MoveSigns";
-        const float EyeHeight = 1.6f;
-        const float SignMaxAngle = 45f;
         const float SignMinDistance = 2f;
         const float SignMaxDistance = 6f;
 
-        // 정면 좌우 45° 안, 수평 2~6m, 눈높이에서 표지판 중심까지 가리는 Collider가 없어야 한다.
+        // 이동 표지판: 편하게 보이는 범위·가림 검사(CheckSignView)와 수평 거리 2~6m.
         static int CheckMoveSign(Transform dest, StringBuilder report)
         {
             var signRoot = GameObject.Find(MoveSignRootName);
@@ -255,33 +278,15 @@ namespace GatePassVR.EditorTools
                 return 1;
             }
 
-            int warnings = 0;
-            var eye = dest.position + Vector3.up * EyeHeight;
-            var flat = sign.position - eye;
+            int warnings = CheckSignView(dest, sign, "이동 표지판", report);
+            var flat = sign.position - dest.position;
             flat.y = 0f;
-            float angle = Vector3.SignedAngle(dest.forward, flat, Vector3.up);
             float distance = flat.magnitude;
-            string label = sign.GetComponentInChildren<TMPro.TMP_Text>()?.text ?? sign.name;
-            report.AppendLine($"- 이동 표지판 '{label}': 거리 {distance:0.0}m, 정면 기준 {angle:+0;-0;0}°");
-
-            if (Mathf.Abs(angle) > SignMaxAngle)
-            {
-                warnings++;
-                report.AppendLine($"  ! 경고: 표지판이 정면 ±{SignMaxAngle:0}° 밖에 있음");
-            }
             // 0.01m는 소수점 계산 오차 여유 (표지판 도구가 정확히 2m에 둔 경우 1.999m로 계산될 수 있음)
             if (distance < SignMinDistance - 0.01f || distance > SignMaxDistance + 0.01f)
             {
                 warnings++;
-                report.AppendLine($"  ! 경고: 표지판 거리가 {SignMinDistance}~{SignMaxDistance}m 밖임");
-            }
-
-            var toCenter = sign.position - eye;
-            if (Physics.Raycast(eye, toCenter.normalized, out var hit, toCenter.magnitude + 0.1f, ~0, QueryTriggerInteraction.Ignore)
-                && hit.transform != sign)
-            {
-                warnings++;
-                report.AppendLine($"  ! 경고: 표지판이 {Describe(hit.collider)}에 가려짐 (눈에서 {hit.distance:0.0}m)");
+                report.AppendLine($"  ! 경고: 이동 표지판 거리가 {SignMinDistance}~{SignMaxDistance}m 밖임");
             }
             return warnings;
         }

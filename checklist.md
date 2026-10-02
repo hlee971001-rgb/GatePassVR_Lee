@@ -27,3 +27,30 @@ Unity에서 실제로 확인한 항목만 체크한다. 추측으로 체크하�
 - [x] Arrival 이후 출국 구역이 보이는지 확인
 - [x] 문제를 context-notes.md에 기록하고 수정 후 다시 확인 (1차 피드백 반영, 2차 점검 문제없음)
 - [x] 커밋, GitHub Push
+
+---
+
+# 오브젝트·표지판·이동 포인트 배치 - Checklist (담당 이씨)
+
+## 준비
+- [x] plan.md, checklist.md, context-notes.md에 업무 추가
+- [ ] 김씨에게 공유: 여권 시작 방식, PointAndHoldTarget을 표지판에 붙이는 방식, Scanner·EXIT 처리
+
+## ① 이동 표지판 7개
+- [ ] 이동 표지판 생성 Editor 도구 작성, Compile Error 0개
+- [ ] 7개 생성, 점검 도구에 "다음 표지판 보임" 검사 추가
+- [ ] 검사 경고 0개, _fwd 캡처로 확인
+
+## ② 구역 이름 표지판 6개
+- [ ] 생성, 캡처로 확인
+
+## ③ 오브젝트 배치
+- [ ] 임시 오브젝트 생성(실제 크기), 집는 물건에 임시 Grab
+- [ ] 영역 표시 3개 배치
+- [ ] 점검 도구 "오브젝트 1m 안" 검사 경고 0개
+
+## ④ 점검
+- [ ] Dest Tour로 표지판 가독성, 오브젝트 위치 확인 (이씨)
+- [ ] Device Simulator로 임시 Grab 확인 (이씨)
+- [ ] Validate Colliders 경고 0개 유지
+- [ ] 커밋, GitHub Push

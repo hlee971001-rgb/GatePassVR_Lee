@@ -112,7 +112,7 @@ namespace GatePassVR.EditorTools
         };
 
         // 2층 심사 부스 줄은 바로 앞이 높이 3.7m 부스와 벽이라 매달거나 세울 빈자리가 없다.
-        // 이 지점들은 표의 각도 방향으로 가장 가까운 시설(부스) 앞면에 판을 붙인다. 이동 표지판과 반대쪽 각도로 둔다.
+        // 이 지점들은 표의 각도 크기(20°)로 가장 가까운 시설(부스) 앞면에 판을 붙인다. 좌우는 이동 표지판이 놓인 쪽의 반대편으로 정한다.
         // 높이는 앉은 사용자가 MaxElevation 안쪽(24°)으로 올려다보도록 부스까지 거리에서 계산한다.
         static readonly Dictionary<string, float> FacilityMountYaw = new Dictionary<string, float>
         {
@@ -180,6 +180,15 @@ namespace GatePassVR.EditorTools
 
                 if (style.IsZone && FacilityMountYaw.TryGetValue(from, out float mountYaw))
                 {
+                    // 이동 표지판이 실제로 놓인 쪽의 반대편에 붙인다(NPC 등으로 이동 표지판 자리가 바뀌어도 겹치지 않게).
+                    var moveSign = GameObject.Find(MoveStyle.RootName)?.transform.Find($"{MoveStyle.NamePrefix}{dest.name}");
+                    if (moveSign != null)
+                    {
+                        var flat = moveSign.position - dest.position;
+                        flat.y = 0f;
+                        float moveYaw = Vector3.SignedAngle(dest.forward, flat, Vector3.up);
+                        mountYaw = moveYaw >= 0f ? -Mathf.Abs(mountYaw) : Mathf.Abs(mountYaw);
+                    }
                     if (TryFacilityMount(dest, mountYaw, out float mountDistance, out float mountHeight))
                     {
                         var mounted = CreateSign(style, root.transform, $"{style.NamePrefix}{dest.name}", dest, text,
@@ -606,9 +615,10 @@ namespace GatePassVR.EditorTools
         }
 
         // 표에 쓰인 모든 문구의 글자를 고정 폰트에 넣는다. 표의 문구를 바꾸고 다시 실행하면 새 글자도 추가된다.
-        static TMP_FontAsset GetOrUpdateSignFont()
+        // extraCharacters: 다른 도구(예: NPC 이름표)가 같은 고정 폰트에 넣을 글자
+        internal static TMP_FontAsset GetOrUpdateSignFont(string extraCharacters = "")
         {
-            var characters = new HashSet<char>(HoldHintText + "0123456789층");
+            var characters = new HashSet<char>(HoldHintText + "0123456789층" + extraCharacters);
             foreach (var sign in MoveSigns)
             {
                 characters.UnionWith(StripTags(sign.text) + sign.arrow);

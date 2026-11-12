@@ -284,7 +284,8 @@ namespace GatePassVR.EditorTools
             string suffix = "_" + dest.name.Replace("Dest_", "");
             foreach (Transform item in root.transform)
             {
-                if (!item.name.EndsWith(suffix) || item.name.StartsWith("Stand_"))
+                // 받침대와 NPC(Collider 없음, 손으로 다루지 않음)는 손 닿는 범위 검사에서 뺀다.
+                if (!item.name.EndsWith(suffix) || item.name.StartsWith("Stand_") || item.name.StartsWith("Npc_"))
                 {
                     continue;
                 }

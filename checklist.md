@@ -90,3 +90,22 @@ Unity에서 실제로 확인한 항목만 체크한다. 추측으로 체크하�
 - [ ] 김씨와 협의 항목 확정 (S1-0 여권 시작, S2-1 체크인 Hand-over, S8-2 여권 반환, EXIT, Reset 버튼)
 - [ ] 김씨 UI 반영 (GuideManager·ScenarioStep), 실제 HUD 한 줄 표시 확인
 - [x] 보안검색 노트북·가방 임시 물건과 트레이 Placement Zone 2칸(왼쪽 노트북, 오른쪽 가방). Play 모드 시험 통과, Device Simulator 이씨 확인(11/13)
+
+---
+
+# [22] NPC 배치 및 상호작용 지점 설정 - Checklist (담당 이씨, 김씨 기능 연결)
+
+## Trello 체크리스트
+- [x] NPC 역할별 위치와 상호작용 지점 배치 (4명, 체크인 여권 건네는 자리 추가)
+- [x] NPC와 필요한 기능 연결 — 이씨 범위: NpcStation으로 지점 연결, 여권 건네는 자리는 Placement Zone 임시 동작. 김씨 Hand-over·Scanner 연결은 남음
+- [ ] 애니메이션 없이도 역할과 상호작용 흐름이 이해되는지 플레이 테스트 (이씨) — 미검증
+
+## 작업
+- [x] NpcStation 컴포넌트(역할 ID, 이름, 상호작용 지점)
+- [x] AirportObjectBuilder에 NPC 종류 추가(몸통·머리·이름표·몸 Collider, 서는 지점을 바라봄)
+- [x] NPC 몸 Collider로 표지판 도구가 NPC 뒤를 피함, 이동 표지판·노란 판 다시 만들기, Validate 경고 0개
+- [x] Play 모드: 여권을 체크인·입국심사 자리에 차례로 놓아 둘 다 성공, 체크인 뒤에도 여권을 다시 집을 수 있음
+- [x] 문구표 S2-1을 "여권을 카운터의 초록 칸에 놓으세요"로 맞춤
+- [ ] 머리 위 역할 이름표를 둘지 결정 (이씨)
+- [ ] 김씨 협의: Hand-over·Scanner를 NpcStation 지점에 연결, 입국심사관 여권 반환 방식(S8-2)
+- [ ] 실제 사람 에셋 교체(라이선스 확인 후)

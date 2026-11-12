@@ -266,3 +266,20 @@
   (AirportObjectBuilder.HiddenDecorations, 모델 원본은 그대로).
 - Play 모드 시험: 가방을 노트북 칸에 놓으면 노트북 칸 onWrongObject 1회, 각자 칸에 놓으면 두 칸 모두 성공·고정.
 - 문구표 S3-1·S3-2 보조 힌트를 "트레이의 왼쪽/오른쪽 초록 칸에 놓으세요"로 바꿨다.
+
+## 2026-11-13 [22] NPC 배치 및 상호작용 지점
+
+- 공항 모델에 직원으로 쓸 사람 모델이 없다(사람 크기 물체 17.4.Model은 건물 끝 자판기류). 임시 사람 모양(캡슐+구)으로 두고
+  실제 에셋은 라이선스 확인 뒤 교체한다. AirportObjectBuilder의 표(Kind.Npc)와 NpcRoles로 만든다.
+- NpcStation(Scripts/Interaction): roleId, displayName, interactionPoint. 김씨가 Hand-over·Scanner를 연결할 때 이 지점을 쓴다.
+  체크인 직원 → Zone_HandOver_CheckIn, 탑승구 직원 → Zone_Scan_Boarding, 입국심사관 → Zone_HandOver_Immigration, 보안검색 요원은 지점 없음.
+- 여권 건네는 자리 2곳은 Placement Zone(받는 물건 Obj_Passport_Start, lockOnPlaced=false)으로 임시 동작. 건넨 여권을 돌려받아
+  다음 단계(스캔, 입국심사)에 또 쓰기 때문에 고정하지 않는다. AttachPlacementZones는 다른 지점 물건을 접미사까지 쓴 이름으로 찾는다.
+- 처음엔 NPC에 Collider가 없어서 표지판 도구가 NPC를 못 보고, 입국심사관이 '수하물 찾는 곳' 이동 표지판 바로 앞에 섰다.
+  NPC에 몸 Capsule Collider를 넣고 이동 표지판·노란 판을 다시 만들었다(입국심사 이동 표지판 -15° → +20°).
+  체크인 직원도 -0.2m에 서면 '보안검색' 이동 표지판 아래 모서리를 가려 0m로 옮겼다.
+  → 순서: Build Temp Objects → Build Move Signs → Build Zone Signs → Validate.
+- 2층 부스 노란 판은 이동 표지판이 실제로 놓인 쪽의 반대편에 붙도록 바꿨다(FacilityMountYaw는 각도 크기만 사용).
+- 체크인 카운터 위 모니터가 오른쪽 앞(0~+0.5m, 앞 1.1~1.35m)을 차지해서 여권 건네는 자리를 -0.2m, 탑승권을 -0.45m로 옮겼다.
+- 역할 이름표(머리 위 "체크인 직원" 등)는 초보자에게 도움이 되지만 게임처럼 보일 수 있어 이씨가 캡처를 보고 정한다.
+- 김씨에게 공유: NPC Collider는 XRI 레이에 걸린다. 이동 표지판이 NPC 뒤에 있지 않게 배치했지만, 레이 마스크에서 NPC를 뺄지 김씨가 판단.

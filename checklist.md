@@ -89,4 +89,4 @@ Unity에서 실제로 확인한 항목만 체크한다. 추측으로 체크하�
 - [x] 글자 수(메인 16자, 힌트 24자) 초과 0개, 금지 용어 0개, 표지판 도구 문구와 일치
 - [ ] 김씨와 협의 항목 확정 (S1-0 여권 시작, S2-1 체크인 Hand-over, S8-2 여권 반환, EXIT, Reset 버튼)
 - [ ] 김씨 UI 반영 (GuideManager·ScenarioStep), 실제 HUD 한 줄 표시 확인
-- [x] 보안검색 노트북·가방 임시 물건과 트레이 Placement Zone 2칸(왼쪽 노트북, 오른쪽 가방). Play 모드 시험 통과
+- [x] 보안검색 노트북·가방 임시 물건과 트레이 Placement Zone 2칸(왼쪽 노트북, 오른쪽 가방). Play 모드 시험 통과, Device Simulator 이씨 확인(11/13)

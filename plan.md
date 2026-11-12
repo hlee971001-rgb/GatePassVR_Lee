@@ -138,3 +138,33 @@ Airport_Lee Scene의 Dest_ 7개 지점에 다음 세 가지를 배치한다.
 ## 범위 밖
 Point & Hold·Grab·Scanner·Hand-over 기능 구현, 여권을 손에 든 채 시작하는 설정(김씨),
 표지판 문구 확정(다음 업무 "안내문/표지 문구 확정"), 실제 에셋 교체(에셋 라이선스 정리 후), NPC 배치
+
+---
+
+# [08] Placement Zone 기본 구조 - Plan (담당 이씨, 김씨 구조 검토)
+
+## 무엇을 만드는가
+지정 물체를 지정 위치에 놓으면 성공 처리하는 재사용 컴포넌트. 완료 기준(업무관리표): "지정 위치에 놓으면 성공 처리".
+
+## 구조 (팀 저장소 김씨 코드와 같은 방식)
+- PlacementZoneState (Scripts/Interaction, 순수 C#): 판정만. HoldGaugeState처럼 EditMode 테스트 가능.
+  성공 = 받는 물건이 손에서 놓인 채 settleTime(0.3초) 동안 가만히 영역 안. 성공은 1회만, Reset으로 다시 시도.
+  받지 않는 물건이 놓이면 WrongObject를 들어올 때마다 1회.
+- PlacementZone (Scripts/Interaction, MonoBehaviour): 영역 판(BoxCollider)에 붙인다.
+  Inspector: zoneId, acceptedItems(XRGrabInteractable), settleTime, restingSpeed, detectHeight, lockOnPlaced, placedColor.
+  이벤트: onPlaced(PlacementZone), onWrongObject(PlacementZone). 다음 Step은 정하지 않는다(§16.2, ScenarioManager 담당).
+  성공 시 물건 고정(lockOnPlaced, 이씨 결정: 고정), 판 색을 MaterialPropertyBlock으로 밝게. ResetZone()으로 판정·고정 해제.
+  물건 가운데가 판 가로·세로 안에 있어야 성공(걸쳐 놓은 것은 성공 아님).
+- asmdef: GatePassVR.Runtime(이 프로젝트에서는 Scripts/Interaction에만), GatePassVR.Tests.EditMode — 팀 저장소와 같은 이름.
+
+## 적용 범위
+- Zone_BaggageDrop_CheckIn ← Obj_Carrier_CheckIn (AirportObjectBuilder.PlacementZones 표).
+- 보안검색 트레이는 무엇을 넣을지 정해진 뒤 적용(이씨 결정). 스캔·여권 건네는 자리는 김씨 Scanner·Hand-over.
+
+## 성공 조건과 검증
+| 성공 조건 | 검증 방법 |
+|---|---|
+| 판정 로직(1회 성공, 손에 듦·움직임·틀린 물건·Reset) | EditMode 테스트 9개 통과 |
+| 씬에서 캐리어를 놓으면 성공, 틀린 물건은 성공 아님 | Play 모드 스크립트 시험 |
+| 실제 손으로 잡아 놓기 | Device Simulator (이씨) |
+| Quest 반복 배치 | 실기기 (이씨) |

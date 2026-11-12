@@ -55,6 +55,13 @@ namespace GatePassVR.EditorTools
             ("Dest_Baggage", "Obj_BaggageBag", Kind.Grab, new Vector3(0.4f, 0.25f, 0.6f), -0.5f, 0.55f, 0f, "Luggage"),
         };
 
+        // Placement Zone 기능을 붙일 영역 표시(이름 → 받는 물건 이름). 이름은 지점 접미사(_CheckIn 등)를 뺀 표의 이름이다.
+        // 스캔 자리·여권 건네는 자리는 김씨의 Scanner·Hand-over가 붙을 자리라 여기 넣지 않는다.
+        static readonly Dictionary<string, string[]> PlacementZones = new Dictionary<string, string[]>
+        {
+            { "Zone_BaggageDrop", new[] { "Obj_Carrier" } },
+        };
+
         // 기존 TempObjects를 지우고 새로 만든다. Undo(Ctrl+Z)로 되돌릴 수 있다.
         [MenuItem("GatePass/Objects/Build Temp Objects")]
         static void Build()
@@ -130,7 +137,8 @@ namespace GatePassVR.EditorTools
                 switch (item.kind)
                 {
                     case Kind.Grab:
-                        go.AddComponent<Rigidbody>();
+                        // 탑승권(두께 2mm)·여권처럼 얇은 물건은 떨어질 때 벨트·카운터 Collider를 뚫고 빠질 수 있어 연속 충돌 검사를 쓴다.
+                        go.AddComponent<Rigidbody>().collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
                         go.AddComponent<XRGrabInteractable>();
                         break;
                     case Kind.Zone:
@@ -144,8 +152,45 @@ namespace GatePassVR.EditorTools
                 created++;
             }
 
+            AttachPlacementZones(root.transform);
+
             EditorSceneManager.MarkSceneDirty(root.scene);
             Debug.Log($"[AirportObjectBuilder] {RootName} {created}개 생성. Scene을 저장해 주세요.", root);
+        }
+
+        // PlacementZones 표의 영역에 PlacementZone을 붙이고, 같은 지점의 받는 물건을 연결한다.
+        static void AttachPlacementZones(Transform root)
+        {
+            foreach (Transform zone in root)
+            {
+                int split = zone.name.LastIndexOf('_');
+                string baseName = split > 0 ? zone.name.Substring(0, split) : zone.name;
+                string suffix = split > 0 ? zone.name.Substring(split) : "";
+                if (!PlacementZones.TryGetValue(baseName, out var acceptedNames))
+                {
+                    continue;
+                }
+
+                var component = zone.gameObject.AddComponent<GatePassVR.Interaction.PlacementZone>();
+                var serialized = new SerializedObject(component);
+                serialized.FindProperty("zoneId").stringValue = zone.name;
+                var accepted = serialized.FindProperty("acceptedItems");
+                accepted.arraySize = 0;
+                foreach (string acceptedName in acceptedNames)
+                {
+                    var item = root.Find(acceptedName + suffix);
+                    var grab = item != null ? item.GetComponent<XRGrabInteractable>() : null;
+                    if (grab == null)
+                    {
+                        Debug.LogError($"[AirportObjectBuilder] {zone.name}: 받는 물건 '{acceptedName + suffix}'(XRGrabInteractable)을 찾을 수 없습니다.");
+                        continue;
+                    }
+                    accepted.arraySize++;
+                    accepted.GetArrayElementAtIndex(accepted.arraySize - 1).objectReferenceValue = grab;
+                }
+                serialized.ApplyModifiedPropertiesWithoutUndo();
+                Debug.Log($"[AirportObjectBuilder] {zone.name}: PlacementZone 연결 (받는 물건 {accepted.arraySize}개)");
+            }
         }
 
         static Material GetOrCreateMaterial(string colorName, bool transparent)

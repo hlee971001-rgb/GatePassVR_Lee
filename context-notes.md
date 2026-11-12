@@ -216,3 +216,30 @@
   대신 XRI 원거리 잡기·놓기(레이로 잡은 채 먼 곳에 놓기)로 처리할 수 있는지 김씨 Grab 설정과 [08] Placement Zone 구현에서 확인한다.
   원거리로 자연스럽지 않으면 Dest_CheckIn을 왼쪽으로 약 1m 옮기는 방법(카운터·벨트 둘 다 1m 안팎)을 다시 검토한다.
 - AirportLayoutValidator.AcceptedOutOfReach에 등록해 Validate에서 경고 대신 "참고"로 보고한다. Validate 경고 0개.
+
+## 2026-11-13 [08] Placement Zone 기본 구조
+
+### 결정 사항
+- 팀 저장소(KJY-1204/GatePass_VR develop)의 김씨 코드 방식을 따른다: 순수 상태 클래스(HoldGaugeState) + MonoBehaviour(PointAndHoldTarget),
+  namespace GatePassVR.Interaction, [SerializeField] private + UnityEvent<자기 자신>, Reset 메서드.
+- 성공 후 물건은 고정한다(이씨 결정). 실제로도 벨트에 올린 가방은 가져가고, 다시 집으면 "성공 취소"가 복잡해진다. ResetZone()으로 풀린다.
+- 보안검색 트레이는 이번에 적용하지 않는다(무엇을 넣을지 미정, 이씨 결정).
+
+### 구현 메모
+- 판정은 Trigger 이벤트 대신 매 프레임 판 위 상자(판 아래 5cm ~ 판 위 0.7m) OverlapBox로 집는 물건을 찾는다.
+  판이 표면에서 약간 떠 있어서, 처음에는 표면에 누운 탑승권(두께 2mm)이 상자 아래로 빠져 "틀린 물건"이 감지되지 않았다 → 판 아래 5cm까지 확장.
+- 떨어뜨린 탑승권이 벨트 Mesh Collider를 뚫고 바닥으로 빠졌다(얇은 물건 + 기본 충돌 검사) → 집는 물건 Rigidbody를 ContinuousDynamic으로.
+- 이 프로젝트는 FadeMoveController가 Assets/Scripts(Assembly-CSharp)에 있고 Editor 도구가 그것을 참조해서,
+  GatePassVR.Runtime asmdef를 Scripts 전체가 아니라 Scripts/Interaction에만 두었다.
+
+### 팀 저장소로 옮길 때 주의
+- 팀 저장소는 Assets/_GatePassVR/Scripts 전체가 GatePassVR.Runtime asmdef다. 이씨 Editor 도구 6~7개를 Scripts/Editor에 그대로 넣으면
+  런타임 asmdef에 UnityEditor 코드가 들어가 빌드가 깨진다 → Scripts/Editor에 Editor 전용 asmdef(GatePassVR.Editor, includePlatforms: Editor,
+  GatePassVR.Runtime 참조)를 만들어야 한다. DestTourWindow는 팀 저장소의 FadeMoveController(GatePassVR.VR, Runtime asmdef)를 참조하게 된다.
+- Scripts/Interaction/GatePassVR.Runtime.asmdef(이 프로젝트 전용)는 옮기지 않는다. PlacementZone*.cs와 Tests만 옮긴다.
+
+### 김씨 구조 검토용 요약
+- 연결 방법: ScenarioManager가 PlacementZone.OnPlaced에 리스너를 달고, 현재 Step의 zoneId와 같을 때만 성공 처리.
+  Step Reset 때 PlacementZone.ResetZone() 호출(물건 위치 복구는 ResetController 담당).
+- onWrongObject는 GuideManager 힌트(예: "캐리어를 올려 주세요")에 쓸 수 있다.
+- 원거리 잡기(레이로 잡은 채 놓기)로도 동작하는지는 김씨 Grab 설정에 달려 있다(Zone_BaggageDrop_CheckIn은 서는 지점에서 1.79m).

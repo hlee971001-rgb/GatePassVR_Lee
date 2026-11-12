@@ -59,3 +59,22 @@ Unity에서 실제로 확인한 항목만 체크한다. 추측으로 체크하�
 - [ ] Device Simulator로 임시 Grab 확인 (이씨) — 미검증
 - [x] Validate Colliders 경고 0개 (11/13)
 - [x] 커밋, GitHub Push (11/13)
+
+---
+
+# [08] Placement Zone 기본 구조 - Checklist (담당 이씨, 김씨 구조 검토)
+
+## Trello 완료 체크리스트
+- [x] Placement Zone 영역과 성공 위치 기준 설정 (물건 가운데가 판 안, 손에서 놓임, 0.3초 정지)
+- [x] 대상 오브젝트를 지정 위치에 놓았을 때 판정되도록 연결 (Zone_BaggageDrop_CheckIn ← Obj_Carrier_CheckIn)
+- [x] 잘못된 위치·오브젝트에서는 성공 처리되지 않는지 확인 (EditMode 테스트 + Play 모드 시험)
+- [ ] Quest에서 반복 배치 테스트 후 성공 처리 확인 (이씨) — 미검증
+
+## 작업
+- [x] asmdef 구성 (GatePassVR.Runtime, GatePassVR.Tests.EditMode — 팀 저장소와 같은 이름)
+- [x] PlacementZoneState 테스트 먼저 작성 → 구현, EditMode 9개 통과
+- [x] PlacementZone 컴포넌트 (onPlaced/onWrongObject, 1회 성공, 성공 시 고정·색 변경, ResetZone)
+- [x] AirportObjectBuilder에서 영역에 자동 연결, 집는 물건에 연속 충돌 검사(얇은 탑승권 관통 방지)
+- [x] Play 모드 시험: 틀린 물건 신호 1회, 걸쳐 놓기 실패, 가운데 놓기 성공(약 0.33초 뒤), 고정·색 변경, ResetZone 후 다시 집기 가능
+- [ ] Device Simulator로 직접 잡아서 놓기 (이씨) — 미검증
+- [ ] 김씨 구조 검토 (context-notes 요약 공유)

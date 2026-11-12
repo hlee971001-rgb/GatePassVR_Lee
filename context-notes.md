@@ -164,3 +164,37 @@
 - Dest_ 오브젝트의 Scene 뷰 이름표(아이콘)는 편집 화면에서만 보이고 게임에는 나오지 않는다. Game 뷰에서는 Gizmos를 꺼서 숨긴다.
   Dest_를 비활성화해서 숨기면 안 된다: GameObject.Find가 꺼진 오브젝트를 찾지 못해 도구가 멈춘다.
   (한 번 꺼졌다가 다시 켰다. Dest Tour 창은 DestinationPoints 아래에서 찾도록 고쳐 꺼져 있어도 동작한다.)
+
+## 2026-11-13 작업 환경 이전, 오브젝트 배치, 이동 표지판 다시 만들기
+
+### 작업 환경
+- 프로젝트 위치를 D:\GatePassVR_Lee로 옮겼다(GitHub에서 clone). 공항 모델은 README 방법대로 다시 넣었다.
+- Claude Code가 Unity를 직접 조작할 수 있게 MCP for Unity 패키지(com.coplaydev.unity-mcp, 팀 develop과 같은 #main)를 추가했다.
+  연결 설정 .mcp.json(UnityMCP, http://127.0.0.1:8080/mcp)은 개인 설정이라 .git/info/exclude로 이 PC에서만 제외했다.
+  Unity에서 Window > MCP for Unity > Toggle MCP Window > Start Server를 눌러야 연결된다.
+- Unity가 처음 열 때 자동으로 바꾼 파일(OpenXR 설정, Quality URP Config, SampleScene.scenetemplate, 동적 폰트 SDF)은 커밋하지 않았다.
+
+### ③ 오브젝트 배치 (GatePass > Objects > Build Temp Objects)
+- AirportObjectBuilder의 표(지점, 이름, 종류, 크기, 지점 기준 오른쪽·앞 거리)로 TempObjects 아래에 만든다. 이름은 <이름>_<지점>.
+  - 집는 물건(Obj_): Box Collider + Rigidbody + XRGrabInteractable(XRI 기본, 동작 확정은 김씨).
+  - 영역 표시(Zone_): 반투명 초록 Unlit 판 + Trigger Box Collider. Placement·Scanner·Hand-over가 붙을 자리.
+  - 여권은 시작 시 손에 드는 방식(김씨)이 생기기 전까지 Start 앞 임시 받침대(Stand_Passport, 0.9m) 위에 둔다.
+- 높이는 물건 가운데와 네 모서리 아래 표면 중 가장 높은 곳으로 정한다. 가운데 한 점만 쟀더니 트레이가 X-ray 벨트 롤러 틈(0.76m)에
+  박혀 Play 시 19° 기울었다. 고친 뒤 기울기 1° 이내.
+- 트레이는 어두운 벨트 위에서 안 보여서 밝은 회색으로 바꿨다. 색별 Material 6개(M_Temp*.mat)를 공유한다.
+- 점검 도구에 "오브젝트가 서는 지점에서 손 닿는 범위(수평 1m, 높이 1.3m 이하)에 있는지" 검사를 추가했다.
+  결과: 여권 0.60, 캐리어 0.35, 탑승권 0.86, 트레이 0.77, 스캔 자리 0.99, 여권 건네는 자리 0.99, 가방 0.39m.
+  - 스캔·여권 건네는 자리: 부스 책상 앞 끝이 지점에서 약 0.98m라 책상 앞 끝에 붙였다.
+- 남은 문제: 체크인 수하물 올리는 자리(Zone_BaggageDrop)가 1.79m. 체크인 벨트가 카운터 왼쪽 1.5m부터 시작해 지금 서는 지점에서 손이 안 닿는다.
+  방법 1) Dest_CheckIn을 왼쪽으로 약 1m 옮겨 카운터와 벨트 사이에 서게 한다(10/2 1차 피드백으로 정한 위치를 바꿈).
+  방법 2) 그대로 두고 XRI 원거리 잡기/놓기와 김씨 Placement Zone 구현에 맡긴다. 이씨 결정 필요.
+- Dest Tour 가독성, Device Simulator 임시 Grab은 아직 이씨가 직접 확인하지 않았다(미검증).
+
+### 이동 표지판 다시 만들기 (이씨 확인)
+- 10/2 버전의 문제: 7개 모두 "다음 구역으로 이동"이라 어디로 가는지 모름, 문구가 길어 글씨가 작고 동적 폰트로 들쭉날쭉,
+  2m 높이에 떠 있어 스티커처럼 보임, 버튼(Point & Hold 목표)처럼 보이지 않음, 위치가 다음 구역 방향과 무관.
+- 바꾼 것: 목적지 문구 + 방향 화살표 + "가리키고 잠시 기다리세요", 바닥에 선 안내 기둥(패널 가운데 1.6m), 다음 구역 쪽 ±20° 우선,
+  표지판 글자만 담은 고정 폰트(Assets/Fonts/NotoSansKR-Medium SDF Signs.asset). 문구를 바꾸고 도구를 다시 실행하면 새 글자도 추가된다.
+- Security·Boarding·Immigration은 바로 앞이 X-ray 기계·심사 부스로 막혀 ±20° 안에 자리가 없어 ±30°까지 넓혀 놓였다(Security +30°, 4m).
+- 화살표는 서 있는 지점에서 본 다음 Dest_ 방향(대략)이다. 출구 화살표(↑)는 EXIT 위치가 정해지면 조정한다.
+- 김씨에게 공유: 흰 원 가운데 GaugeAnchor에 원형 게이지를, 표지판 루트(Box Collider)에 PointAndHoldTarget을 붙이면 된다.

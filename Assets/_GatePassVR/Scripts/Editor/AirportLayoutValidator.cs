@@ -263,6 +263,13 @@ namespace GatePassVR.EditorTools
 
         const string TempObjectRootName = "TempObjects";
 
+        // 손 닿는 범위 밖이어도 의도적으로 둔 오브젝트(이유). 경고 대신 참고로 보고한다.
+        static readonly Dictionary<string, string> AcceptedOutOfReach = new Dictionary<string, string>
+        {
+            // 2026-11-13 이씨 결정: 체크인 벨트가 카운터 왼쪽 1.5m부터라 서는 지점에서 닿지 않지만 지점을 옮기지 않는다.
+            { "Zone_BaggageDrop_CheckIn", "이씨 결정(11/13): 지점 유지, 원거리 잡기·놓기와 김씨 Placement Zone 구현에서 확인" },
+        };
+
         // AirportObjectBuilder가 만든 <이름>_<지점 짧은 이름> 오브젝트가 서는 지점에서 손 닿는 범위에 있어야 한다.
         // 기준: 지점에서 Collider의 가장 가까운 점까지 수평 거리 ReachDistance 이하, 바닥에서 ReachMaxHeight 이하.
         static int CheckTempObjects(Transform dest, StringBuilder report)
@@ -297,6 +304,11 @@ namespace GatePassVR.EditorTools
                 // 0.01m는 계산 오차 여유
                 if (flat.magnitude > ReachDistance + 0.01f || height > ReachMaxHeight + 0.01f)
                 {
+                    if (AcceptedOutOfReach.TryGetValue(item.name, out string reason))
+                    {
+                        report.AppendLine($"  - 참고: 손 닿는 범위 밖이지만 의도적으로 둠 ({reason})");
+                        continue;
+                    }
                     warnings++;
                     report.AppendLine($"  ! 경고: {item.name}이 손 닿는 범위({ReachDistance}m, 높이 {ReachMaxHeight}m 이하) 밖에 있음");
                 }

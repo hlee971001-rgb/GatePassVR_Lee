@@ -51,10 +51,11 @@ Unity에서 실제로 확인한 항목만 체크한다. 추측으로 체크하�
 - [x] 임시 오브젝트 생성(실제 크기), 집는 물건에 임시 Grab (GatePass > Objects > Build Temp Objects)
 - [x] 영역 표시 3개 배치
 - [x] Play 모드 약 8초 동안 집는 물건 5개가 떨어지거나 뚫지 않고 제자리에 놓임
-- [ ] 점검 도구 "오브젝트 1m 안" 검사 경고 0개 — Zone_BaggageDrop_CheckIn 1.79m로 경고 1개 남음(처리 방식 결정 필요, context-notes)
+- [x] 점검 도구 "오브젝트 1m 안" 검사 경고 0개 — Zone_BaggageDrop_CheckIn(1.79m)은 이씨 결정으로 지점 유지, 검사에서 "참고"로 표시
+- [ ] 김씨와 확인: 수하물 올리는 자리를 원거리 잡기·놓기로 쓸 수 있는지 (Grab 설정, [08] Placement Zone)
 
 ## ④ 점검
 - [ ] Dest Tour로 표지판 가독성, 오브젝트 위치 확인 (이씨) — 미검증
 - [ ] Device Simulator로 임시 Grab 확인 (이씨) — 미검증
-- [x] Validate Colliders 기존 검사 경고 0개 유지 (새 "오브젝트 1m 안" 검사 경고 1개 제외)
+- [x] Validate Colliders 경고 0개 (11/13)
 - [x] 커밋, GitHub Push (11/13)

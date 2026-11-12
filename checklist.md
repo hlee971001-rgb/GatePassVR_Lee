@@ -76,5 +76,5 @@ Unity에서 실제로 확인한 항목만 체크한다. 추측으로 체크하�
 - [x] PlacementZone 컴포넌트 (onPlaced/onWrongObject, 1회 성공, 성공 시 고정·색 변경, ResetZone)
 - [x] AirportObjectBuilder에서 영역에 자동 연결, 집는 물건에 연속 충돌 검사(얇은 탑승권 관통 방지)
 - [x] Play 모드 시험: 틀린 물건 신호 1회, 걸쳐 놓기 실패, 가운데 놓기 성공(약 0.33초 뒤), 고정·색 변경, ResetZone 후 다시 집기 가능
-- [ ] Device Simulator로 직접 잡아서 놓기 (이씨) — 미검증
+- [x] Device Simulator로 직접 잡아서 놓기 (이씨 확인 11/13: 캐리어를 레이로 잡아 초록 판에 놓으면 성공)
 - [ ] 김씨 구조 검토 (context-notes 요약 공유)

@@ -31,7 +31,9 @@ namespace GatePassVR.EditorTools
             public string MaterialPath;
             public bool AddCollider;
             public bool IsPylon;     // 바닥에 선 기둥 + 패널(안내 기둥형)
+            public bool IsZone;      // 구역 표지판: 왼쪽 출국/입국 띠, 천장에 매달거나(천장이 가까우면) 두 기둥으로 세움
             public float[] Heights;  // 바닥에서 판 가운데 높이 후보
+            public float[] FallbackHeights = new float[0]; // Heights로 자리가 없을 때만 쓰는 높이
             public float MinDistance;
             public float MaxDistance;
             public float MaxYaw;     // 정면 기준 좌우 허용 각도
@@ -55,23 +57,33 @@ namespace GatePassVR.EditorTools
             MaxYaw = 20f,
         };
 
-        // 구역 이름 표지판: 실제 공항처럼 노란 판, 검은 글씨, 더 크고 높게. Collider 없음(Point & Hold Ray를 막지 않게).
+        // 구역 이름 표지판: 실제 공항처럼 노란 판, 검은 글씨. Collider 없음(Point & Hold Ray를 막지 않게).
+        // "지금 여기가 어디인지" 알려 주는 배경 정보라서 눈높이의 이동 표지판(행동)보다 작고 높게 둔다(3m 이상, 4m 이상 떨어져서).
+        // 왼쪽 띠로 출국(파랑)/입국(초록)을 구별한다. 이 공항은 출국·입국 구역이 한 건물이라 서로 보이기 때문이다.
         static readonly SignStyle ZoneStyle = new SignStyle
         {
             RootName = "ZoneSigns",
             NamePrefix = "ZoneSign_",
-            BoardSize = new Vector3(2.0f, 0.6f, 0.06f),
+            BoardSize = new Vector3(1.6f, 0.45f, 0.05f),
             BoardColor = new Color(1f, 0.8f, 0.1f),
             TextColor = new Color(0.05f, 0.05f, 0.05f),
             MaterialPath = MaterialFolder + "/M_TempZoneSignBoard.mat",
             AddCollider = false,
-            IsPylon = false,
-            // 2.1m는 2층 심사 부스처럼 바로 앞이 높은 시설로 막힌 곳용(부스 앞면 안내판 높이).
-            Heights = new[] { 2.1f, 2.6f, 3.0f, 3.5f },
-            MinDistance = 2f,
+            IsZone = true,
+            Heights = new[] { 3.0f, 3.3f, 3.6f },
+            // 2층 심사 부스처럼 앞이 높은 시설로 막혀 3m 이상에 자리가 없을 때만 낮춘다.
+            // (2층 부스 줄은 이 범위로도 자리가 없어 FacilityMountYaw로 부스 앞면에 붙인다.)
+            FallbackHeights = new[] { 2.6f },
+            MinDistance = 4f,
             MaxDistance = 8f,
             MaxYaw = SignViewRules.MaxYaw,
         };
+
+        const float ZoneBandWidth = 0.4f;
+        static readonly Color DepartureBandColor = new Color(0.1f, 0.35f, 0.75f);
+        static readonly Color ArrivalBandColor = new Color(0.1f, 0.55f, 0.3f);
+        // 판 윗면에서 천장까지 이 거리 안이면 천장에 매달고, 더 멀면(2층 천장 13m 이상 등) 바닥에 두 기둥으로 세운다.
+        const float MaxHangLength = 3f;
 
         // (서 있는 지점, 목적지 문구, 방향 화살표, 정면 기준 각도(+는 오른쪽), 수평 거리 m)
         // 각도는 다음 구역 쪽(±20° 안으로 자른 값)이다. 화살표는 서 있는 지점에서 본 다음 구역 방향이다.
@@ -88,14 +100,24 @@ namespace GatePassVR.EditorTools
             ("Dest_Baggage", "출구", "↑", -20f, 3f), // EXIT 위치를 김씨와 정한 뒤 화살표 조정
         };
 
+        // (서 있는 지점, 구역 이름, 출국/입국 띠, 정면 기준 각도, 수평 거리 m, 바닥에서 판 가운데 높이 m)
         // 출구(EXIT) 구역 표지판은 EXIT 위치를 김씨와 정한 뒤 추가한다.
-        static readonly (string from, string text, float yawOffset, float distance, float height)[] ZoneSigns =
+        static readonly (string from, string text, string band, float yawOffset, float distance, float height)[] ZoneSigns =
         {
-            ("Dest_CheckIn", "체크인", 0f, 3f, 3.0f),
-            ("Dest_Security", "보안검색", 0f, 3f, 3.0f),
-            ("Dest_Boarding", "탑승구", 0f, 2.5f, 3.0f),
-            ("Dest_Immigration", "입국심사", 0f, 2.5f, 3.0f),
-            ("Dest_Baggage", "수하물 찾는 곳", 0f, 4f, 3.0f),
+            ("Dest_CheckIn", "체크인", "출국", 0f, 4.5f, 3.0f),
+            ("Dest_Security", "보안검색", "출국", 0f, 4.5f, 3.0f),
+            ("Dest_Boarding", "탑승구", "출국", 0f, 4.5f, 3.0f),
+            ("Dest_Immigration", "입국심사", "입국", 0f, 4.5f, 3.0f),
+            ("Dest_Baggage", "수하물 찾는 곳", "입국", 0f, 4.5f, 3.0f),
+        };
+
+        // 2층 심사 부스 줄은 바로 앞이 높이 3.7m 부스와 벽이라 매달거나 세울 빈자리가 없다.
+        // 이 지점들은 표의 각도 방향으로 가장 가까운 시설(부스) 앞면에 판을 붙인다. 이동 표지판과 반대쪽 각도로 둔다.
+        // 높이는 앉은 사용자가 MaxElevation 안쪽(24°)으로 올려다보도록 부스까지 거리에서 계산한다.
+        static readonly Dictionary<string, float> FacilityMountYaw = new Dictionary<string, float>
+        {
+            { "Dest_Boarding", -20f },     // 이동 표지판 +20°
+            { "Dest_Immigration", 20f },   // 이동 표지판 -15°
         };
 
         // 기존 표지판을 지우고 새로 만든다. Undo(Ctrl+Z)로 되돌릴 수 있다.
@@ -115,9 +137,10 @@ namespace GatePassVR.EditorTools
         static void BuildZoneSigns()
         {
             var signs = new List<(string from, string text, string arrow, float yawOffset, float distance, float height)>();
-            foreach (var (from, text, yaw, distance, height) in ZoneSigns)
+            // 구역 표지판은 화살표 자리에 출국/입국 띠 문구를 넘긴다.
+            foreach (var (from, text, band, yaw, distance, height) in ZoneSigns)
             {
-                signs.Add((from, text, null, yaw, distance, height));
+                signs.Add((from, text, band, yaw, distance, height));
             }
             Build(ZoneStyle, signs);
         }
@@ -155,6 +178,20 @@ namespace GatePassVR.EditorTools
                     continue;
                 }
 
+                if (style.IsZone && FacilityMountYaw.TryGetValue(from, out float mountYaw))
+                {
+                    if (TryFacilityMount(dest, mountYaw, out float mountDistance, out float mountHeight))
+                    {
+                        var mounted = CreateSign(style, root.transform, $"{style.NamePrefix}{dest.name}", dest, text,
+                            mountYaw, mountDistance, mountHeight, font, material);
+                        AddZoneParts(style, mounted.transform, dest, arrow, font, false);
+                        Debug.Log($"[AirportSignBuilder] {from} '{text}': 시설 앞면에 붙임 ({mountYaw:+0;-0;0}°, {mountDistance:0.00}m, 높이 {mountHeight:0.00}m)");
+                        created++;
+                        continue;
+                    }
+                    Debug.LogWarning($"[AirportSignBuilder] {from} '{text}': {mountYaw:+0;-0;0}° 방향 3m 안에 붙일 시설이 없어 일반 방식으로 둡니다.");
+                }
+
                 if (!FindClearPlacement(style, dest, yawOffset, distance, height,
                         out float placedYaw, out float placedDistance, out float placedHeight))
                 {
@@ -176,6 +213,10 @@ namespace GatePassVR.EditorTools
                 {
                     AddPylonParts(style, sign.transform, dest, arrow, font);
                 }
+                if (style.IsZone)
+                {
+                    AddZoneParts(style, sign.transform, dest, arrow, font, true);
+                }
                 created++;
             }
 
@@ -195,6 +236,7 @@ namespace GatePassVR.EditorTools
             {
                 heights.Add(preferredHeight);
             }
+            heights.AddRange(style.FallbackHeights);
 
             var candidates = new List<(float yaw, float distance, float height, float cost)>
             {
@@ -209,6 +251,10 @@ namespace GatePassVR.EditorTools
             foreach (float h in heights)
             {
                 float heightCost = Mathf.Abs(h - preferredHeight) / 0.5f;
+                if (System.Array.IndexOf(style.FallbackHeights, h) >= 0)
+                {
+                    heightCost += OutOfRangeCost;
+                }
                 for (float yaw = -SignViewRules.MaxYaw; yaw <= SignViewRules.MaxYaw + 0.01f; yaw += 5f)
                 {
                     for (float d = searchMinDistance; d <= searchMaxDistance + 0.01f; d += 0.5f)
@@ -233,6 +279,7 @@ namespace GatePassVR.EditorTools
                 // 앉은 사용자도 MaxElevation 이하로 올려다보고, 서서·앉아서 모두 가려지지 않아야 한다.
                 if (SignViewRules.Elevation(seatedEye, position) <= SignViewRules.MaxElevation
                     && (!style.IsPylon || IsPostClear(style, dest, position))
+                    && (!style.IsZone || IsZoneMountClear(style, dest, position, rotation))
                     && IsClear(style, standingEye, position, rotation) && IsClear(style, seatedEye, position, rotation))
                 {
                     yawOffset = candidate.yaw;
@@ -286,6 +333,157 @@ namespace GatePassVR.EditorTools
             return !Physics.CheckBox(center, half, Quaternion.identity, ~0, QueryTriggerInteraction.Ignore);
         }
 
+        // 구역 표지판 두 지지대(판 좌우 끝에서 0.15m 안쪽)의 위치
+        static Vector3[] ZoneSupportPoints(SignStyle style, Vector3 center, Quaternion rotation)
+        {
+            var side = rotation * Vector3.right * (style.BoardSize.x / 2f - 0.15f);
+            return new[] { center - side, center + side };
+        }
+
+        // 두 지지대 위로 MaxHangLength 안에 천장이 있으면 매달기(천장 높이 반환), 없으면 바닥 기둥.
+        static bool TryFindCeiling(SignStyle style, Vector3 center, Quaternion rotation, out float ceilingY)
+        {
+            ceilingY = float.PositiveInfinity;
+            float top = center.y + style.BoardSize.y / 2f;
+            foreach (var point in ZoneSupportPoints(style, center, rotation))
+            {
+                if (!Physics.Raycast(new Vector3(point.x, top + 0.01f, point.z), Vector3.up, out var hit,
+                        MaxHangLength, ~0, QueryTriggerInteraction.Ignore))
+                {
+                    return false;
+                }
+                ceilingY = Mathf.Min(ceilingY, hit.point.y);
+            }
+            return true;
+        }
+
+        // 매달 수 없으면 두 바닥 기둥이 시설을 뚫지 않아야 한다.
+        static bool IsZoneMountClear(SignStyle style, Transform dest, Vector3 center, Quaternion rotation)
+        {
+            if (TryFindCeiling(style, center, rotation, out _))
+            {
+                return true;
+            }
+            foreach (var point in ZoneSupportPoints(style, center, rotation))
+            {
+                if (!IsPostClear(style, dest, point))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        const float FacilityMountElevation = 24f;
+
+        // 표의 각도 방향으로 높이를 바꿔 가며 3m 안의 시설 앞면을 찾는다. 판을 앞면에서 4cm 띄워 붙인다.
+        static bool TryFacilityMount(Transform dest, float yawOffset, out float distance, out float height)
+        {
+            // 부스 유리 원통처럼 Collider가 없는 모델 부분에 판이 묻히지 않도록, 공항 모델 전체에 임시 Mesh Collider를 만들어 잰다.
+            // (AirportLayoutValidator의 Analyze와 같은 방식. 숨김 오브젝트라 Scene에 남지 않는다.)
+            var temporary = new List<GameObject>();
+            var model = GameObject.Find("Airport7_FINALc_EscenaMontada");
+            if (model != null)
+            {
+                foreach (var filter in model.GetComponentsInChildren<MeshFilter>())
+                {
+                    if (filter.sharedMesh == null)
+                    {
+                        continue;
+                    }
+                    var go = new GameObject(filter.name) { hideFlags = HideFlags.HideAndDontSave };
+                    go.transform.SetPositionAndRotation(filter.transform.position, filter.transform.rotation);
+                    go.transform.localScale = filter.transform.lossyScale;
+                    go.AddComponent<MeshCollider>().sharedMesh = filter.sharedMesh;
+                    temporary.Add(go);
+                }
+            }
+            try
+            {
+                return MeasureFacilityMount(dest, yawOffset, out distance, out height);
+            }
+            finally
+            {
+                foreach (var go in temporary)
+                {
+                    Object.DestroyImmediate(go);
+                }
+                Physics.SyncTransforms();
+            }
+        }
+
+        static bool MeasureFacilityMount(Transform dest, float yawOffset, out float distance, out float height)
+        {
+            Physics.SyncTransforms();
+            var direction = Quaternion.Euler(0f, dest.eulerAngles.y + yawOffset, 0f) * Vector3.forward;
+            // 먼저 대략 높이 2.1m에서 앞면까지 거리를 재고, 그 거리로 높이를 다시 정한 뒤 그 높이에서 한 번 더 잰다.
+            // 원통형 부스처럼 앞면이 휘어 있으면 가운데만 재면 판 양 끝이 시설에 박힌다. 판 가운데와 양 끝 세 줄 중 가장 가까운 앞면에 맞춘다.
+            var side = Quaternion.Euler(0f, dest.eulerAngles.y + yawOffset, 0f) * Vector3.right * (ZoneStyle.BoardSize.x / 2f);
+            height = 2.1f;
+            distance = 0f;
+            for (int i = 0; i < 2; i++)
+            {
+                // 판 폭을 0.2m 간격으로, 판 위·가운데·아래 세 높이에서 잰다(원통 하나가 판 일부만 가려도 놓치지 않게).
+                float nearest = float.PositiveInfinity;
+                for (float t = -1f; t <= 1.001f; t += 0.25f)
+                {
+                    foreach (float dy in new[] { -ZoneStyle.BoardSize.y / 2f, 0f, ZoneStyle.BoardSize.y / 2f })
+                    {
+                        var origin = dest.position + Vector3.up * (height + dy) + side * t;
+                        if (Physics.Raycast(origin, direction, out var hit, 3f, ~0, QueryTriggerInteraction.Ignore))
+                        {
+                            nearest = Mathf.Min(nearest, hit.distance);
+                        }
+                    }
+                }
+                if (float.IsInfinity(nearest))
+                {
+                    return false;
+                }
+                distance = nearest - 0.04f;
+                height = SignViewRules.SeatedEyeHeight + Mathf.Tan(FacilityMountElevation * Mathf.Deg2Rad) * distance;
+            }
+            return true;
+        }
+
+        // 왼쪽 출국/입국 띠와, 천장에 매다는 줄 또는 바닥 기둥 두 개를 붙인다(시설에 붙인 판은 지지대 없음).
+        static void AddZoneParts(SignStyle style, Transform sign, Transform dest, string band, TMP_FontAsset font, bool addSupports)
+        {
+            float front = -style.BoardSize.z / 2f;
+            if (!string.IsNullOrEmpty(band))
+            {
+                bool departure = band == "출국";
+                var bandMaterial = GetOrCreateMaterial(
+                    MaterialFolder + (departure ? "/M_TempZoneBandDeparture.mat" : "/M_TempZoneBandArrival.mat"),
+                    departure ? DepartureBandColor : ArrivalBandColor);
+                float bandX = -style.BoardSize.x / 2f + ZoneBandWidth / 2f;
+                CreateBox("Band", sign, new Vector3(bandX, 0f, front - 0.002f),
+                    new Vector3(ZoneBandWidth, style.BoardSize.y, 0.004f), bandMaterial);
+                CreateLabel("BandLabel", sign, new Vector3(bandX, 0f, front - 0.01f),
+                    new Vector2(ZoneBandWidth - 0.08f, style.BoardSize.y - 0.12f), band, font, Color.white, 10f);
+            }
+
+            if (!addSupports)
+            {
+                return;
+            }
+            var supportMaterial = GetOrCreateMaterial(MaterialFolder + "/M_TempSignPost.mat", new Color(0.18f, 0.2f, 0.24f));
+            Physics.SyncTransforms();
+            bool hanging = TryFindCeiling(style, sign.position, sign.rotation, out float ceilingY);
+            float boardTop = sign.position.y + style.BoardSize.y / 2f;
+            float boardBottom = sign.position.y - style.BoardSize.y / 2f;
+            float from = hanging ? boardTop : dest.position.y;
+            float to = hanging ? ceilingY : boardBottom;
+            float width = hanging ? 0.02f : PostWidth;
+            var points = ZoneSupportPoints(style, sign.position, sign.rotation);
+            for (int i = 0; i < points.Length; i++)
+            {
+                var local = sign.InverseTransformPoint(new Vector3(points[i].x, (from + to) / 2f, points[i].z));
+                CreateBox(hanging ? $"HangRod{i}" : $"Post{i}", sign, new Vector3(local.x, local.y, 0.01f),
+                    new Vector3(width, to - from, width), supportMaterial);
+            }
+        }
+
         // 표지판의 +Z가 플레이어 반대쪽을 향하게 해서, 글씨(-Z 면)가 플레이어 쪽에 보이게 한다.
         static void GetPlacement(Transform dest, float yawOffset, float distance, float height,
             out Vector3 position, out Quaternion rotation)
@@ -320,6 +518,14 @@ namespace GatePassVR.EditorTools
                     text, font, style.TextColor, 10f);
                 CreateLabel("Hint", sign.transform, new Vector3(0.19f, -0.21f, front), new Vector2(0.72f, 0.14f),
                     HoldHintText, font, new Color(0.75f, 0.85f, 1f), 10f);
+            }
+            else if (style.IsZone)
+            {
+                // 왼쪽 띠(ZoneBandWidth) 오른쪽 영역 가운데에 구역 이름을 둔다.
+                float areaLeft = -style.BoardSize.x / 2f + ZoneBandWidth + 0.05f;
+                float areaRight = style.BoardSize.x / 2f - 0.05f;
+                CreateLabel("Label", sign.transform, new Vector3((areaLeft + areaRight) / 2f, 0f, front),
+                    new Vector2(areaRight - areaLeft, style.BoardSize.y - 0.08f), text, font, style.TextColor, 10f);
             }
             else
             {
@@ -409,7 +615,7 @@ namespace GatePassVR.EditorTools
             }
             foreach (var sign in ZoneSigns)
             {
-                characters.UnionWith(StripTags(sign.text));
+                characters.UnionWith(StripTags(sign.text) + sign.band);
             }
             characters.Remove(' ');
             string needed = string.Concat(characters);

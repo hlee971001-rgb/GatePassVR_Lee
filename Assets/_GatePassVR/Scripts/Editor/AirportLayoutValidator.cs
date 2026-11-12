@@ -187,6 +187,9 @@ namespace GatePassVR.EditorTools
             // 5. 이 지점의 구역 이름 표지판이 보이는지 (ZoneSigns가 있을 때만)
             warnings += CheckZoneSigns(dest, report);
 
+            // 6. 이 지점의 임시 오브젝트·영역 표시가 손 닿는 1m 안에 있는지 (TempObjects가 있을 때만)
+            warnings += CheckTempObjects(dest, report);
+
             report.AppendLine();
             return warnings;
         }
@@ -253,6 +256,49 @@ namespace GatePassVR.EditorTools
                     warnings++;
                     report.AppendLine($"  ! 경고: {who} 볼 때 {kind}가 {Describe(hit.collider)}에 가려짐 (눈에서 {hit.distance:0.0}m)");
                     break;
+                }
+            }
+            return warnings;
+        }
+
+        const string TempObjectRootName = "TempObjects";
+
+        // AirportObjectBuilder가 만든 <이름>_<지점 짧은 이름> 오브젝트가 서는 지점에서 손 닿는 범위에 있어야 한다.
+        // 기준: 지점에서 Collider의 가장 가까운 점까지 수평 거리 ReachDistance 이하, 바닥에서 ReachMaxHeight 이하.
+        static int CheckTempObjects(Transform dest, StringBuilder report)
+        {
+            var root = GameObject.Find(TempObjectRootName);
+            if (root == null)
+            {
+                return 0;
+            }
+
+            int warnings = 0;
+            string suffix = "_" + dest.name.Replace("Dest_", "");
+            foreach (Transform item in root.transform)
+            {
+                if (!item.name.EndsWith(suffix) || item.name.StartsWith("Stand_"))
+                {
+                    continue;
+                }
+                var collider = item.GetComponent<Collider>();
+                if (collider == null)
+                {
+                    warnings++;
+                    report.AppendLine($"  ! 경고: 오브젝트 {item.name}에 Collider 없음");
+                    continue;
+                }
+
+                var closest = collider.ClosestPoint(dest.position + Vector3.up * ReachMaxHeight);
+                var flat = closest - dest.position;
+                float height = flat.y;
+                flat.y = 0f;
+                report.AppendLine($"- 오브젝트 {item.name}: 가장 가까운 점까지 수평 {flat.magnitude:0.00}m, 바닥에서 {height:0.00}m");
+                // 0.01m는 계산 오차 여유
+                if (flat.magnitude > ReachDistance + 0.01f || height > ReachMaxHeight + 0.01f)
+                {
+                    warnings++;
+                    report.AppendLine($"  ! 경고: {item.name}이 손 닿는 범위({ReachDistance}m, 높이 {ReachMaxHeight}m 이하) 밖에 있음");
                 }
             }
             return warnings;

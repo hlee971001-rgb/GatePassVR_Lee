@@ -55,8 +55,8 @@ Unity에서 실제로 확인한 항목만 체크한다. 추측으로 체크하�
 - [ ] 김씨와 확인: 수하물 올리는 자리를 원거리 잡기·놓기로 쓸 수 있는지 (Grab 설정, [08] Placement Zone)
 
 ## ④ 점검
-- [ ] Dest Tour로 표지판 가독성, 오브젝트 위치 확인 (이씨) — 미검증
-- [ ] Device Simulator로 임시 Grab 확인 (이씨) — 미검증
+- [x] Dest Tour로 표지판 가독성, 오브젝트 위치 확인 (이씨 확인 11/13)
+- [x] Device Simulator로 임시 Grab 확인 (이씨 확인 11/13: 여권·캐리어·탑승권·트레이·가방)
 - [x] Validate Colliders 경고 0개 (11/13)
 - [x] 커밋, GitHub Push (11/13)
 

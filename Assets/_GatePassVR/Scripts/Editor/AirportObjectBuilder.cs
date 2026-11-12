@@ -31,6 +31,9 @@ namespace GatePassVR.EditorTools
             // 트레이는 어두운 X-ray 벨트 위에서 눈에 띄도록 밝은 회색.
             { "Tray", new Color(0.78f, 0.8f, 0.84f) },
             { "Stand", new Color(0.6f, 0.6f, 0.6f) },
+            { "Laptop", new Color(0.22f, 0.24f, 0.28f) },
+            // 들고 타는 가방은 맡기는 캐리어(주황)와 헷갈리지 않게 청록색.
+            { "Bag", new Color(0.1f, 0.55f, 0.6f) },
             { "Zone", new Color(0.1f, 0.85f, 0.35f, 0.35f) },
         };
 
@@ -45,8 +48,15 @@ namespace GatePassVR.EditorTools
             ("Dest_CheckIn", "Obj_Carrier", Kind.Grab, new Vector3(0.4f, 0.6f, 0.25f), -0.55f, 0.15f, 0f, "Luggage"),
             ("Dest_CheckIn", "Obj_BoardingPass", Kind.Grab, new Vector3(0.08f, 0.002f, 0.2f), -0.2f, 0.95f, 0f, "Paper"),
             ("Dest_CheckIn", "Zone_BaggageDrop", Kind.Zone, new Vector3(0.7f, 0.02f, 0.6f), -1.8f, 1.35f, 0f, "Zone"),
-            // 보안검색: 트레이는 X-ray 벨트 입구. 벨트가 앞뒤로 흐르므로 긴 쪽(60cm)을 앞뒤로 둔다.
-            ("Dest_Security", "Obj_SecurityTray", Kind.Grab, new Vector3(0.4f, 0.08f, 0.6f), -0.375f, 1.05f, 0f, "Tray"),
+            // 보안검색: 노트북(벨트 입구 오른쪽 빈 곳)과 가방(플레이어 오른쪽 바닥)을 집어 트레이에 넣는다(guide-texts S3-1, S3-2).
+            // 오른쪽에 받침대를 세우면 이동 표지판을 가려서, 받침대 없이 벨트 빈 곳과 바닥을 쓴다.
+            // 트레이는 고정(집지 않음)하고, 긴 쪽(60cm)을 벨트 가로로 두어 왼쪽 반은 노트북, 오른쪽 반은 가방 자리로 쓴다.
+            // 가로로 두면 두 자리 모두 서는 지점에서 1m 안에 들어온다(세로로 두면 뒤쪽 칸이 1m를 넘음).
+            ("Dest_Security", "Obj_SecurityTray", Kind.Stand, new Vector3(0.6f, 0.08f, 0.4f), -0.375f, 0.95f, 0f, "Tray"),
+            ("Dest_Security", "Zone_TrayLaptop", Kind.Zone, new Vector3(0.28f, 0.02f, 0.38f), -0.525f, 0.95f, 0f, "Zone"),
+            ("Dest_Security", "Zone_TrayBag", Kind.Zone, new Vector3(0.28f, 0.02f, 0.38f), -0.225f, 0.95f, 0f, "Zone"),
+            ("Dest_Security", "Obj_Laptop", Kind.Grab, new Vector3(0.22f, 0.02f, 0.3f), 0.15f, 0.88f, 0f, "Laptop"),
+            ("Dest_Security", "Obj_Bag", Kind.Grab, new Vector3(0.28f, 0.38f, 0.15f), 0.55f, 0.2f, 0f, "Bag"),
             // 탑승 게이트: 부스 책상 위 여권·탑승권 스캔 자리. 책상 앞 끝이 지점에서 약 0.98m라 앞 끝에 붙여 1m 안에 둔다.
             ("Dest_Boarding", "Zone_Scan", Kind.Zone, new Vector3(0.3f, 0.02f, 0.25f), -0.3f, 1.1f, 0f, "Zone"),
             // 입국심사: 부스 책상 위 여권 건네는 자리(Boarding과 같은 부스 줄, 같은 기준).
@@ -60,6 +70,14 @@ namespace GatePassVR.EditorTools
         static readonly Dictionary<string, string[]> PlacementZones = new Dictionary<string, string[]>
         {
             { "Zone_BaggageDrop", new[] { "Obj_Carrier" } },
+            { "Zone_TrayLaptop", new[] { "Obj_Laptop" } },
+            { "Zone_TrayBag", new[] { "Obj_Bag" } },
+        };
+
+        // 임시 오브젝트와 겹쳐서 헷갈리게 만드는 공항 모델의 장식(Collider 없음). Scene에서만 끈다(모델 원본은 그대로).
+        static readonly (string path, string reason)[] HiddenDecorations =
+        {
+            ("17.8.Model.002", "보안검색 트레이 위에 겹친 장식 배낭. 트레이에 넣는 '가방'과 헷갈림"),
         };
 
         // 기존 TempObjects를 지우고 새로 만든다. Undo(Ctrl+Z)로 되돌릴 수 있다.
@@ -153,9 +171,34 @@ namespace GatePassVR.EditorTools
             }
 
             AttachPlacementZones(root.transform);
+            HideDecorations();
 
             EditorSceneManager.MarkSceneDirty(root.scene);
             Debug.Log($"[AirportObjectBuilder] {RootName} {created}개 생성. Scene을 저장해 주세요.", root);
+        }
+
+        static void HideDecorations()
+        {
+            var model = GameObject.Find("Airport7_FINALc_EscenaMontada");
+            if (model == null)
+            {
+                return;
+            }
+            foreach (var (path, reason) in HiddenDecorations)
+            {
+                var decoration = model.transform.Find(path);
+                if (decoration == null)
+                {
+                    Debug.LogWarning($"[AirportObjectBuilder] 끌 장식 '{path}'을 찾을 수 없습니다.");
+                    continue;
+                }
+                if (decoration.gameObject.activeSelf)
+                {
+                    Undo.RecordObject(decoration.gameObject, "Hide decoration");
+                    decoration.gameObject.SetActive(false);
+                    Debug.Log($"[AirportObjectBuilder] 장식 '{path}' 끔: {reason}");
+                }
+            }
         }
 
         // PlacementZones 표의 영역에 PlacementZone을 붙이고, 같은 지점의 받는 물건을 연결한다.

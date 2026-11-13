@@ -283,3 +283,13 @@
 - 체크인 카운터 위 모니터가 오른쪽 앞(0~+0.5m, 앞 1.1~1.35m)을 차지해서 여권 건네는 자리를 -0.2m, 탑승권을 -0.45m로 옮겼다.
 - 역할 이름표(머리 위 "체크인 직원" 등)는 유지한다(이씨 결정, 캡처 확인 후). 초보자가 누구에게 무엇을 하는지 바로 알 수 있다.
 - 김씨에게 공유: NPC Collider는 XRI 레이에 걸린다. 이동 표지판이 NPC 뒤에 있지 않게 배치했지만, 레이 마스크에서 NPC를 뺄지 김씨가 판단.
+
+## 2026-11-13 [21] 안내 음성·효과음
+
+- 음성은 Azure Speech `ko-KR-InJoonNeural`(성인 남성, 이씨 결정). 이 PC의 Windows TTS는 Heami(여성)뿐이라 쓰지 않았다.
+- 이용 조건 확인(11/13): Microsoft Product Terms의 TTS 출력물 사용권은 "paid tier TTS Service only"로 인용됨 → S0로 만든다.
+  Microsoft AI 서비스 행동강령 3항은 합성 음성임을 알리라고 요구 → 시작 화면·크레딧에 고지(C-AIVOICE). Microsoft 출처 표기 의무는 찾지 못함.
+  Google Cloud TTS는 생성형 AI 약관의 18세 미만 대상 서비스 제한 가능성 때문에 제외. Amazon Polly(Hyunduk)는 고지 의무가 명시되지 않은 대안.
+- Unity MCP의 generate_audio는 fal.ai 유료 키가 필요하고 설정되지 않아 쓰지 않았다. 효과음은 스크립트로 직접 합성.
+- 파일 이름을 guide-texts.md ID와 같게(VO_S2-1.wav) 해서 김씨가 Step마다 바로 연결하게 했다. 문구를 고치면 guide-texts.md → generate_voice.py 다시 실행.
+- GuideManager는 10초 무반응 때 같은 클립을 다시 재생하므로, 기내 안내방송 차임은 VO_S6-1 안에 붙였다(다시 재생될 때도 차임이 같이 나옴).

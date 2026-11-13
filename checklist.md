@@ -109,3 +109,20 @@ Unity에서 실제로 확인한 항목만 체크한다. 추측으로 체크하�
 - [x] 머리 위 역할 이름표 유지 (이씨 결정 11/13)
 - [ ] 김씨 협의: Hand-over·Scanner를 NpcStation 지점에 연결, 입국심사관 여권 반환 방식(S8-2)
 - [ ] 실제 사람 에셋 교체(라이선스 확인 후)
+
+---
+
+# [21] 안내 음성·효과음 정리 - Checklist (담당 이씨, 김씨 시스템 연결)
+
+## Trello 완료 기준: 필요 음원 준비 및 재생
+- [x] 음성 서비스 결정: Azure Speech `ko-KR-InJoonNeural`, 유료 S0, AI 음성 고지(이씨 결정 11/13)
+- [x] 효과음 6개 합성 (`Tools/generate_sfx.py`), Unity Console Error 0개 (24kHz 모노, Vorbis, 11/13)
+- [ ] 효과음 6개를 이씨가 직접 들어 확인 — 미검증
+- [x] 음성 생성 스크립트 작성 (`Tools/generate_voice.py`), `--dry-run` 22줄 확인
+- [x] AI 음성 고지 문구 추가 (guide-texts.md C-AIVOICE, README 출처)
+- [ ] Azure Speech S0 리소스 생성, 환경 변수 설정 (이씨)
+- [ ] 음성 22개 생성, 길이 0초 없음, Console Error 0개
+- [ ] 이씨 프로젝트 Play 모드에서 재생 확인
+- [ ] 이씨가 직접 들어 발음·속도 확인 — 미검증
+- [ ] feature/lee-audio → main 병합, GitHub Push
+- [ ] 김씨 연결: VO_<ID> → GuideManager.SetGuide, 효과음 재생 위치, 시작 화면 AI 음성 고지

@@ -203,3 +203,37 @@ START → STEP 1~9 → EXIT 전체 흐름의 안내 문구표(guide-texts.md). �
 ## 검증
 - Validate 경고 0개(표지판이 NPC에 가려지지 않음), 지점 4곳 캡처, Play 모드에서 여권을 두 자리에 차례로 놓아 성공.
 - 역할이 이해되는지 Dest Tour로 이씨 확인(Trello 3번).
+
+---
+
+# [21] 안내 음성·효과음 정리 - Plan (담당 이씨, 김씨 시스템 연결)
+
+## 무엇을 만드는가
+START → STEP 1~9 → END 안내 음성 22개(guide-texts.md "음성 대본" 21줄 + C-RESET)와 효과음 6개.
+완료 기준(업무관리표): "필요 음원 준비 및 재생".
+
+## 결정 사항 (이씨, 2026-11-13)
+- 음성: Azure Speech 미리 만들어진 음성 `ko-KR-InJoonNeural`(성인 남성). 유료 S0 리소스로 생성한다
+  (Product Terms의 출력물 사용권이 유료 등급 고객에만 명시됨).
+- AI 음성 고지: Microsoft AI 서비스 행동강령 3항(합성 음성임을 알림)에 따라 시작 화면과 크레딧에
+  "안내 음성은 AI로 합성한 음성입니다"를 넣는다(guide-texts.md C-AIVOICE). Microsoft 출처 표기 의무는 없음.
+- 효과음: 외부 음원 대신 스크립트로 직접 합성한다(라이선스 문제 없음).
+- 브랜치: feature/lee-audio. 음성까지 만들고 이씨가 들어 본 뒤 main에 합친다.
+
+## 구조
+- `Tools/generate_voice.py`: guide-texts.md 표를 읽어 Azure TTS REST로 `Assets/_GatePassVR/Audio/Voice/VO_<ID>.wav` 생성.
+  키는 환경 변수 `AZURE_SPEECH_KEY`, `AZURE_SPEECH_REGION`. 발음 바꿈표(예: GatePass VR → 게이트패스 브이알)는 스크립트에만 둔다.
+  S6-1 기내 안내방송은 앞에 SFX_Chime을 붙인다. `--dry-run`은 API 없이 읽은 대본만 출력.
+- `Tools/generate_sfx.py`: `Assets/_GatePassVR/Audio/SFX/SFX_*.wav` 6개 합성(24kHz 모노 16bit, 음성과 같은 형식).
+  Success(성공), Retry(다시 하기 힌트), GaugeFill(게이지 1.5초, PointAndHoldTarget.holdDuration 기본값), Scan(스캔),
+  Chime(안내방송), Complete(완료).
+- 재생 연결은 김씨: GuideManager.SetGuide(메인, 힌트, voice)에 VO_<ID>를 넣는다. 효과음 재생 코드는 아직 없음.
+
+## 성공 조건과 검증
+| 성공 조건 | 검증 방법 |
+|---|---|
+| 대본 22줄을 빠짐없이 읽음 | `--dry-run` 출력 22줄 |
+| 음성 22개·효과음 6개 생성, 길이 0초 없음 | 스크립트 출력과 파일 확인 |
+| Unity 가져오기 오류 없음 | Console Error 0개 |
+| 이씨 프로젝트에서 재생됨 | Play 모드 AudioSource 재생 |
+| 듣기에 자연스러움 | 이씨가 직접 들어 확인 (그 전까지 미검증) |

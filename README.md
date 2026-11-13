@@ -21,3 +21,5 @@ GatePass VR 프로젝트의 이씨 개인 작업용 Unity 프로젝트입니다.
 
 - Airport model: "Airport Final Big Scene" by assetfactory on Sketchfab, Sketchfab Free Standard License
 - Font: Noto Sans KR, SIL Open Font License
+- 안내 음성: Microsoft Azure Speech 미리 만들어진 음성 `ko-KR-InJoonNeural`로 합성(AI 합성 음성, 유료 S0 등급). 생성 스크립트 `Tools/generate_voice.py`
+- 효과음: `Tools/generate_sfx.py`로 직접 합성

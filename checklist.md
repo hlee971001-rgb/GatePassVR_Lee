@@ -118,32 +118,35 @@ Unity에서 실제로 확인한 항목만 체크한다. 추측으로 체크하�
 - [x] 두 저장소 기록이 이어져 있지 않음 확인 (개인 a6d4a9f, 팀 develop bcfb347)
 - [x] 팀 저장소 쓰기 권한 확인 (hlee971001-rgb, dry-run 11/20)
 - [x] 옮길 파일·옮기지 않을 파일·충돌 지점 정리 (plan.md)
-- [ ] 김씨 확인: 안 올린 작업 여부
-- [ ] 김씨 확인: FadeMoveController 참조 처리, Editor asmdef, 이씨 문서 위치, XR Device Simulator 샘플
+- [ ] 김씨 확인: 안 올린 작업 여부 — 팀 PR #1 설명에서 요청함(11/20)
+- [ ] 김씨 확인: FadeMoveController 참조 처리, Editor asmdef, 이씨 문서 위치, XR Device Simulator 샘플 — 팀 PR #1 리뷰에서 확인
+- [x] 김씨 확인이 필요한 것 중 씬이 쓰지 않는 Editor 도구·asmdef는 1차에서 빼고 진행하기로 결정 (이씨 11/20). 문서는 docs/lee/, 샘플은 넣기
 - [x] PR #1(feature/lee-audio → 개인 main) 처리 결정 — 열어 둔다(이씨 11/20). 원래 계획은 음성까지 만들고 들어 본 뒤 머지
 - [x] 1차(콘텐츠)·2차(음원)로 나눠 옮기기로 결정 (이씨 11/20, plan.md)
 
 아래 옮기기·검증·마무리는 1차(콘텐츠)다. 효과음·음성 생성 스크립트는 1차에 넣지 않는다.
 
 ## 옮기기
-- [ ] 팀 저장소 clone, develop에서 feature/lee-content 생성
-- [ ] 공항 모델 README대로 넣기 (Unity 열기 전)
-- [ ] 옮기는 파일 복사 (.meta 포함)
-- [ ] .gitignore에 공항 모델·LayoutCaptures 규칙 추가
-- [ ] Scripts/Editor에 GatePassVR.Editor asmdef 추가
-- [ ] FadeMoveController 참조를 팀 스크립트로 정리
+- [x] 팀 저장소 clone(C:\GatePass_VR), develop에서 feature/lee-content 생성
+- [x] 공항 모델 README대로 넣기 (Unity 열기 전)
+- [x] 옮기는 파일 복사 (.meta 포함)
+- [x] .gitignore에 공항 모델·LayoutCaptures 규칙 추가
+- [ ] Scripts/Editor에 GatePassVR.Editor asmdef 추가 — 1차에서 뺌, Editor 도구 7개와 같이 따로 PR
+- [x] FadeMoveController 참조를 팀 스크립트로 정리 (참조 1곳 GUID 교체)
+- [x] Airport_Lee Scene·라이트맵 GUID가 팀 SampleScene과 같아 Scene에 새 GUID, 라이트 다시 Bake
 
-## 검증
-- [ ] Compile Error 0개
-- [ ] Airport_Lee Missing Script·Prefab·Reference 0개
-- [ ] EditMode 테스트 전부 통과
-- [ ] Validate Colliders 경고 0개
-- [ ] Dest Tour 7개 지점 이동
-- [ ] 공항 모델 원본 미포함, 김씨 Scene·Prefab 변경 없음
+## 검증 (11/20, C:\GatePass_VR, Unity 6000.3.10f1)
+- [x] Compile Error 0개
+- [x] Airport_Lee Missing Script·Prefab 0개. Missing Reference 34개는 팀 VR 템플릿 프리팹에 원래 있던 것
+- [x] EditMode 테스트 전부 통과 (20/20)
+- [ ] Validate Colliders 경고 0개 — 미검증 (Editor 도구 필요)
+- [ ] Dest Tour 7개 지점 이동 — 미검증 (Editor 도구 필요)
+- [x] 공항 모델 원본 미포함, 김씨 Scene·Prefab 변경 없음
 
 ## 마무리
-- [ ] 의미 단위 커밋, 푸시, 팀 develop으로 PR (base가 develop인지 확인)
+- [x] 의미 단위 커밋 8개, 푸시, 팀 develop으로 PR (KJY-1204/GatePass_VR PR #1, base develop)
 - [ ] 김씨 리뷰 후 머지, 머지된 develop 다시 열어 재검증
+- [ ] Editor 도구 7개 + GatePassVR.Editor asmdef PR, Validate Colliders·Dest Tour 확인
 
 ## 2차 (음원, 1차 머지 후)
 - [ ] 머지된 develop에서 feature/lee-audio 새로 만들기

@@ -313,3 +313,33 @@
   개인 저장소에서 만들고 다시 옮기면 같은 일을 두 번 하게 된다.
 - 개인 커밋 31개는 팀으로 옮기지 않는다. 파일의 최종 상태만 복사해 새 커밋으로 올린다. 기록은 개인 저장소에 남는다.
 - 개인 PR #1은 열어 둔다(이씨 결정). 2차 이후 기록용으로 둘지 닫을지는 이씨가 정한다.
+
+## 2026-11-20 1차 이전 실행 (팀 저장소 feature/lee-content)
+
+- 이씨 결정: 김씨 확인이 필요한 것 중 씬이 쓰지 않는 Editor 도구 7개와 Editor asmdef는 1차에서 빼고 나중에 같이 올린다.
+  씬이 쓰는 FadeMoveController와 XR Device Simulator 샘플은 뺄 수 없어서 아래처럼 처리했다.
+- FadeMoveController: 개인 Assets/Scripts/FadeMoveController.cs는 옮기지 않았다. 팀 Scripts/VR/FadeMoveController.cs와 코드가 같고
+  주석 인코딩만 달라서 직렬화 필드도 같다. Airport_Lee의 스크립트 참조 1곳을 팀 GUID(99613e98…)로 바꿨다. 김씨 코드는 고치지 않았다.
+- XR Device Simulator 샘플(XRI 3.5.1): 이씨 결정으로 샘플 폴더를 그대로 넣었다. 팀 XRI도 3.5.1이고 XR 설정 파일은 바꾸지 않았다.
+- Airport_Lee는 SampleScene을 복사해 만든 Scene이라 Scene·라이트맵·LightingData의 GUID가 팀 SampleScene과 같았다.
+  그대로 넣으면 Unity가 한쪽 GUID를 바꿔 연결이 깨질 수 있어서, Scene .meta에 새 GUID를 주고 라이트맵 폴더(Airport_Lee/)는 옮기지 않았다.
+  LightingData.asset은 바이너리라 안의 GUID를 고칠 수 없다. Scene의 m_LightingDataAsset을 비웠으니 팀 프로젝트에서 라이트를 다시 Bake해야 한다.
+- 이씨 문서는 docs/lee/에 둔다(이씨 결정). 공항 모델 받는 방법은 docs/lee/README.md. 팀 README·루트 문서는 바꾸지 않았다.
+- 팀에 이미 있는 _GatePassVR/Art/Temp.meta는 팀 것을 그대로 두었다.
+- 커밋 기록은 옮기지 않았다. 개인 main(681e665)의 파일 최종 상태를 복사했다.
+
+### 1차 검증 (2026-11-20, C:\GatePass_VR, Unity 6000.3.10f1)
+
+- Compile Error 0개, Console Error 0개. 경고는 공항 모델 FBX의 self-intersecting 폴리곤 경고(개인 프로젝트와 같음)와
+  OpenXRPackageSettings 임포트 경고뿐.
+- Airport_Lee: GameObject 1,045개, Missing Script 0, Missing Prefab 0. FadeMoveController 1, PlacementZone 5, NpcStation 4, XR Device Simulator 연결됨.
+- Missing Reference 34개는 전부 팀 VR 템플릿 프리팹 6개(Complete XR Origin Set Up Hands Variant, Tutorial Player, Spatial Panel Scroll,
+  List Item Slider/Dropdown/Toggle) 안에 원래 있는 것이다. 프리팹 자체를 열어 세어도 같은 34개라서 이전 때문에 생긴 문제가 아니다.
+- EditMode 테스트 20개 통과(김씨 GuideReguideTimer 5, HoldGaugeState 6, PlacementZoneState 9).
+- 라이트를 다시 Bake했다(ProgressiveGPU). 새 라이트맵·LightingData의 GUID는 팀 파일과 겹치지 않는다.
+  Scene 저장 때 템플릿 UI 프리팹 인스턴스의 RectTransform 값(앵커·크기·위치) 21곳이 레이아웃 계산값으로 바뀌었다.
+- 미검증: Validate Colliders, Dest Tour 7개 지점 이동(둘 다 1차에서 뺀 Editor 도구가 필요). Play 모드 동선 확인, Quest 3S 실기기.
+- Unity가 열리면서 팀 설정 파일 5개(OpenXRPackageSettings, ProjectSettings, ShaderGraphSettings, 패키지 설정 2개)를 자동으로 바꿨다.
+  1차에 넣지 않았다. C:\Users\User-29\GatePass_VR는 예전 팀 사본(main 12c2b3b, 6000.3.23f1)이라 쓰지 않는다.
+- 팀 PR: KJY-1204/GatePass_VR PR #1 (feature/lee-content → develop, 커밋 8개, 파일 184개, 삭제 0). 김씨 리뷰·머지 대기.
+- 앞으로 팀 작업은 C:\GatePass_VR에서 한다. 개인 저장소 문서는 11/20 기준으로 팀 docs/lee와 맞춰 두었다.

@@ -203,3 +203,73 @@ START → STEP 1~9 → EXIT 전체 흐름의 안내 문구표(guide-texts.md). �
 ## 검증
 - Validate 경고 0개(표지판이 NPC에 가려지지 않음), 지점 4곳 캡처, Play 모드에서 여권을 두 자리에 차례로 놓아 성공.
 - 역할이 이해되는지 Dest Tour로 이씨 확인(Trello 3번).
+
+---
+
+# [이전] 팀 저장소 develop으로 옮기기 - Plan (담당 이씨, 김씨 확인)
+
+## 무엇을 하는가
+개인 저장소(hlee971001-rgb/GatePassVR_Lee)의 이씨 작업을 팀 저장소(KJY-1204/GatePass_VR)의 develop에 PR로 합친다.
+두 저장소는 Git 기록이 이어져 있지 않다(개인 첫 커밋 a6d4a9f 10/2, 팀 develop bcfb347 9/11). 그래서 브랜치째 머지하지 않고,
+팀 develop에서 새 브랜치를 만들어 이씨 파일만 옮겨 담는다(CLAUDE.md §19, §19.2).
+
+## 왜 하는가
+M3(START→EXIT 완주)와 김씨 기능 연결(Point & Hold, Hand-over, Scanner, GuideManager 음성)은 같은 프로젝트에 있어야 할 수 있다.
+옮긴 뒤에는 팀 저장소를 받은 폴더에서만 작업하고, 개인 저장소는 백업으로 남긴다.
+
+## 기준 시점 (2026-11-20 확인)
+- 팀 develop: bcfb347 (2026-09-11, 김씨 마지막 커밋). 쓰기 권한 있음(hlee971001-rgb, dry-run 확인).
+- 개인: main 90878ab, feature/lee-audio 26a7ced(main 포함, PR #1 열림·머지 안 함).
+
+## 옮기는 것 (.meta 함께)
+| 대상 | 경로 |
+|---|---|
+| Scene과 라이트맵 | Assets/_GatePassVR/Scenes/Airport_Lee.unity, Airport_Lee/ |
+| 임시 머티리얼 20개 | Assets/_GatePassVR/Art/Temp/M_Temp*.mat |
+| 효과음 6개 | Assets/_GatePassVR/Audio/SFX/ |
+| Editor 도구 7개 | Assets/_GatePassVR/Scripts/Editor/*.cs + 새 Editor asmdef |
+| 런타임 스크립트 3개 | Scripts/Interaction/PlacementZone.cs, PlacementZoneState.cs, NpcStation.cs |
+| EditMode 테스트 | Tests/EditMode/PlacementZoneStateTests.cs |
+| 표지판 폰트 | Assets/Fonts/NotoSansKR-Medium.ttf, NotoSansKR-Medium SDF Signs.asset |
+| 공항 모델 .meta만 | Assets/Environments/ (.fbx·.png는 라이선스상 제외) |
+| Scene이 쓰는 템플릿·샘플 | Assets/VRTemplateAssets/Models/Environment/Torus Cut.fbx, XRI 3.5.1 XR Device Simulator 샘플 |
+| 도구·문서 | Tools/generate_sfx.py, Tools/generate_voice.py, guide-texts.md, README 공항 모델 안내 |
+| .gitignore 규칙 | 공항 모델 .fbx·.png 제외, /LayoutCaptures/ 제외 (추가만, 기존 규칙 유지) |
+
+## 옮기지 않는 것
+- Assets/Scripts/FadeMoveController.cs: 팀 저장소 Scripts/VR/FadeMoveController.cs와 같은 클래스(GatePassVR.VR). 둘 다 있으면 컴파일 에러.
+- Scripts/Interaction/GatePassVR.Runtime.asmdef, Tests/EditMode/GatePassVR.Tests.EditMode.asmdef: 팀 것과 이름·내용이 같다. 팀 것을 쓴다.
+- 폴더 .meta(_GatePassVR/Art.meta 등): 팀 것을 그대로 둔다.
+- ProjectSettings, Packages, Assets/Settings, Assets/XR, XRI 설정, TextMesh Pro, CompositionLayers, 26a7ced(Unity 자동 변경 5개).
+- 동적 폰트 NotoSansKR-Medium SDF.asset(Scene에서 쓰지 않음, 실행 때마다 바뀜). 표지판 도구가 필요로 하면 그때 다시 판단.
+
+## 해결해야 할 충돌
+1. FadeMoveController GUID: Scene과 DestTourWindow가 개인 프로젝트의 FadeMoveController(guid 502ad16d…)를 쓴다.
+   팀 FadeMoveController의 GUID로 바꾸거나 Unity에서 다시 연결해야 한다. 방법은 김씨와 정한다.
+2. Editor asmdef: 팀은 Scripts 전체가 GatePassVR.Runtime이라 Scripts/Editor의 도구가 런타임에 들어가 빌드가 깨진다.
+   Scripts/Editor에 GatePassVR.Editor(includePlatforms: Editor, GatePassVR.Runtime 참조)를 만든다. 김씨 구조 영역이라 먼저 공유.
+3. 루트 plan.md·checklist.md·context-notes.md: 팀 저장소에 김씨 문서가 있다. 덮어쓰지 않는다. 이씨 문서를 어디에 둘지 김씨와 정한다
+   (후보: 팀 문서에 이씨 절 추가, 또는 docs/lee/로 분리).
+4. XR Device Simulator 샘플: 팀 저장소에 없다. 샘플 추가는 XR 설정(김씨)과 겹치므로 확인 후 넣는다.
+
+## 순서
+1. 김씨에게 확인: 팀 저장소에 아직 안 올린 작업이 있는지, 위 충돌 1~4의 처리 방법.
+2. 팀 저장소를 별도 폴더에 clone, develop에서 feature/lee-content 생성. 공항 모델을 README대로 먼저 넣는다(먼저 열면 .meta가 지워짐).
+3. 옮기는 것만 복사, Editor asmdef 추가, FadeMoveController 참조 정리.
+4. Unity로 열어 검증(아래), 의미 단위로 커밋.
+5. 푸시, 팀 develop으로 PR. 김씨 리뷰 후 머지, 머지된 develop을 다시 열어 재검증(§14.2-12).
+6. 이후 작업은 팀 저장소 폴더에서 feature/lee-* 브랜치로. 개인 저장소는 백업.
+
+## 성공 조건과 검증
+| 성공 조건 | 검증 방법 |
+|---|---|
+| Compile Error 0개 | Unity Console |
+| Airport_Lee에 Missing Script·Missing Prefab·Missing Reference 없음 | Scene 열기, Console, Inspector 확인 |
+| 기존 EditMode 테스트(김씨 HoldGauge·GuideReguide)와 PlacementZoneState 9개 통과 | Test Runner EditMode |
+| Validate Colliders 경고 0개 | GatePass > Layout > Validate Colliders |
+| Dest Tour로 7개 지점 이동 | Play 모드 + XR Device Simulator |
+| 공항 모델 .fbx·.png가 커밋되지 않음 | git status, PR 파일 목록 |
+| 김씨 Scene(SmokeTest_PointHoldFade, TestMap_Quest)·Prefab 변경 없음 | PR 파일 목록 |
+
+## 범위 밖
+옮기면서 기능 고치기, 김씨 코드 수정, 패키지·프로젝트 설정 변경, 음성 22개 생성([21] 업무에서 따로).

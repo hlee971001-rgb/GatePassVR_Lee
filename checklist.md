@@ -109,3 +109,35 @@ Unity에서 실제로 확인한 항목만 체크한다. 추측으로 체크하�
 - [x] 머리 위 역할 이름표 유지 (이씨 결정 11/13)
 - [ ] 김씨 협의: Hand-over·Scanner를 NpcStation 지점에 연결, 입국심사관 여권 반환 방식(S8-2)
 - [ ] 실제 사람 에셋 교체(라이선스 확인 후)
+
+---
+
+# [이전] 팀 저장소 develop으로 옮기기 - Checklist (담당 이씨, 김씨 확인)
+
+## 준비
+- [x] 두 저장소 기록이 이어져 있지 않음 확인 (개인 a6d4a9f, 팀 develop bcfb347)
+- [x] 팀 저장소 쓰기 권한 확인 (hlee971001-rgb, dry-run 11/20)
+- [x] 옮길 파일·옮기지 않을 파일·충돌 지점 정리 (plan.md)
+- [ ] 김씨 확인: 안 올린 작업 여부
+- [ ] 김씨 확인: FadeMoveController 참조 처리, Editor asmdef, 이씨 문서 위치, XR Device Simulator 샘플
+- [ ] PR #1(feature/lee-audio → 개인 main) 처리 결정 — 원래 계획은 음성까지 만들고 들어 본 뒤 머지
+
+## 옮기기
+- [ ] 팀 저장소 clone, develop에서 feature/lee-content 생성
+- [ ] 공항 모델 README대로 넣기 (Unity 열기 전)
+- [ ] 옮기는 파일 복사 (.meta 포함)
+- [ ] .gitignore에 공항 모델·LayoutCaptures 규칙 추가
+- [ ] Scripts/Editor에 GatePassVR.Editor asmdef 추가
+- [ ] FadeMoveController 참조를 팀 스크립트로 정리
+
+## 검증
+- [ ] Compile Error 0개
+- [ ] Airport_Lee Missing Script·Prefab·Reference 0개
+- [ ] EditMode 테스트 전부 통과
+- [ ] Validate Colliders 경고 0개
+- [ ] Dest Tour 7개 지점 이동
+- [ ] 공항 모델 원본 미포함, 김씨 Scene·Prefab 변경 없음
+
+## 마무리
+- [ ] 의미 단위 커밋, 푸시, 팀 develop으로 PR
+- [ ] 김씨 리뷰 후 머지, 머지된 develop 다시 열어 재검증

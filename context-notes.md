@@ -283,3 +283,20 @@
 - 체크인 카운터 위 모니터가 오른쪽 앞(0~+0.5m, 앞 1.1~1.35m)을 차지해서 여권 건네는 자리를 -0.2m, 탑승권을 -0.45m로 옮겼다.
 - 역할 이름표(머리 위 "체크인 직원" 등)는 유지한다(이씨 결정, 캡처 확인 후). 초보자가 누구에게 무엇을 하는지 바로 알 수 있다.
 - 김씨에게 공유: NPC Collider는 XRI 레이에 걸린다. 이동 표지판이 NPC 뒤에 있지 않게 배치했지만, 레이 마스크에서 NPC를 뺄지 김씨가 판단.
+
+## 2026-11-20 팀 저장소 develop으로 옮기기 계획
+
+- 팀 저장소 KJY-1204/GatePass_VR의 CLAUDE.md·plan·checklist·context-notes를 다시 읽고 이씨 작업 기준으로 삼는다(이씨 지시).
+- 두 저장소는 Git 기록이 이어져 있지 않다. 개인 저장소 첫 커밋 a6d4a9f(10/2)는 팀 커밋을 포함하지 않는다.
+  그래서 브랜치째 머지·직접 푸시는 불가(강제 푸시는 김씨 기록을 지움). 팀 develop에서 새 브랜치를 만들어 이씨 파일만 옮긴다.
+- 팀 develop 마지막 커밋은 bcfb347(2026-09-11). 그 뒤 김씨가 안 올린 작업이 있을 수 있어 옮기기 전에 확인한다.
+- hlee971001-rgb 계정은 팀 저장소 쓰기 권한이 있다(git push --dry-run으로 확인, 실제로 올린 것 없음).
+- Airport_Lee Scene이 참조하는데 팀 저장소에 없는 파일 5개를 찾았다. 공항 모델 .fbx.meta, NotoSansKR-Medium SDF Signs,
+  XRI 3.5.1 XR Device Simulator 샘플 prefab, Assets/Scripts/FadeMoveController.cs, VRTemplateAssets Torus Cut.fbx.
+  같은 경로인데 GUID가 다른 파일 검사는 시간이 오래 걸려 끝내지 못했다. 옮긴 뒤 Unity Missing 검사로 확인한다.
+- 개인 FadeMoveController.cs는 팀 것과 같은 클래스(GatePassVR.VR.FadeMoveController)지만 GUID가 다르다.
+  옮기지 않고 참조만 팀 스크립트로 바꿔야 한다.
+- 11/20 Unity 자동 변경 5개(OpenXR 설정 2개, Quality URP Config, SampleScene.scenetemplate, 동적 폰트 SDF)를 이씨 확인 후
+  별도 커밋(26a7ced)으로 feature/lee-audio에 올렸다. 11/13에는 같은 종류를 커밋하지 않기로 했었다. 팀 저장소로는 옮기지 않는다.
+- PR #1(feature/lee-audio → 개인 main)을 11/20에 만들었다. [21] 결정은 "음성까지 만들고 들어 본 뒤 main에 합친다"라서
+  음성 22개 생성·청취 전에는 머지하지 않는다.

@@ -217,11 +217,45 @@ START → STEP 1~9 → EXIT 전체 흐름의 안내 문구표(guide-texts.md). �
 M3(START→EXIT 완주)와 김씨 기능 연결(Point & Hold, Hand-over, Scanner, GuideManager 음성)은 같은 프로젝트에 있어야 할 수 있다.
 옮긴 뒤에는 팀 저장소를 받은 폴더에서만 작업하고, 개인 저장소는 백업으로 남긴다.
 
+## 두 번에 나눠 옮긴다 (2026-11-20 이씨 결정)
+처음 계획은 한 번에 옮기는 것이었다. 안내 음성이 아직 없으므로 두 번으로 나눈다.
+- 1차 (콘텐츠): 개인 main에 있는 것. 김씨 확인을 받으면 바로 옮긴다.
+- 2차 (음원): 효과음·안내 음성. 1차가 develop에 머지된 뒤, 팀 저장소에서 develop 기준 feature/lee-audio를 새로 만들어 진행한다.
+  음성 22개는 팀 저장소 폴더에서 생성하고 이씨가 들어 본 뒤 PR한다(개인 저장소에서 만들고 다시 옮기는 이중 작업을 피함).
+- 이유: 콘텐츠는 음성 없이도 동작하고, develop에 늦게 합칠수록 김씨 작업과 충돌이 커진다. 11월은 안정화 시기라 develop에서 빨리 같이 검증한다.
+  PR을 둘로 나누면 김씨가 검토하기도 쉽다(CLAUDE.md §19 의미 단위).
+- 커밋은 옮기지 않는다. 파일의 최종 상태만 복사해 팀 브랜치에 새 커밋으로 올린다. 개인 저장소 커밋 기록은 개인 저장소에 남는다.
+
 ## 기준 시점 (2026-11-20 확인)
 - 팀 develop: bcfb347 (2026-09-11, 김씨 마지막 커밋). 쓰기 권한 있음(hlee971001-rgb, dry-run 확인).
 - 개인: main 90878ab, feature/lee-audio 26a7ced(main 포함, PR #1 열림·머지 안 함).
+- 11/20 정리 후: 개인 main dec191a(Unity 자동 변경 d40e2b4, 이 계획 dec191a 포함), feature/lee-audio df0a7d0(main + 음원 커밋 3개).
+  PR #1은 열어 둔다(이씨 결정). 1차는 main, 2차는 feature/lee-audio의 음원 커밋 3개(f8e6410, 689ce79, df0a7d0)가 원본이다.
 
-## 옮기는 것 (.meta 함께)
+## 1차에 옮기는 것 (.meta 함께, 개인 main 기준)
+| 대상 | 경로 |
+|---|---|
+| Scene과 라이트맵 | Assets/_GatePassVR/Scenes/Airport_Lee.unity, Airport_Lee/ |
+| 임시 머티리얼 20개 | Assets/_GatePassVR/Art/Temp/M_Temp*.mat |
+| Editor 도구 7개 | Assets/_GatePassVR/Scripts/Editor/*.cs + 새 Editor asmdef |
+| 런타임 스크립트 3개 | Scripts/Interaction/PlacementZone.cs, PlacementZoneState.cs, NpcStation.cs |
+| EditMode 테스트 | Tests/EditMode/PlacementZoneStateTests.cs |
+| 표지판 폰트 | Assets/Fonts/NotoSansKR-Medium.ttf, NotoSansKR-Medium SDF Signs.asset |
+| 공항 모델 .meta만 | Assets/Environments/ (.fbx·.png는 라이선스상 제외) |
+| Scene이 쓰는 템플릿·샘플 | Assets/VRTemplateAssets/Models/Environment/Torus Cut.fbx, XRI 3.5.1 XR Device Simulator 샘플 |
+| 문서 | guide-texts.md(main 버전), README 공항 모델 안내 |
+| .gitignore 규칙 | 공항 모델 .fbx·.png 제외, /LayoutCaptures/ 제외 (추가만, 기존 규칙 유지) |
+
+## 2차에 옮기는 것 (.meta 함께, 개인 feature/lee-audio 기준)
+| 대상 | 경로 |
+|---|---|
+| 효과음 6개 | Assets/_GatePassVR/Audio/SFX/ (Audio.meta, SFX.meta 포함) |
+| 음원 생성 도구 | Tools/generate_sfx.py, Tools/generate_voice.py |
+| 문서 추가분 | guide-texts.md의 AI 음성 고지(C-AIVOICE), README 음원 출처 줄 |
+| 안내 음성 22개 | 팀 저장소 폴더에서 generate_voice.py로 새로 생성 (Azure Speech S0) |
+| [21] 계획·체크리스트·결정 기록 | 이씨 문서 위치(충돌 3)가 정해진 곳에 함께 |
+
+## (이전 표, 기록용) 한 번에 옮기려던 목록
 | 대상 | 경로 |
 |---|---|
 | Scene과 라이트맵 | Assets/_GatePassVR/Scenes/Airport_Lee.unity, Airport_Lee/ |
@@ -240,7 +274,7 @@ M3(START→EXIT 완주)와 김씨 기능 연결(Point & Hold, Hand-over, Scanner
 - Assets/Scripts/FadeMoveController.cs: 팀 저장소 Scripts/VR/FadeMoveController.cs와 같은 클래스(GatePassVR.VR). 둘 다 있으면 컴파일 에러.
 - Scripts/Interaction/GatePassVR.Runtime.asmdef, Tests/EditMode/GatePassVR.Tests.EditMode.asmdef: 팀 것과 이름·내용이 같다. 팀 것을 쓴다.
 - 폴더 .meta(_GatePassVR/Art.meta 등): 팀 것을 그대로 둔다.
-- ProjectSettings, Packages, Assets/Settings, Assets/XR, XRI 설정, TextMesh Pro, CompositionLayers, 26a7ced(Unity 자동 변경 5개).
+- ProjectSettings, Packages, Assets/Settings, Assets/XR, XRI 설정, TextMesh Pro, CompositionLayers, 26a7ced(Unity 자동 변경 5개, 11/20 정리 후 main의 d40e2b4).
 - 동적 폰트 NotoSansKR-Medium SDF.asset(Scene에서 쓰지 않음, 실행 때마다 바뀜). 표지판 도구가 필요로 하면 그때 다시 판단.
 
 ## 해결해야 할 충돌
@@ -260,6 +294,15 @@ M3(START→EXIT 완주)와 김씨 기능 연결(Point & Hold, Hand-over, Scanner
 5. 푸시, 팀 develop으로 PR. 김씨 리뷰 후 머지, 머지된 develop을 다시 열어 재검증(§14.2-12).
 6. 이후 작업은 팀 저장소 폴더에서 feature/lee-* 브랜치로. 개인 저장소는 백업.
 
+위 1~5가 1차다. 1차 PR 대상(base)이 main이 아니라 develop인지 PR 만들기 전에 확인한다.
+
+### 2차 순서 (1차 머지 후)
+1. 머지된 develop을 받아 feature/lee-audio를 새로 만든다.
+2. 개인 feature/lee-audio에서 2차 표의 파일을 복사한다(.meta 포함). 효과음을 이씨가 들어 확인한다.
+3. Azure Speech S0 리소스·환경 변수 준비 후 음성 22개 생성. 이씨가 들어 발음·속도 확인.
+4. Unity로 열어 검증, 의미 단위로 커밋, 팀 develop으로 PR. 김씨가 GuideManager·효과음 재생 위치에 연결.
+5. 머지된 develop 재검증. 개인 저장소 PR #1은 기록용으로 남긴다(머지 여부는 이씨가 정함).
+
 ## 성공 조건과 검증
 | 성공 조건 | 검증 방법 |
 |---|---|
@@ -271,5 +314,15 @@ M3(START→EXIT 완주)와 김씨 기능 연결(Point & Hold, Hand-over, Scanner
 | 공항 모델 .fbx·.png가 커밋되지 않음 | git status, PR 파일 목록 |
 | 김씨 Scene(SmokeTest_PointHoldFade, TestMap_Quest)·Prefab 변경 없음 | PR 파일 목록 |
 
+위 표는 1차·2차 모두 적용한다. 2차에 더하는 조건은 아래와 같다.
+
+| 2차 성공 조건 | 검증 방법 |
+|---|---|
+| 효과음 6개·음성 22개 Import 경고 없음, 길이 0초 없음 | Unity Console, Inspector |
+| Play 모드에서 재생됨 | Airport_Lee Play 모드 |
+| 이씨가 직접 들어 확인 | 이씨 청취 (못 하면 "미검증") |
+| Azure 키가 커밋되지 않음 | git diff, PR 파일 목록 |
+
 ## 범위 밖
 옮기면서 기능 고치기, 김씨 코드 수정, 패키지·프로젝트 설정 변경, 음성 22개 생성([21] 업무에서 따로).
+(11/20 변경) 음성 22개 생성은 1차 범위 밖이고 2차에서 한다.

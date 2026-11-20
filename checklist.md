@@ -120,7 +120,10 @@ Unity에서 실제로 확인한 항목만 체크한다. 추측으로 체크하�
 - [x] 옮길 파일·옮기지 않을 파일·충돌 지점 정리 (plan.md)
 - [ ] 김씨 확인: 안 올린 작업 여부
 - [ ] 김씨 확인: FadeMoveController 참조 처리, Editor asmdef, 이씨 문서 위치, XR Device Simulator 샘플
-- [ ] PR #1(feature/lee-audio → 개인 main) 처리 결정 — 원래 계획은 음성까지 만들고 들어 본 뒤 머지
+- [x] PR #1(feature/lee-audio → 개인 main) 처리 결정 — 열어 둔다(이씨 11/20). 원래 계획은 음성까지 만들고 들어 본 뒤 머지
+- [x] 1차(콘텐츠)·2차(음원)로 나눠 옮기기로 결정 (이씨 11/20, plan.md)
+
+아래 옮기기·검증·마무리는 1차(콘텐츠)다. 효과음·음성 생성 스크립트는 1차에 넣지 않는다.
 
 ## 옮기기
 - [ ] 팀 저장소 clone, develop에서 feature/lee-content 생성
@@ -139,5 +142,18 @@ Unity에서 실제로 확인한 항목만 체크한다. 추측으로 체크하�
 - [ ] 공항 모델 원본 미포함, 김씨 Scene·Prefab 변경 없음
 
 ## 마무리
-- [ ] 의미 단위 커밋, 푸시, 팀 develop으로 PR
+- [ ] 의미 단위 커밋, 푸시, 팀 develop으로 PR (base가 develop인지 확인)
 - [ ] 김씨 리뷰 후 머지, 머지된 develop 다시 열어 재검증
+
+## 2차 (음원, 1차 머지 후)
+- [ ] 머지된 develop에서 feature/lee-audio 새로 만들기
+- [ ] 효과음 6개, Tools/generate_sfx.py·generate_voice.py, C-AIVOICE·README 음원 출처 복사 (.meta 포함)
+- [ ] 효과음 6개 이씨 청취 — 미검증
+- [ ] Azure Speech S0 리소스 생성, 환경 변수 설정 (이씨, 키는 커밋하지 않음)
+- [ ] 음성 22개 생성, 길이 0초 없음, Console Error 0개
+- [ ] Play 모드 재생 확인, 이씨가 발음·속도 확인 — 미검증
+- [ ] Compile Error 0개, EditMode 테스트 통과
+- [ ] 의미 단위 커밋, 푸시, 팀 develop으로 PR
+- [ ] 김씨 연결: VO_<ID> → GuideManager.SetGuide, 효과음 재생 위치, 시작 화면 AI 음성 고지
+- [ ] 머지된 develop 다시 열어 재검증
+- [ ] 개인 PR #1 처리 (기록용으로 둘지, 닫을지 이씨 결정)

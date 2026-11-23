@@ -19467,7 +19467,7 @@ MonoBehaviour:
   m_StartingSingleGrabTransformers: []
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1
-  m_FarAttachMode: 0
+  m_FarAttachMode: 1
   m_LimitLinearVelocity: 0
   m_LimitAngularVelocity: 0
   m_MaxLinearVelocityDelta: 10
@@ -19602,6 +19602,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1205346889}
   - component: {fileID: 1205346888}
+  - component: {fileID: 1205346890}
   m_Layer: 0
   m_Name: StepSuccessRelay
   m_TagString: Untagged
@@ -19651,6 +19652,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1205346890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1205346887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af9470c6642c4c64dbd0b13cae822db3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GatePassVR.Runtime::GatePassVR.Core.CarryAlong
+  items:
+  - {fileID: 1203517104}
+  - {fileID: 2139092544}
+  player: {fileID: 1098041327}
+  maxDistance: 4
+  forwardOffset: 0.45
+  sideSpacing: 0.25
+  dropHeight: 0.15
 --- !u!1 &1210921447
 GameObject:
   m_ObjectHideFlags: 0
@@ -21213,7 +21234,7 @@ MonoBehaviour:
   m_StartingSingleGrabTransformers: []
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1
-  m_FarAttachMode: 0
+  m_FarAttachMode: 1
   m_LimitLinearVelocity: 0
   m_LimitAngularVelocity: 0
   m_MaxLinearVelocityDelta: 10
@@ -27080,7 +27101,7 @@ MonoBehaviour:
   m_StartingSingleGrabTransformers: []
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1
-  m_FarAttachMode: 0
+  m_FarAttachMode: 1
   m_LimitLinearVelocity: 0
   m_LimitAngularVelocity: 0
   m_MaxLinearVelocityDelta: 10
@@ -29170,7 +29191,7 @@ MonoBehaviour:
   m_StartingSingleGrabTransformers: []
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1
-  m_FarAttachMode: 0
+  m_FarAttachMode: 1
   m_LimitLinearVelocity: 0
   m_LimitAngularVelocity: 0
   m_MaxLinearVelocityDelta: 10
@@ -30877,7 +30898,7 @@ MonoBehaviour:
   m_StartingSingleGrabTransformers: []
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1
-  m_FarAttachMode: 0
+  m_FarAttachMode: 1
   m_LimitLinearVelocity: 0
   m_LimitAngularVelocity: 0
   m_MaxLinearVelocityDelta: 10
@@ -33540,10 +33561,14 @@ PrefabInstance:
       objectReference: {fileID: 1098041327}
     - target: {fileID: 8853553027946770674, guid: 9a700d16c26073b4a99f424af962f7ee, type: 3}
       propertyPath: onMoveCompleted.m_PersistentCalls.m_Calls.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8853553027946770674, guid: 9a700d16c26073b4a99f424af962f7ee, type: 3}
       propertyPath: onMoveCompleted.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 1205346890}
+    - target: {fileID: 8853553027946770674, guid: 9a700d16c26073b4a99f424af962f7ee, type: 3}
+      propertyPath: onMoveCompleted.m_PersistentCalls.m_Calls.Array.data[2].m_Target
       value: 
       objectReference: {fileID: 2014553413}
     - target: {fileID: 8853553027946770674, guid: 9a700d16c26073b4a99f424af962f7ee, type: 3}
@@ -33551,11 +33576,23 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8853553027946770674, guid: 9a700d16c26073b4a99f424af962f7ee, type: 3}
+      propertyPath: onMoveCompleted.m_PersistentCalls.m_Calls.Array.data[2].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8853553027946770674, guid: 9a700d16c26073b4a99f424af962f7ee, type: 3}
       propertyPath: onMoveCompleted.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: BringFarItems
+      objectReference: {fileID: 0}
+    - target: {fileID: 8853553027946770674, guid: 9a700d16c26073b4a99f424af962f7ee, type: 3}
+      propertyPath: onMoveCompleted.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
       value: SaveCheckpoint
       objectReference: {fileID: 0}
     - target: {fileID: 8853553027946770674, guid: 9a700d16c26073b4a99f424af962f7ee, type: 3}
       propertyPath: onMoveCompleted.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: GatePassVR.Core.CarryAlong, GatePassVR.Runtime
+      objectReference: {fileID: 0}
+    - target: {fileID: 8853553027946770674, guid: 9a700d16c26073b4a99f424af962f7ee, type: 3}
+      propertyPath: onMoveCompleted.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
       value: GatePassVR.Core.ResetController, GatePassVR.Runtime
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -36089,7 +36126,7 @@ MonoBehaviour:
   m_StartingSingleGrabTransformers: []
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1
-  m_FarAttachMode: 0
+  m_FarAttachMode: 1
   m_LimitLinearVelocity: 0
   m_LimitAngularVelocity: 0
   m_MaxLinearVelocityDelta: 10

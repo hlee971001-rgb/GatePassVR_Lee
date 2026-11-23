@@ -383,4 +383,4 @@
 - 검증(C:\GatePass_VR, Unity 6000.3.10f1): Console Error 0개(경고는 공항 모델 FBX 경고뿐), 효과음 6개·음성 22개 Import(모노, 길이 0초 없음),
   EditMode 테스트 20/20 통과, Airport_Lee Play 모드에서 28개 모두 로드되고 VO_START 재생 진행 확인. Scene 파일은 바뀌지 않았다.
 - Unity가 자동으로 바꾼 팀 설정 파일 6개(OpenXRPackageSettings, MalgunGothic SDF, ProjectSettings 등)는 이번에도 커밋하지 않았다.
-- 남은 일: 팀 develop PR 김씨 리뷰·머지, 김씨 연결(VO_<ID> → GuideManager.SetGuide, 효과음 재생 위치, 시작 화면 AI 음성 고지), 머지 후 재검증.
+- 팀 PR: KJY-1204/GatePass_VR PR #2 (feature/lee-audio → develop, 커밋 4개, 파일 65개). 남은 일: 김씨 리뷰·머지, 김씨 연결(VO_<ID> → GuideManager.SetGuide, 효과음 재생 위치, 시작 화면 AI 음성 고지), 머지 후 재검증.

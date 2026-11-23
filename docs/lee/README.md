@@ -4,6 +4,9 @@
 
 - plan.md, checklist.md, context-notes.md: 이씨 업무별 계획·체크리스트·결정 기록
 - guide-texts.md: 안내문·표지 문구 (ID별)
+- test-cases.md: 기능 테스트 항목과 결과, 발견 문제
+- assets-and-tests.md: 에셋·라이선스 목록과 테스트 결과 요약 (업무 [29])
+- 빌드 방법: 팀 루트 `docs/build-guide.md` (업무 [28])
 - 메인 Scene: `Assets/_GatePassVR/Scenes/Airport_Lee.unity`
 
 ## 공항 모델 받기 (Unity를 열기 전에 꼭 먼저)
@@ -22,5 +25,5 @@
 
 - Airport model: "Airport Final Big Scene" by assetfactory on Sketchfab, Sketchfab Free Standard License
 - Font: Noto Sans KR, SIL Open Font License
-- 안내 음성: Microsoft Azure Speech 미리 만들어진 음성 `ko-KR-InJoonNeural`로 합성(AI 합성 음성, 유료 S0 등급). 생성 스크립트 `Tools/generate_voice.py`
+- 안내 음성(24개): Microsoft Azure Speech 미리 만들어진 음성 `ko-KR-InJoonNeural`로 합성(AI 합성 음성, 유료 S0 등급). 생성 스크립트 `Tools/generate_voice.py`
 - 효과음: `Tools/generate_sfx.py`로 직접 합성

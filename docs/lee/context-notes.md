@@ -403,3 +403,49 @@
   보드에 "완료 11월 27일" 목록이 있어 최종 마감일일 수 있다(확인 필요).
 - 주의: 팀 클론에서 씬을 전환할 때 Unity가 Airport_Lee의 Canvas 자동 계산 값(m_SizeDelta 등) 2줄을 저장했다.
   변경 의도가 없어 git checkout으로 되돌렸다. 씬을 바꾸기 전에 저장 여부를 확인할 것.
+
+## 2026-11-23 — [14] Airport_Lee START→EXIT 연결 (김씨 부재 대비)
+
+### 배치와 연결
+- GatePassSystems·GuideHUD Prefab을 씬에 넣었다. 옛 SceneTransitionManager(FadeMoveController)는 지우고
+  GatePassSystems의 FadeController를 쓴다. 옛 Canvas/FadeImage는 남아 있다(사용 안 함, 정리 후보).
+- XR Origin 시작 위치를 Dest_Start로 옮겼다(김씨 점검 주의 3).
+- 이동 표지판 7개(MoveSign_Dest_*)에 XRSimpleInteractable + PointAndHoldTarget(targetId Sign_<지점>, 1.2초)을 붙이고
+  GaugeAnchor에 PointHoldGauge를 넣었다. 표지판이 곧 Pad다.
+- 시작 버튼: StartScreen 아래 StartPad(PointHoldPad, 0.5배, 세움, targetId Pad_Start) + "시작" + C-AIVOICE 한 줄.
+  표지판 글꼴(NotoSansKR-Medium SDF Signs)은 표지판 글자만 든 정적 글꼴이라 글자가 깨졌다. 같은 ttf로
+  동적 글꼴 `Assets/Fonts/NotoSansKR-Medium SDF Dynamic.asset`을 만들어 썼다. 3단계(GuideHUD 폰트 교체)에도 쓸 수 있다.
+- 건네기: Zone_HandOver_CheckIn/Immigration을 HandOverZone Prefab으로 바꿨다(이름 그대로, NpcStation
+  interactionPoint 다시 연결). ReceivePoint는 직원 쪽 0.35m, ReturnPoint는 칸 옆 0.32m(칸 판정 상자 밖, 탑승권
+  반대쪽). 둘 다 아래에 책상 Collider가 있다.
+- 스캐너: Zone_Scan_Boarding을 ScannerZone Prefab으로 바꿨다. 순서 여권(S4-1) → 탑승권(S4-2), scanId = Step ID.
+- PlacementZone 3개(캐리어 벨트, 트레이 왼쪽·오른쪽) onPlaced → ScenarioManager.ReportPlaced.
+- 성공 ID 규칙: 표지판 Sign_<지점>, 시작 Pad_Start, 집기 Grab_Passport/Grab_BoardingPass/Grab_Carrier,
+  건네기 zoneId, 돌려받기 zoneId_Returned, 스캔 S4-1/S4-2, 비행 S6-1.
+
+### 새 스크립트·김씨 코드 수정
+- `StepSuccessRelay`(이씨, Scripts/Core): 집기 성공 보고, 비행(S6-1) 16초 뒤 자동 진행(음성 14.3초),
+  Step에 들어왔을 때 이미 손에 들고 있거나 이미 놓인 경우 한 프레임 뒤 따라잡기. 따라잡기가 없으면 가방을
+  노트북보다 먼저 놓았을 때 S3-2에서 막힌다(Play로 확인, 따라잡기 후 S3-1→S3-3 진행).
+- `ResetController` 수정(김씨 부재로 이씨 수정): `SaveCheckpoint()`·`ResetAll()` 추가, ResetCurrent는 기억한
+  위치로 돌린다. 연결: onStepEntered·FadeController.onMoveCompleted → SaveCheckpoint, onScenarioCompleted →
+  ResetAll. SaveCheckpoint를 부르지 않는 씬(TestMap_Quest)은 예전과 똑같이 시작 위치로 돌린다.
+- 손에 든 물건은 Reset 때 놓아진다(김씨 동작 유지). 그 자리에서 떨어지므로 다시 집어야 한다.
+
+### 시나리오 결정
+- S2-1b(여권 돌려받기)와 S4-3(스캔 뒤 여권 챙기기)를 추가했다. 문구는 guide-texts.md, 음성은 generate_voice.py.
+- S9-2(출구) 성공 시 Dest_Start로 이동하고 END를 보여 준다(EXIT 위치 협의 전 임시). END 성공 ID도 Pad_Start라서
+  시작 버튼을 다시 가리키면 onScenarioCompleted → ResetAll → 첫 Step(START)부터 다시 한다.
+  Ray를 계속 대고 있으면 START도 바로 이어서 완료되어 S1-0(여권 집기)부터 시작된다.
+- S6-1(비행)은 탑승구에 선 채로 안내방송을 듣고 16초 뒤 Dest_Arrival로 이동한다(비행기 공간 없음).
+
+### 검증 (시뮬레이터 Play, 물건 이동·집기는 코드, 표지판 Hold는 ReportHoldCompleted 호출)
+- START → S1-0 → … → S9-2 → END → 다시 시작까지 진행. 안내 문구·음성이 Step마다 바뀌었다.
+- 여권을 든 채 이동하면 같이 이동, 체크인 건네기 → 2초 뒤 ReturnPoint 반환 → 집으면 S2-2.
+- 맵 밖으로 떨어뜨린 노트북을 Reset하면 보안검색 자리로 돌아왔다. 캐리어(벨트에 놓인 것)는 그대로.
+- 탑승권을 먼저 스캔하면 진행 안 됨, 여권 → 탑승권 순서로 진행, S4-3에서 여권을 집어야 S5-1.
+- 다시 시작하면 여권·캐리어·수하물 캐리어가 시작 위치, 스캐너 차례 0.
+- EditMode 56/56, Compile Error 0, Missing Script·Reference 0(GatePassVR 컴포넌트).
+- **주의**: 시뮬레이터 기본 컨트롤러 방향이 Dest_Boarding의 탑승하기 표지판을 향해 있어 S5-1이 저절로 Hold됐다.
+  실제 기기에서는 1.2초 동안 계속 가리켜야 하지만, 정면 표지판이 실수로 눌리는지 실기기에서 볼 것.
+- **미검증**: 실제 Ray 조준 Hold, 게이지 표시 방향, Quest 실기기, 이씨 음성 청취(VO_S2-1b, VO_S4-3).

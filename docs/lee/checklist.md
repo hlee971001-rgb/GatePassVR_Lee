@@ -198,11 +198,16 @@ Unity에서 실제로 확인한 항목만 체크한다. 추측으로 체크하�
 - [x] 개인 저장소에 전체 push (원격 lee, feature/lee-full-flow, 11/23). 팀 저장소도 공개라 새로 공개되는 내용 없음, 이씨 결정
 
 ## 2. [14] Airport_Lee START→EXIT 연결
-- [ ] 시스템 Prefab 배치와 씬 참조 연결 (GuideHUD, XR Origin, Fade)
-- [ ] 출국 S0~S4 Step 데이터·음성 연결, Play 확인
-- [ ] 체크인 여권 돌려받기 (returnPoint + S2-3 문구)
-- [ ] ResetController Step 단위 되돌리기
-- [ ] 입국 S5~EXIT Step 데이터·음성 연결, Play 확인
+- [x] 시스템 Prefab 배치와 씬 참조 연결 (GatePassSystems, GuideHUD, XR Origin을 Dest_Start로, 옛 SceneTransitionManager 제거, 11/23)
+- [x] 이동 표지판 7개에 Point & Hold·게이지, 시작 버튼(StartPad)·AI 음성 고지 글씨 (11/23)
+- [x] 건네기 칸 2개 → HandOverZone, 탑승구 → ScannerZone(S4-1 여권, S4-2 탑승권) (11/23)
+- [x] 체크인 여권 돌려받기: returnPoint + S2-1b 단계·음성 추가 (11/23, S2-3 문구 대신 별도 단계로 바꿈: 한 화면 한 행동)
+- [x] 스캔 뒤 여권 챙기기: S4-3 단계·음성 추가 (11/23, Play에서 여권을 두고 가면 S8-1에서 막히는 것 발견)
+- [x] ResetController: Step 진입·이동 완료 때 위치를 기억해 그 위치로 되돌림, 다시 시작할 때만 처음 위치 (11/23)
+- [x] 집기·비행·미리 놓기 연결 StepSuccessRelay (11/23)
+- [x] Step 23개 데이터·음성 연결, 시뮬레이터 Play로 START→END→다시 시작 확인 (11/23, 표지판 Hold는 코드 호출, 실제 Ray 조준은 미확인)
+- [ ] 이씨 음성 2개 청취 (VO_S2-1b, VO_S4-3)
+- [ ] 실제 Ray로 표지판·시작 버튼 Hold 확인 (시뮬레이터 또는 Quest)
 
 ## 3. [13] 힌트·고지·폰트
 - [ ] 틀린 물건 힌트 문구 연결

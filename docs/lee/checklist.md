@@ -195,7 +195,7 @@ Unity에서 실제로 확인한 항목만 체크한다. 추측으로 체크하�
 - [x] 팀 클론에 feature/lee-full-flow 생성 (develop b0cddc5 기준, 11/23)
 - [x] 개인 저장소를 원격 `lee`로 추가 (11/23)
 - [ ] 팀에 마무리 담당 알림 (이씨가 직접 보냄)
-- [ ] 개인 저장소 공개 상태에서 김씨 코드 함께 올라가는 것 확인 (김씨에게 묻거나 비공개 전환)
+- [x] 개인 저장소에 전체 push (원격 lee, feature/lee-full-flow, 11/23). 팀 저장소도 공개라 새로 공개되는 내용 없음, 이씨 결정
 
 ## 2. [14] Airport_Lee START→EXIT 연결
 - [ ] 시스템 Prefab 배치와 씬 참조 연결 (GuideHUD, XR Origin, Fade)

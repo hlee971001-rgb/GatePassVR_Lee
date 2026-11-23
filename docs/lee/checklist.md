@@ -185,3 +185,32 @@ Unity에서 실제로 확인한 항목만 체크한다. 추측으로 체크하�
 - [ ] 김씨 연결: VO_<ID> → GuideManager.SetGuide, 효과음 재생 위치, 시작 화면 AI 음성 고지
 - [ ] 머지된 develop 다시 열어 재검증
 - [ ] 개인 PR #1 처리 (기록용으로 둘지, 닫을지 이씨 결정)
+
+---
+
+# [마무리] 김씨 부재 대비, START→EXIT 연결부터 최종 빌드까지 - Checklist (담당 이씨)
+
+## 1. 준비
+- [x] 김씨 11/23 작업 검토: 문서와 동작 일치, EditMode 56/56, TestMap_Quest Play 확인 (11/23)
+- [x] 팀 클론에 feature/lee-full-flow 생성 (develop b0cddc5 기준, 11/23)
+- [x] 개인 저장소를 원격 `lee`로 추가 (11/23)
+- [ ] 팀에 마무리 담당 알림 (이씨가 직접 보냄)
+- [ ] 개인 저장소 공개 상태에서 김씨 코드 함께 올라가는 것 확인 (김씨에게 묻거나 비공개 전환)
+
+## 2. [14] Airport_Lee START→EXIT 연결
+- [ ] 시스템 Prefab 배치와 씬 참조 연결 (GuideHUD, XR Origin, Fade)
+- [ ] 출국 S0~S4 Step 데이터·음성 연결, Play 확인
+- [ ] 체크인 여권 돌려받기 (returnPoint + S2-3 문구)
+- [ ] ResetController Step 단위 되돌리기
+- [ ] 입국 S5~EXIT Step 데이터·음성 연결, Play 확인
+
+## 3. [13] 힌트·고지·폰트
+- [ ] 틀린 물건 힌트 문구 연결
+- [ ] 시작 화면 AI 음성 고지 (C-AIVOICE)
+- [ ] 한글 폰트 Noto Sans KR 교체
+
+## 4~7
+- [ ] [23]·[24] 기능 테스트 목록, 시뮬레이터 START→EXIT 완주, 막힘 수정
+- [ ] [25] Quest 빌드·실기기 확인
+- [ ] [28] 기술 설정·빌드 문서, [29] 에셋·테스트 결과 문서
+- [ ] [30] 최종 빌드와 백업

@@ -384,3 +384,22 @@
   EditMode 테스트 20/20 통과, Airport_Lee Play 모드에서 28개 모두 로드되고 VO_START 재생 진행 확인. Scene 파일은 바뀌지 않았다.
 - Unity가 자동으로 바꾼 팀 설정 파일 6개(OpenXRPackageSettings, MalgunGothic SDF, ProjectSettings 등)는 이번에도 커밋하지 않았다.
 - 팀 PR: KJY-1204/GatePass_VR PR #2 (feature/lee-audio → develop, 커밋 4개, 파일 65개). 남은 일: 김씨 리뷰·머지, 김씨 연결(VO_<ID> → GuideManager.SetGuide, 효과음 재생 위치, 시작 화면 AI 음성 고지), 머지 후 재검증.
+
+## 2026-11-23 — 김씨 부재 대비 마무리 시작
+
+- 김씨 11/23 작업(ResetController, ScenarioManager, Hand-over, Scanner, Highlight, 공통 Prefab)을 검토했다.
+  김씨 plan·checklist·context-notes 내용과 코드가 일치하고 EditMode 56/56 통과, TestMap_Quest Play에서
+  건네기 → 2초 뒤 반환, 틀린 물건 스캔 무시, 여권 스캔 → 다음 Step, 강조 대상 이동을 확인했다.
+- 공항 적용 전에 고칠 문제 2개:
+  1. HandOverZone에 returnPoint가 없으면 물건이 kinematic·Grab 비활성으로 계속 고정된다. Play에서 재현했고
+     고정된 물건은 ScannerZone에서도 인식되지 않았다(`item.enabled`가 false인 물건은 건너뜀). 김씨 사용법의
+     "체크인처럼 돌려주지 않으면 returnPoint 비우기"를 그대로 따르면 S4-1·S8-1에서 여권을 쓸 수 없다.
+  2. ResetController.ResetCurrent는 등록된 물건을 전부 Awake 때 위치로 돌린다. 테스트 맵은 좁아 문제없지만
+     공항에서는 여권이 출발 지점으로 돌아가 손이 닿지 않는다. 김씨 체크리스트에도 "Step 단위 등록으로 바꿔야
+     한다"고 남아 있다.
+- 결정(이씨): 김씨 코드는 다시 만들지 않고 이어서 쓴다. 팀 클론 feature/lee-full-flow에서 작업해 개인
+  저장소(원격 `lee`)에 먼저 push하고, 나중에 같은 브랜치를 팀에 PR한다(이유는 plan.md [마무리]).
+- Trello(11/23 확인): [10] Scanner는 진행중 0/4, [13] Highlight는 미착수로 남아 있지만 코드로는 구현됐다.
+  보드에 "완료 11월 27일" 목록이 있어 최종 마감일일 수 있다(확인 필요).
+- 주의: 팀 클론에서 씬을 전환할 때 Unity가 Airport_Lee의 Canvas 자동 계산 값(m_SizeDelta 등) 2줄을 저장했다.
+  변경 의도가 없어 git checkout으로 되돌렸다. 씬을 바꾸기 전에 저장 여부를 확인할 것.

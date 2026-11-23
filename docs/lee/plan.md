@@ -370,3 +370,45 @@ M3(START→EXIT 완주)와 김씨 기능 연결(Point & Hold, Hand-over, Scanner
 ## 범위 밖
 옮기면서 기능 고치기, 김씨 코드 수정, 패키지·프로젝트 설정 변경, 음성 22개 생성([21] 업무에서 따로).
 (11/20 변경) 음성 22개 생성은 1차 범위 밖이고 2차에서 한다.
+
+---
+
+# [마무리] 김씨 부재 대비, START→EXIT 연결부터 최종 빌드까지 - Plan (담당 이씨)
+
+## 무엇을 하는가
+김씨가 프로젝트에 참여하지 못할 경우를 대비해, Trello에 남은 김씨 카드([13] 힌트, [14], [23]~[26], [28], [30])를
+이씨가 이어서 마무리한다. 김씨가 2026-11-23에 develop에 올린 ScenarioManager·Hand-over·Scanner·Highlight·
+ResetController·공통 Prefab은 **다시 만들지 않고 그대로 쓴다**(테스트 56개 통과, 문서와 동작 일치 확인).
+
+## 왜 이렇게 하는가 (2026-11-23 이씨 결정)
+- 김씨 코드는 검증되어 있어 다시 만들면 시간만 들고 팀 저장소에 같은 역할 스크립트가 두 벌 생긴다.
+- 최종 목표일(11/20)이 지났고 Trello에 "완료 11월 27일" 목록이 있다. 끝까지 플레이 가능한 빌드가 먼저다.
+- [14]의 콘텐츠 적용은 원래 이씨 역할(CLAUDE.md §18 "김씨 기능의 콘텐츠 적용")이고 Airport_Lee는 이씨 씬이다.
+
+## 저장소 흐름
+- 팀 클론 `C:\GatePass_VR`에서 develop(b0cddc5)으로부터 `feature/lee-full-flow`를 만들어 작업한다.
+- 원격 `lee`(개인 GatePassVR_Lee)에 먼저 push하고, 준비되면 같은 브랜치를 `origin`(팀)에 push해 develop으로 PR한다.
+  복사 방식이 아니라 김씨 커밋 위에 이어서 쌓으므로 김씨가 돌아와도 그대로 이어받을 수 있다.
+- 김씨 스크립트를 고칠 때는 커밋과 context-notes에 "김씨 부재로 이씨 수정, 이유"를 남긴다.
+
+## 단계
+1. 준비: 브랜치·원격, 이 계획 기록, 팀 알림(이씨가 직접 보냄).
+2. [14] Airport_Lee에 GatePassSystems·GuideHUD·PointHoldPad·HandOverZone·ScannerZone 배치, guide-texts.md ID 순서로
+   Step 데이터와 VO_<ID> 22개 연결. 출국(S0~S4) 먼저 Play 확인, 그다음 입국(S5~EXIT).
+   - 문제 1: 체크인에서 건넨 여권이 돌려받는 자리 없이 고정되면 S4-1·S8-1에서 쓸 수 없다(Play로 재현). 체크인에도
+     returnPoint를 두고 S2-3에서 여권도 받게 한다(문구 한 줄 수정).
+   - 문제 2: ResetController가 등록된 물건을 전부 맨 처음 위치로 돌린다. 공항에서는 여권이 출발 지점으로 가서 막힌다.
+     Step 단위로 되돌리게 고친다.
+3. [13] 틀린 물건 힌트 연결, 시작 화면 AI 음성 고지(C-AIVOICE), Quest용 한글 폰트(Noto Sans KR) 교체.
+4. [23]·[24] 기능 테스트 목록, 시뮬레이터 START→EXIT 완주, 막힘 수정([26]).
+5. [25] Quest 빌드·실기기 확인(기기 필요).
+6. [28] 기술 설정·빌드 문서, [29] 에셋·테스트 결과 문서.
+7. [30] 최종 빌드와 백업.
+
+## 성공 조건과 검증
+- Airport_Lee에서 START→EXIT를 시뮬레이터 Play로 끊김 없이 완주한다(Step 전환·안내·음성·이동).
+- Compile Error 0, EditMode 전체 통과, Missing Script·Reference 0(GatePassVR 컴포넌트 기준).
+- Quest 실기기에서 한글이 깨지지 않고 완주된다(5단계, 기기 없으면 미검증으로 남김).
+
+## 범위 밖
+- 김씨 기능 재구현, NPC Animation, 새 상호작용 종류 추가.

@@ -9,7 +9,9 @@ from pathlib import Path
 from xml.sax.saxutils import escape
 
 ROOT = Path(__file__).resolve().parent.parent
-GUIDE = ROOT / "guide-texts.md"
+# 개인 저장소는 루트, 팀 저장소는 docs/lee/에 문구표가 있다.
+GUIDE = next((p for p in (ROOT / "docs" / "lee" / "guide-texts.md", ROOT / "guide-texts.md") if p.exists()),
+             ROOT / "guide-texts.md")
 OUT_DIR = ROOT / "Assets" / "_GatePassVR" / "Audio" / "Voice"
 CHIME = ROOT / "Assets" / "_GatePassVR" / "Audio" / "SFX" / "SFX_Chime.wav"
 

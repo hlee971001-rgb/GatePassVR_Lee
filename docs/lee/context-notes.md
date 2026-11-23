@@ -470,3 +470,24 @@
 - 검증(시뮬레이터 Play): S3-1에서 가방을 노트북 칸에 놓으면 힌트 "노트북을 왼쪽 초록 칸에 넣어 주세요", 10초 뒤
   "막히면 B나 Y 버튼으로 다시 하세요", Reset 후 원래 힌트, 진행 때 효과음 재생, END까지 글자 깨짐 경고 0.
   EditMode 56/56, Compile Error 0. **미검증**: 소리 크기·겹침을 귀로 들어 보기, Quest 한글 표시.
+
+## 2026-11-23 — [23]·[24] 시뮬레이터 테스트와 [26] 막힘 수정
+
+- 테스트 항목·결과는 `docs/lee/test-cases.md`에 둔다(기능 25개, 완주 3회, 발견 문제 B1~B7).
+- 시뮬레이터 조준 방법: XRDeviceSimulator의 `m_RightControllerState.deviceRotation`(XR Origin 기준)과
+  `m_RightControllerEuler`를 함께 바꾼다. 손 위치는 `devicePosition`(CameraFloorOffsetObject 기준). 잡기는
+  `XRInteractionManager.SelectEnter`. 김씨 context-notes의 방법과 같다.
+- B5 원인(중요): XRGrabInteractable은 놓을 때 Drop()에서 kinematic을 되돌리고, 던지기 속도는 다음 Late 단계 Detach()에서
+  넣는다. HandOverZone이 받은 물건을 `enabled = false`로 두면 그 Detach가 미뤄졌다가 돌려줄 때(다시 켤 때) 실행되어
+  물건이 날아갔다. 이동 직후에 건네면 속도 기록에 순간이동이 들어 있어 매우 크다. 건넬 때와 Reset 때 그 한 프레임만
+  `throwOnDetach`를 끄고 다음 프레임에 되돌린다(HandOverZone·ResetController, 김씨 부재로 이씨 수정).
+- B6: 공항 물건 6개 XRGrabInteractable `farAttachMode = Near`. 원거리로 잡아도 손으로 온다. NearFarInteractor 기본은 Far라
+  여권이 몸 앞 1.2m에 떠 있다가 이동 직후 체크인 칸에 저절로 들어가 건네졌다(S2-1 음성이 바로 끊김).
+- B7: `CarryAlong`(이씨, Scripts/Core, StepSuccessRelay 오브젝트). FadeController.onMoveCompleted에서
+  RearmHoldTargets → BringFarItems → SaveCheckpoint 순서. 손에 없고, 고정·건넨 상태가 아니고, 4m 넘게 떨어진
+  여권·탑승권을 플레이어 오른쪽 발옆(0.35m, 0.25m 간격)으로 옮긴다. 보안검색은 바로 앞 0.6m 안에 벨트가 있어 앞이 아니라
+  옆에 둔다(7개 지점 모두 오른쪽 0.75m 안에 막힘 없음 확인).
+- 같이 확인: 표지판 게이지는 아이콘 둘레에 초록 원으로 차고 플레이어 쪽을 향한다(캡처). 안내 HUD 글꼴 정상.
+  머리에 붙은 HUD가 뒤 표지판과 겹쳐 읽기 어려운 장면이 있다(김씨 UI, 실기기에서 판단).
+- 동적 글꼴 `.asset`은 Play할 때마다 바뀐다. 이번에도 되돌렸다. "Importer generated inconsistent result" 경고가 한 번
+  났는데 되돌린 뒤 다시 가져오면 사라진다.

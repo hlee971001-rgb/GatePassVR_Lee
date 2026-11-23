@@ -254,8 +254,10 @@ M3(START→EXIT 완주)와 김씨 기능 연결(Point & Hold, Hand-over, Scanner
 ## 두 번에 나눠 옮긴다 (2026-11-20 이씨 결정)
 처음 계획은 한 번에 옮기는 것이었다. 안내 음성이 아직 없으므로 두 번으로 나눈다.
 - 1차 (콘텐츠): 개인 main에 있는 것. 김씨 확인을 받으면 바로 옮긴다.
-- 2차 (음원): 효과음·안내 음성. 1차가 develop에 머지된 뒤, 팀 저장소에서 develop 기준 feature/lee-audio를 새로 만들어 진행한다.
-  음성 22개는 팀 저장소 폴더에서 생성하고 이씨가 들어 본 뒤 PR한다(개인 저장소에서 만들고 다시 옮기는 이중 작업을 피함).
+- 2차 (음원): 효과음·안내 음성. (2026-11-23 이씨 결정으로 바꿈) 음성 22개를 개인 저장소(C:\GatePassVR_Lee) feature/lee-audio에서
+  먼저 만들고 이씨가 들어 본 뒤 개인 GitHub에 푸시한다. 그다음 팀 저장소(C:\GatePass_VR)에서 develop 기준 feature/lee-audio를 새로 만들어
+  음원 파일을 .meta와 함께 복사하고 팀 develop으로 PR한다. 개인 저장소에 완성본 백업을 남기고, 확인을 마친 결과만 팀에 올리기 위해서다.
+  (11/20 원래 계획: 음성을 팀 폴더에서 바로 생성. 복사 단계 하나를 줄이려던 것이었다.)
 - 이유: 콘텐츠는 음성 없이도 동작하고, develop에 늦게 합칠수록 김씨 작업과 충돌이 커진다. 11월은 안정화 시기라 develop에서 빨리 같이 검증한다.
   PR을 둘로 나누면 김씨가 검토하기도 쉽다(CLAUDE.md §19 의미 단위).
 - 커밋은 옮기지 않는다. 파일의 최종 상태만 복사해 팀 브랜치에 새 커밋으로 올린다. 개인 저장소 커밋 기록은 개인 저장소에 남는다.
@@ -286,7 +288,7 @@ M3(START→EXIT 완주)와 김씨 기능 연결(Point & Hold, Hand-over, Scanner
 | 효과음 6개 | Assets/_GatePassVR/Audio/SFX/ (Audio.meta, SFX.meta 포함) |
 | 음원 생성 도구 | Tools/generate_sfx.py, Tools/generate_voice.py |
 | 문서 추가분 | guide-texts.md의 AI 음성 고지(C-AIVOICE), README 음원 출처 줄 |
-| 안내 음성 22개 | 팀 저장소 폴더에서 generate_voice.py로 새로 생성 (Azure Speech S0) |
+| 안내 음성 22개 | 개인 저장소에서 generate_voice.py로 생성한 VO_*.wav (Azure Speech S0, 11/23 변경) |
 | [21] 계획·체크리스트·결정 기록 | 이씨 문서 위치(충돌 3)가 정해진 곳에 함께 |
 
 ## (이전 표, 기록용) 한 번에 옮기려던 목록
@@ -330,12 +332,20 @@ M3(START→EXIT 완주)와 김씨 기능 연결(Point & Hold, Hand-over, Scanner
 
 위 1~5가 1차다. 1차 PR 대상(base)이 main이 아니라 develop인지 PR 만들기 전에 확인한다.
 
-### 2차 순서 (1차 머지 후)
-1. 머지된 develop을 받아 feature/lee-audio를 새로 만든다.
-2. 개인 feature/lee-audio에서 2차 표의 파일을 복사한다(.meta 포함). 효과음을 이씨가 들어 확인한다.
-3. Azure Speech S0 리소스·환경 변수 준비 후 음성 22개 생성. 이씨가 들어 발음·속도 확인.
-4. Unity로 열어 검증, 의미 단위로 커밋, 팀 develop으로 PR. 김씨가 GuideManager·효과음 재생 위치에 연결.
-5. 머지된 develop 재검증. 개인 저장소 PR #1은 기록용으로 남긴다(머지 여부는 이씨가 정함).
+### 2차 순서 (1차 머지 후, 2026-11-23 바꿈)
+1차 팀 PR #1은 develop에 머지됐다(머지 커밋 a2938a7, 11/23 확인).
+
+개인 저장소(C:\GatePassVR_Lee, feature/lee-audio)
+1. Azure Speech S0 리소스·환경 변수 준비(이씨, 키는 커밋하지 않음).
+2. 음성 22개 생성, Unity로 열어 Import 경고·길이 0초·Console Error 확인, Play 모드 재생 확인.
+3. 이씨가 효과음 6개와 음성 22개를 들어 발음·속도 확인.
+4. 의미 단위로 커밋, 개인 GitHub에 푸시.
+
+팀 저장소(C:\GatePass_VR)
+5. 머지된 develop을 받아 feature/lee-audio를 새로 만든다.
+6. 개인 feature/lee-audio에서 2차 표의 파일을 복사한다(.meta 포함, 커밋 기록은 옮기지 않음).
+7. Unity로 열어 검증, 의미 단위로 커밋, 팀 develop으로 PR. 김씨가 GuideManager·효과음 재생 위치에 연결.
+8. 머지된 develop 재검증. 개인 저장소 PR #1은 기록용으로 남긴다(머지 여부는 이씨가 정함).
 
 ## 성공 조건과 검증
 | 성공 조건 | 검증 방법 |

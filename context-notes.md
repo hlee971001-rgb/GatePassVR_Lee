@@ -353,3 +353,14 @@
   1차에 넣지 않았다. C:\Users\User-29\GatePass_VR는 예전 팀 사본(main 12c2b3b, 6000.3.23f1)이라 쓰지 않는다.
 - 팀 PR: KJY-1204/GatePass_VR PR #1 (feature/lee-content → develop, 커밋 8개, 파일 184개, 삭제 0). 김씨 리뷰·머지 대기.
 - 앞으로 팀 작업은 C:\GatePass_VR에서 한다. 개인 저장소 문서는 11/20 기준으로 팀 docs/lee와 맞춰 두었다.
+
+## 2026-11-23 2차(음원) 순서 바꿈: 개인 먼저, 팀에 복사
+
+- 확인: 1차 팀 PR #1(feature/lee-content → develop)이 머지됐다(팀 develop 머지 커밋 a2938a7).
+- 결정(이씨): 음성 22개를 개인 저장소 C:\GatePassVR_Lee의 feature/lee-audio에서 먼저 만들고, 들어 본 뒤 개인 GitHub에 푸시한다.
+  그다음 팀 저장소 C:\GatePass_VR에서 develop 기준 feature/lee-audio를 새로 만들어 파일을 .meta와 함께 복사하고 팀 develop으로 PR한다.
+- 이유: 개인 저장소에 완성본 백업이 남고, 확인을 마친 결과만 팀에 올릴 수 있다. 음원 파일은 다른 파일을 참조하지 않아서 복사가 단순하고,
+  .meta를 같이 옮기면 GUID가 유지된다.
+- 11/20 계획(팀 폴더에서 바로 생성)과 다른 점: 복사 단계가 하나 늘고, 팀 Scene에서의 재생 확인은 복사 후 다시 해야 한다.
+- 두 저장소는 Git 기록이 이어져 있지 않아서 개인 브랜치를 팀에 그대로 푸시·병합할 수 없다. 1차와 같이 파일만 복사해 새 커밋으로 올린다.
+- 11/23 기준 AZURE_SPEECH_KEY·AZURE_SPEECH_REGION 사용자 환경 변수는 아직 설정되지 않았다.

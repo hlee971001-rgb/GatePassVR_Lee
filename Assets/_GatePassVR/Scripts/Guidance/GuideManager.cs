@@ -108,6 +108,16 @@ namespace GatePassVR.Guidance
             timer.Reset();
         }
 
+        // 보조 힌트만 바꾼다(틀린 행동 힌트 등). 메인 안내·음성·재안내 타이머는 그대로 둔다.
+        // (이씨 2026-11-23 추가, 김씨 부재로 이씨 수정)
+        public void SetHintText(string hint)
+        {
+            if (hintText != null)
+            {
+                hintText.text = hint ?? string.Empty;
+            }
+        }
+
         public void ClearGuide()
         {
             hasActiveGuide = false;

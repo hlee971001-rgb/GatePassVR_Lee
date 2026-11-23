@@ -124,7 +124,7 @@ namespace GatePassVR.Core
             ResetCurrent();
         }
 
-        private static void RestoreItem(XRGrabInteractable item, Pose pose)
+        private void RestoreItem(XRGrabInteractable item, Pose pose)
         {
             if (item == null)
             {
@@ -132,9 +132,14 @@ namespace GatePassVR.Core
             }
 
             // 손에 들고 있으면 먼저 놓게 해야 원위치로 옮길 수 있다.
+            // 놓을 때 XRI가 다음 Late 단계에 던지기 속도를 넣어 옮긴 물건이 날아가지 않게, 그 한 프레임만 던지기를 끈다.
+            // (이씨 2026-11-23 추가)
             if (item.isSelected && item.interactionManager != null)
             {
+                bool wasThrow = item.throwOnDetach;
+                item.throwOnDetach = false;
                 item.interactionManager.CancelInteractableSelection((IXRSelectInteractable)item);
+                StartCoroutine(RestoreThrowNextFrame(item, wasThrow));
             }
 
             item.transform.SetPositionAndRotation(pose.position, pose.rotation);
@@ -148,6 +153,15 @@ namespace GatePassVR.Core
                     body.linearVelocity = Vector3.zero;
                     body.angularVelocity = Vector3.zero;
                 }
+            }
+        }
+
+        private static System.Collections.IEnumerator RestoreThrowNextFrame(XRGrabInteractable item, bool value)
+        {
+            yield return null;
+            if (item != null)
+            {
+                item.throwOnDetach = value;
             }
         }
 

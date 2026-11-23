@@ -34,6 +34,8 @@ namespace GatePassVR.Interaction
         private BoxCollider zoneCollider;
         private XRGrabInteractable heldItem;
         private bool heldWasKinematic;
+        private bool heldWasThrow;
+        private bool restoreThrow;
         private Coroutine returnRoutine;
 
         public string ZoneId => zoneId;
@@ -113,6 +115,12 @@ namespace GatePassVR.Interaction
             // 손에 든 채로 건넸으면 먼저 놓게 해야 직원 쪽으로 옮길 수 있다.
             if (item.isSelected && item.interactionManager != null)
             {
+                // XRI는 놓은 뒤 던지기 속도를 다음 Late 단계에 넣는데, 아래에서 물건을 비활성화하면 그 처리가
+                // 돌려줄 때(다시 활성화할 때)로 밀려 물건이 날아간다. 이동 직후에 건네면 속도가 매우 크다.
+                // 그래서 놓을 때만 던지기를 끄고 Release 다음 프레임에 되돌린다. (이씨 2026-11-23, 김씨 부재로 수정)
+                heldWasThrow = item.throwOnDetach;
+                item.throwOnDetach = false;
+                restoreThrow = true;
                 item.interactionManager.CancelInteractableSelection((IXRSelectInteractable)item);
             }
 
@@ -168,6 +176,21 @@ namespace GatePassVR.Interaction
             }
 
             item.enabled = true;
+
+            if (restoreThrow)
+            {
+                restoreThrow = false;
+                StartCoroutine(RestoreThrowNextFrame(item, heldWasThrow));
+            }
+        }
+
+        private static IEnumerator RestoreThrowNextFrame(XRGrabInteractable item, bool value)
+        {
+            yield return null;
+            if (item != null)
+            {
+                item.throwOnDetach = value;
+            }
         }
 
         private static void MoveItem(XRGrabInteractable item, Transform point)

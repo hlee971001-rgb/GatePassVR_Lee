@@ -21,6 +21,9 @@ namespace GatePassVR.Core
         [SerializeField] private UnityEvent onReset;
 
         private Pose[] initialPoses;
+        // Reset 때 물건을 돌려놓을 위치. 처음엔 시작 위치이고, SaveCheckpoint를 부르면 그때 위치로 바뀐다.
+        // (이씨 2026-11-23 추가: 공항처럼 넓은 씬에서 시작 위치로 돌리면 손이 닿지 않아 진행이 막힌다.)
+        private Pose[] checkpointPoses;
 
         private void Awake()
         {
@@ -32,6 +35,28 @@ namespace GatePassVR.Core
                     initialPoses[i] = new Pose(items[i].transform.position, items[i].transform.rotation);
                 }
             }
+
+            checkpointPoses = (Pose[])initialPoses.Clone();
+        }
+
+        // 지금 물건 위치를 Reset 복귀 위치로 기억한다.
+        // ScenarioManager.onStepEntered와 FadeMoveController.onMoveCompleted(이동 뒤 들고 있는 물건 위치)에 연결한다.
+        public void SaveCheckpoint()
+        {
+            for (int i = 0; i < items.Length; i++)
+            {
+                if (items[i] != null)
+                {
+                    checkpointPoses[i] = new Pose(items[i].transform.position, items[i].transform.rotation);
+                }
+            }
+        }
+
+        // 처음 상태로 완전히 되돌린다(시나리오를 처음부터 다시 할 때). 물건은 시작 위치로 간다.
+        public void ResetAll()
+        {
+            checkpointPoses = (Pose[])initialPoses.Clone();
+            ResetCurrent();
         }
 
         private void OnEnable()
@@ -75,7 +100,7 @@ namespace GatePassVR.Core
 
             for (int i = 0; i < items.Length; i++)
             {
-                RestoreItem(items[i], initialPoses[i]);
+                RestoreItem(items[i], checkpointPoses[i]);
             }
 
             RearmHoldTargets();

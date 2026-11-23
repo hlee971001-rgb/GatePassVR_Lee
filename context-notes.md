@@ -372,4 +372,4 @@
 - 결과: 22개 모두 24kHz 모노 16bit, 0초나 무음 파일 없음, 합계 182.5초. 가장 긴 것은 VO_S6-1(차임 포함 14.25초), 가장 짧은 것은 VO_S4-2(3.83초).
 - Unity(GatePassVR_Lee, 6000.3.10f1) 가져오기: 효과음과 같은 기본 설정(Vorbis, Decompress On Load). Console Error·Warning 0개.
 - Play 모드: 22개 모두 로드됨, 임시 AudioSource로 VO_START를 재생해 재생 시간이 진행되는 것을 확인했다. Play 모드를 끄면서 임시 오브젝트는 사라졌다.
-- 미검증: 이씨가 직접 들어 발음·속도 확인. 고칠 줄은 `python Tools/generate_voice.py --only <ID>`로 그 줄만 다시 만든다.
+- 이씨 청취(11/23): 22개 모두 수정 없음. 나중에 고칠 줄은 `python Tools/generate_voice.py --only <ID>`로 그 줄만 다시 만든다.

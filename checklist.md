@@ -117,7 +117,7 @@ Unity에서 실제로 확인한 항목만 체크한다. 추측으로 체크하�
 ## Trello 완료 기준: 필요 음원 준비 및 재생
 - [x] 음성 서비스 결정: Azure Speech `ko-KR-InJoonNeural`, 유료 S0, AI 음성 고지(이씨 결정 11/13)
 - [x] 효과음 6개 합성 (`Tools/generate_sfx.py`), Unity Console Error 0개 (24kHz 모노, Vorbis, 11/13)
-- [ ] 효과음 6개를 이씨가 직접 들어 확인 — 미검증
+- [x] 효과음 6개를 이씨가 직접 들어 확인 (11/23, 수정 없음)
 - [x] 음성 생성 스크립트 작성 (`Tools/generate_voice.py`), `--dry-run` 22줄 확인
 - [x] AI 음성 고지 문구 추가 (guide-texts.md C-AIVOICE, README 출처)
 - [ ] Azure Speech S0 리소스 생성, 환경 변수 설정 (이씨)
@@ -173,7 +173,8 @@ Unity에서 실제로 확인한 항목만 체크한다. 추측으로 체크하�
 - [ ] Azure Speech S0 리소스 생성, 환경 변수 설정 (이씨, 키는 커밋하지 않음)
 - [ ] 음성 22개 생성, 길이 0초 없음, Console Error 0개
 - [ ] Play 모드 재생 확인
-- [ ] 효과음 6개·음성 22개 이씨 청취, 발음·속도 확인 — 미검증
+- [x] 효과음 6개 이씨 청취 (11/23, 수정 없음)
+- [ ] 음성 22개 이씨 청취, 발음·속도 확인 — 미검증
 - [ ] 의미 단위 커밋, 개인 GitHub 푸시
 
 ### 팀 저장소 (C:\GatePass_VR)

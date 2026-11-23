@@ -120,9 +120,9 @@ Unity에서 실제로 확인한 항목만 체크한다. 추측으로 체크하�
 - [x] 효과음 6개를 이씨가 직접 들어 확인 (11/23, 수정 없음)
 - [x] 음성 생성 스크립트 작성 (`Tools/generate_voice.py`), `--dry-run` 22줄 확인
 - [x] AI 음성 고지 문구 추가 (guide-texts.md C-AIVOICE, README 출처)
-- [ ] Azure Speech S0 리소스 생성, 환경 변수 설정 (이씨)
-- [ ] 음성 22개 생성, 길이 0초 없음, Console Error 0개
-- [ ] 이씨 프로젝트 Play 모드에서 재생 확인
+- [x] Azure Speech S0 리소스 생성, 환경 변수 설정 (이씨, Azure for Students 구독, 11/23)
+- [x] 음성 22개 생성, 길이 0초 없음, Console Error·Warning 0개 (24kHz 모노, Vorbis, 합계 182.5초, 11/23)
+- [x] 이씨 프로젝트 Play 모드에서 재생 확인 (22개 로드, VO_START 재생 진행 확인, 11/23)
 - [ ] 이씨가 직접 들어 발음·속도 확인 — 미검증
 - [ ] feature/lee-audio → main 병합, GitHub Push
 - [ ] 김씨 연결: VO_<ID> → GuideManager.SetGuide, 효과음 재생 위치, 시작 화면 AI 음성 고지
@@ -170,9 +170,9 @@ Unity에서 실제로 확인한 항목만 체크한다. 추측으로 체크하�
 - [x] 2차 순서 결정: 개인 저장소에서 음성 생성·청취·푸시 후 팀 저장소에 복사 (이씨 11/23, plan.md)
 
 ### 개인 저장소 (C:\GatePassVR_Lee, feature/lee-audio)
-- [ ] Azure Speech S0 리소스 생성, 환경 변수 설정 (이씨, 키는 커밋하지 않음)
-- [ ] 음성 22개 생성, 길이 0초 없음, Console Error 0개
-- [ ] Play 모드 재생 확인
+- [x] Azure Speech S0 리소스 생성, 환경 변수 설정 (이씨, 키는 커밋하지 않음, 11/23)
+- [x] 음성 22개 생성, 길이 0초 없음, Console Error 0개 (11/23)
+- [x] Play 모드 재생 확인 (11/23)
 - [x] 효과음 6개 이씨 청취 (11/23, 수정 없음)
 - [ ] 음성 22개 이씨 청취, 발음·속도 확인 — 미검증
 - [ ] 의미 단위 커밋, 개인 GitHub 푸시

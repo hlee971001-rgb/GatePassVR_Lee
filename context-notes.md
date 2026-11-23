@@ -364,3 +364,12 @@
 - 11/20 계획(팀 폴더에서 바로 생성)과 다른 점: 복사 단계가 하나 늘고, 팀 Scene에서의 재생 확인은 복사 후 다시 해야 한다.
 - 두 저장소는 Git 기록이 이어져 있지 않아서 개인 브랜치를 팀에 그대로 푸시·병합할 수 없다. 1차와 같이 파일만 복사해 새 커밋으로 올린다.
 - 11/23 기준 AZURE_SPEECH_KEY·AZURE_SPEECH_REGION 사용자 환경 변수는 아직 설정되지 않았다.
+
+## 2026-11-23 안내 음성 22개 생성 (개인 저장소 feature/lee-audio)
+
+- Azure Speech S0(Azure for Students 구독, koreacentral), `ko-KR-InJoonNeural`로 `Tools/generate_voice.py`를 실행해 VO_*.wav 22개를 만들었다.
+  스크립트는 고치지 않았다. 환경 변수는 사용자 범위에 있고, 실행할 때 그 값을 프로세스에 읽어 넣었다. 키는 출력·커밋하지 않았다.
+- 결과: 22개 모두 24kHz 모노 16bit, 0초나 무음 파일 없음, 합계 182.5초. 가장 긴 것은 VO_S6-1(차임 포함 14.25초), 가장 짧은 것은 VO_S4-2(3.83초).
+- Unity(GatePassVR_Lee, 6000.3.10f1) 가져오기: 효과음과 같은 기본 설정(Vorbis, Decompress On Load). Console Error·Warning 0개.
+- Play 모드: 22개 모두 로드됨, 임시 AudioSource로 VO_START를 재생해 재생 시간이 진행되는 것을 확인했다. Play 모드를 끄면서 임시 오브젝트는 사라졌다.
+- 미검증: 이씨가 직접 들어 발음·속도 확인. 고칠 줄은 `python Tools/generate_voice.py --only <ID>`로 그 줄만 다시 만든다.

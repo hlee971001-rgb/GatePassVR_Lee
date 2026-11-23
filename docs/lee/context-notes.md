@@ -499,3 +499,14 @@
 - 최종 빌드 전 발견(build-guide 5번 F1~F5): Build Profile에 Airport_Lee가 없고 SampleScene이 0번, Package Name이 템플릿 기본값
   `com.DefaultCompany.VRTemplate`, Airport_Lee 안에 XR Device Simulator 오브젝트가 있다. 5단계(Quest 빌드) 때 정한다.
 - PolyOne Free VR Hands(김씨 9/4 추가)는 라이선스 원문을 아직 못 봤다.
+
+## 2026-11-23 — END 화면 크레딧
+
+- 이씨 결정: 크레딧은 END 화면에 작게. `StartScreen/CreditsText`(Noto 동적 글꼴 0.7, `<mark>`로 어두운 띠)를 시작 버튼 오른쪽
+  (Dest_Start 앞 1.2m, 오른쪽 1.7m, 높이 1.3m)에 두고 `ShowDuringSteps`(이씨, Scripts/Guidance)가 END Step에서만 켠다.
+  내용: 공항 모델(assetfactory, Sketchfab), Noto Sans KR(OFL), Azure AI 합성 음성, 효과음 팀 제작. 팀원 이름은 넣지 않음.
+- 안내 HUD는 눈 앞 1.3m에 높이 1.58~2.05m 띠로 떠 있어서, 그 뒤 같은 방향의 "시작" 글씨가 가려졌다. 시작 화면을 내렸다:
+  StartPad 1.20m, "시작" 1.49m, AI 음성 고지 0.85m(바닥 0.43 기준 위치 값).
+- **주의(편집 코드)**: 부모가 일반 Transform인 TextMeshPro(RectTransform)는 코드에서 `transform.position`을 바꿔도 저장할 때
+  `m_AnchoredPosition`이 따라가지 않아 위치가 되돌아갔다. SerializedObject로 `m_AnchoredPosition`(x,y)과 `m_LocalPosition`을
+  직접 넣어야 저장된다. 처음 만든 CreditsText가 (0, 0, z)로 저장된 원인이다.

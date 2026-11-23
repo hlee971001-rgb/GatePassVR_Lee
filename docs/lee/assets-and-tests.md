@@ -23,10 +23,11 @@
 글꼴: Noto Sans KR (SIL Open Font License 1.1)
 안내 음성: Microsoft Azure AI Speech로 합성한 AI 음성입니다
 ```
-크레딧 화면은 아직 없다. END 화면이나 시작 화면 아래에 넣을지 정해야 한다.
+(2026-11-23 이씨 결정) END 화면에 작게 넣었다. Airport_Lee `StartScreen/CreditsText`, 시작 버튼 오른쪽, END Step에서만 보인다(`ShowDuringSteps`). 위 세 줄에 "효과음: GatePass VR 팀 제작"을 더했다. 팀원 이름은 넣지 않았다.
 
 ### 남은 확인
 - [ ] PolyOne Free VR Hands 라이선스 원문(김씨가 받은 곳)
+- [x] 크레딧 위치: END 화면 (11/23)
 - [ ] Sketchfab Free Standard의 표기 의무 여부 원문 확인(지금은 표기하는 쪽으로 정리)
 - [ ] NPC를 실제 사람 모델로 바꿀지(바꾸면 라이선스 다시 정리)
 

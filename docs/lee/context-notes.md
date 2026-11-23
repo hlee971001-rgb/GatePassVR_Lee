@@ -491,3 +491,11 @@
   머리에 붙은 HUD가 뒤 표지판과 겹쳐 읽기 어려운 장면이 있다(김씨 UI, 실기기에서 판단).
 - 동적 글꼴 `.asset`은 Play할 때마다 바뀐다. 이번에도 되돌렸다. "Importer generated inconsistent result" 경고가 한 번
   났는데 되돌린 뒤 다시 가져오면 사라진다.
+
+## 2026-11-23 — [28] 빌드 문서·[29] 에셋·테스트 정리
+
+- `docs/build-guide.md`(팀 루트 docs, 원래 김씨 업무)와 `docs/lee/assets-and-tests.md`를 만들었다. 설정값은 Unity에서
+  PlayerSettings·XR 설정·Build Profile을 직접 읽었다.
+- 최종 빌드 전 발견(build-guide 5번 F1~F5): Build Profile에 Airport_Lee가 없고 SampleScene이 0번, Package Name이 템플릿 기본값
+  `com.DefaultCompany.VRTemplate`, Airport_Lee 안에 XR Device Simulator 오브젝트가 있다. 5단계(Quest 빌드) 때 정한다.
+- PolyOne Free VR Hands(김씨 9/4 추가)는 라이선스 원문을 아직 못 봤다.

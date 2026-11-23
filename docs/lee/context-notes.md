@@ -449,3 +449,24 @@
 - **주의**: 시뮬레이터 기본 컨트롤러 방향이 Dest_Boarding의 탑승하기 표지판을 향해 있어 S5-1이 저절로 Hold됐다.
   실제 기기에서는 1.2초 동안 계속 가리켜야 하지만, 정면 표지판이 실수로 눌리는지 실기기에서 볼 것.
 - **미검증**: 실제 Ray 조준 Hold, 게이지 표시 방향, Quest 실기기, 이씨 음성 청취(VO_S2-1b, VO_S4-3).
+
+## 2026-11-23 — [13] 틀린 행동 힌트·효과음·Reset 안내·한글 폰트
+
+- `StepFeedback`(이씨, Scripts/Guidance, Airport_Lee의 StepFeedback 오브젝트):
+  - onStepEntered에서 Step 번호가 늘었을 때만 SFX_Success, END에 들어가면 SFX_Complete. Reset 재진입·처음부터
+    다시는 소리 없음. 스캔 Step은 스캐너 SFX_Scan과 성공음이 같이 난다.
+  - PlacementZone·HandOverZone onWrongObject, ScannerZone onWrongItem → `ShowWrongHint()`. 현재 Step ID로
+    guide-texts.md "틀린 행동 힌트"(7개)를 찾아 보조 힌트만 바꾸고 SFX_Retry(1초에 한 번까지). 힌트가 없는 Step의
+    틀린 행동은 무시한다. 다음 Step이나 Reset에서 원래 힌트로 돌아온다.
+  - GuideManager.onNoProgressLong(10초) → `ShowResetHint()`로 보조 힌트에 C-RESET. 음성은 김씨 동작대로 Step 음성을
+    다시 재생한다(C-RESET 음성은 쓰지 않음).
+- `GuideManager.SetHintText()` 추가(김씨 부재로 이씨 수정). SetGuide로 힌트를 바꾸면 음성이 지워져 10초 재안내가 사라져서
+  힌트만 바꾸는 메서드가 필요했다.
+- C-RESET: "메뉴 버튼" → "B나 Y 버튼"(김씨 ResetController 기본 입력). VO_C-RESET 다시 생성.
+- GuideHUD Prefab 글꼴을 맑은 고딕(Windows 전용 DynamicOS) → NotoSansKR-Medium SDF Dynamic(ttf 포함, OFL)으로 바꿨다.
+  김씨 context-notes의 "최우선 후속 조치 — 한글 폰트 교체"다. TestMap_Quest도 같은 Prefab이라 함께 바뀐다.
+- **주의**: 동적 글꼴은 Play 중 쓰인 글자를 아틀라스에 추가해서 `.asset`이 바뀐다. 그 변경은 커밋하지 않고 되돌린다
+  (빌드 때 동적 데이터는 비워짐).
+- 검증(시뮬레이터 Play): S3-1에서 가방을 노트북 칸에 놓으면 힌트 "노트북을 왼쪽 초록 칸에 넣어 주세요", 10초 뒤
+  "막히면 B나 Y 버튼으로 다시 하세요", Reset 후 원래 힌트, 진행 때 효과음 재생, END까지 글자 깨짐 경고 0.
+  EditMode 56/56, Compile Error 0. **미검증**: 소리 크기·겹침을 귀로 들어 보기, Quest 한글 표시.

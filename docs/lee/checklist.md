@@ -210,9 +210,13 @@ Unity에서 실제로 확인한 항목만 체크한다. 추측으로 체크하�
 - [ ] 실제 Ray로 표지판·시작 버튼 Hold 확인 (시뮬레이터 또는 Quest)
 
 ## 3. [13] 힌트·고지·폰트
-- [ ] 틀린 물건 힌트 문구 연결
-- [ ] 시작 화면 AI 음성 고지 (C-AIVOICE)
-- [ ] 한글 폰트 Noto Sans KR 교체
+- [x] 틀린 물건 힌트 문구 연결: StepFeedback이 현재 Step의 "틀린 행동 힌트"를 보조 힌트에 표시 + SFX_Retry (11/23)
+- [x] 효과음 연결: 앞으로 진행 SFX_Success, END SFX_Complete, 틀린 행동 SFX_Retry, 스캔 SFX_Scan(김씨 Prefab), 안내방송 Chime(VO_S6-1 안) (11/23)
+- [x] 약 10초 무반응이면 보조 힌트에 C-RESET 표시, C-RESET 문구·음성을 B·Y 버튼으로 수정 (11/23)
+- [x] 시작 화면 AI 음성 고지 (C-AIVOICE, 2단계에서 StartScreen에 넣음)
+- [x] 한글 폰트 Noto Sans KR 교체: GuideHUD Prefab MainGuideText·HintText → NotoSansKR-Medium SDF Dynamic, 맑은 고딕 참조 0 (11/23)
+- [ ] 이씨 음성 청취 (VO_C-RESET 새로 만듦)
+- [ ] Quest 실기기에서 한글 표시 확인 (5단계)
 
 ## 4~7
 - [ ] [23]·[24] 기능 테스트 목록, 시뮬레이터 START→EXIT 완주, 막힘 수정

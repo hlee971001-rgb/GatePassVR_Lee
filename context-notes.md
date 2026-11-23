@@ -373,3 +373,14 @@
 - Unity(GatePassVR_Lee, 6000.3.10f1) 가져오기: 효과음과 같은 기본 설정(Vorbis, Decompress On Load). Console Error·Warning 0개.
 - Play 모드: 22개 모두 로드됨, 임시 AudioSource로 VO_START를 재생해 재생 시간이 진행되는 것을 확인했다. Play 모드를 끄면서 임시 오브젝트는 사라졌다.
 - 이씨 청취(11/23): 22개 모두 수정 없음. 나중에 고칠 줄은 `python Tools/generate_voice.py --only <ID>`로 그 줄만 다시 만든다.
+
+## 2026-11-23 2차 이전 (팀 저장소 feature/lee-audio)
+
+- C:\GatePass_VR에서 develop(a2938a7, 1차 머지 포함)을 받아 feature/lee-audio를 만들었다.
+- 복사: Audio/SFX·Voice와 각 폴더 .meta(GUID 유지), Tools/generate_sfx.py·generate_voice.py, docs/lee의 plan·checklist·context-notes·guide-texts(개인 최신본).
+  docs/lee/README.md는 팀용 머리말을 두고 음원 출처 두 줄만 더했다. Audio.meta와 .gitkeep은 팀 것을 그대로 두었다.
+- 팀 저장소는 문구표가 docs/lee/guide-texts.md에 있어서 generate_voice.py가 docs/lee/와 루트를 차례로 찾게 고쳤다(개인 dd80a39). 양쪽에서 --dry-run 22줄 확인.
+- 검증(C:\GatePass_VR, Unity 6000.3.10f1): Console Error 0개(경고는 공항 모델 FBX 경고뿐), 효과음 6개·음성 22개 Import(모노, 길이 0초 없음),
+  EditMode 테스트 20/20 통과, Airport_Lee Play 모드에서 28개 모두 로드되고 VO_START 재생 진행 확인. Scene 파일은 바뀌지 않았다.
+- Unity가 자동으로 바꾼 팀 설정 파일 6개(OpenXRPackageSettings, MalgunGothic SDF, ProjectSettings 등)는 이번에도 커밋하지 않았다.
+- 남은 일: 팀 develop PR 김씨 리뷰·머지, 김씨 연결(VO_<ID> → GuideManager.SetGuide, 효과음 재생 위치, 시작 화면 AI 음성 고지), 머지 후 재검증.

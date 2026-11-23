@@ -178,9 +178,9 @@ Unity에서 실제로 확인한 항목만 체크한다. 추측으로 체크하�
 - [x] 의미 단위 커밋, 개인 GitHub 푸시 (feature/lee-audio, 11/23)
 
 ### 팀 저장소 (C:\GatePass_VR)
-- [ ] 머지된 develop에서 feature/lee-audio 새로 만들기
-- [ ] 효과음 6개·음성 22개, Tools/generate_sfx.py·generate_voice.py, C-AIVOICE·README 음원 출처 복사 (.meta 포함)
-- [ ] Compile Error 0개, EditMode 테스트 통과, Play 모드 재생 확인
+- [x] 머지된 develop(a2938a7)에서 feature/lee-audio 새로 만들기 (11/23)
+- [x] 효과음 6개·음성 22개, Tools/generate_sfx.py·generate_voice.py, C-AIVOICE·README 음원 출처 복사 (.meta 포함, 11/23)
+- [x] Compile Error 0개, EditMode 테스트 통과(20/20), Airport_Lee Play 모드 재생 확인 (11/23)
 - [ ] 의미 단위 커밋, 푸시, 팀 develop으로 PR
 - [ ] 김씨 연결: VO_<ID> → GuideManager.SetGuide, 효과음 재생 위치, 시작 화면 AI 음성 고지
 - [ ] 머지된 develop 다시 열어 재검증

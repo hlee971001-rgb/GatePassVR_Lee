@@ -206,6 +206,40 @@ START → STEP 1~9 → EXIT 전체 흐름의 안내 문구표(guide-texts.md). �
 
 ---
 
+# [21] 안내 음성·효과음 정리 - Plan (담당 이씨, 김씨 시스템 연결)
+
+## 무엇을 만드는가
+START → STEP 1~9 → END 안내 음성 22개(guide-texts.md "음성 대본" 21줄 + C-RESET)와 효과음 6개.
+완료 기준(업무관리표): "필요 음원 준비 및 재생".
+
+## 결정 사항 (이씨, 2026-11-13)
+- 음성: Azure Speech 미리 만들어진 음성 `ko-KR-InJoonNeural`(성인 남성). 유료 S0 리소스로 생성한다
+  (Product Terms의 출력물 사용권이 유료 등급 고객에만 명시됨).
+- AI 음성 고지: Microsoft AI 서비스 행동강령 3항(합성 음성임을 알림)에 따라 시작 화면과 크레딧에
+  "안내 음성은 AI로 합성한 음성입니다"를 넣는다(guide-texts.md C-AIVOICE). Microsoft 출처 표기 의무는 없음.
+- 효과음: 외부 음원 대신 스크립트로 직접 합성한다(라이선스 문제 없음).
+- 브랜치: feature/lee-audio. 음성까지 만들고 이씨가 들어 본 뒤 main에 합친다.
+
+## 구조
+- `Tools/generate_voice.py`: guide-texts.md 표를 읽어 Azure TTS REST로 `Assets/_GatePassVR/Audio/Voice/VO_<ID>.wav` 생성.
+  키는 환경 변수 `AZURE_SPEECH_KEY`, `AZURE_SPEECH_REGION`. 발음 바꿈표(예: GatePass VR → 게이트패스 브이알)는 스크립트에만 둔다.
+  S6-1 기내 안내방송은 앞에 SFX_Chime을 붙인다. `--dry-run`은 API 없이 읽은 대본만 출력.
+- `Tools/generate_sfx.py`: `Assets/_GatePassVR/Audio/SFX/SFX_*.wav` 6개 합성(24kHz 모노 16bit, 음성과 같은 형식).
+  Success(성공), Retry(다시 하기 힌트), GaugeFill(게이지 1.5초, PointAndHoldTarget.holdDuration 기본값), Scan(스캔),
+  Chime(안내방송), Complete(완료).
+- 재생 연결은 김씨: GuideManager.SetGuide(메인, 힌트, voice)에 VO_<ID>를 넣는다. 효과음 재생 코드는 아직 없음.
+
+## 성공 조건과 검증
+| 성공 조건 | 검증 방법 |
+|---|---|
+| 대본 22줄을 빠짐없이 읽음 | `--dry-run` 출력 22줄 |
+| 음성 22개·효과음 6개 생성, 길이 0초 없음 | 스크립트 출력과 파일 확인 |
+| Unity 가져오기 오류 없음 | Console Error 0개 |
+| 이씨 프로젝트에서 재생됨 | Play 모드 AudioSource 재생 |
+| 듣기에 자연스러움 | 이씨가 직접 들어 확인 (그 전까지 미검증) |
+
+---
+
 # [이전] 팀 저장소 develop으로 옮기기 - Plan (담당 이씨, 김씨 확인)
 
 ## 무엇을 하는가
@@ -220,8 +254,10 @@ M3(START→EXIT 완주)와 김씨 기능 연결(Point & Hold, Hand-over, Scanner
 ## 두 번에 나눠 옮긴다 (2026-11-20 이씨 결정)
 처음 계획은 한 번에 옮기는 것이었다. 안내 음성이 아직 없으므로 두 번으로 나눈다.
 - 1차 (콘텐츠): 개인 main에 있는 것. 김씨 확인을 받으면 바로 옮긴다.
-- 2차 (음원): 효과음·안내 음성. 1차가 develop에 머지된 뒤, 팀 저장소에서 develop 기준 feature/lee-audio를 새로 만들어 진행한다.
-  음성 22개는 팀 저장소 폴더에서 생성하고 이씨가 들어 본 뒤 PR한다(개인 저장소에서 만들고 다시 옮기는 이중 작업을 피함).
+- 2차 (음원): 효과음·안내 음성. (2026-11-23 이씨 결정으로 바꿈) 음성 22개를 개인 저장소(C:\GatePassVR_Lee) feature/lee-audio에서
+  먼저 만들고 이씨가 들어 본 뒤 개인 GitHub에 푸시한다. 그다음 팀 저장소(C:\GatePass_VR)에서 develop 기준 feature/lee-audio를 새로 만들어
+  음원 파일을 .meta와 함께 복사하고 팀 develop으로 PR한다. 개인 저장소에 완성본 백업을 남기고, 확인을 마친 결과만 팀에 올리기 위해서다.
+  (11/20 원래 계획: 음성을 팀 폴더에서 바로 생성. 복사 단계 하나를 줄이려던 것이었다.)
 - 이유: 콘텐츠는 음성 없이도 동작하고, develop에 늦게 합칠수록 김씨 작업과 충돌이 커진다. 11월은 안정화 시기라 develop에서 빨리 같이 검증한다.
   PR을 둘로 나누면 김씨가 검토하기도 쉽다(CLAUDE.md §19 의미 단위).
 - 커밋은 옮기지 않는다. 파일의 최종 상태만 복사해 팀 브랜치에 새 커밋으로 올린다. 개인 저장소 커밋 기록은 개인 저장소에 남는다.
@@ -252,7 +288,7 @@ M3(START→EXIT 완주)와 김씨 기능 연결(Point & Hold, Hand-over, Scanner
 | 효과음 6개 | Assets/_GatePassVR/Audio/SFX/ (Audio.meta, SFX.meta 포함) |
 | 음원 생성 도구 | Tools/generate_sfx.py, Tools/generate_voice.py |
 | 문서 추가분 | guide-texts.md의 AI 음성 고지(C-AIVOICE), README 음원 출처 줄 |
-| 안내 음성 22개 | 팀 저장소 폴더에서 generate_voice.py로 새로 생성 (Azure Speech S0) |
+| 안내 음성 22개 | 개인 저장소에서 generate_voice.py로 생성한 VO_*.wav (Azure Speech S0, 11/23 변경) |
 | [21] 계획·체크리스트·결정 기록 | 이씨 문서 위치(충돌 3)가 정해진 곳에 함께 |
 
 ## (이전 표, 기록용) 한 번에 옮기려던 목록
@@ -296,12 +332,20 @@ M3(START→EXIT 완주)와 김씨 기능 연결(Point & Hold, Hand-over, Scanner
 
 위 1~5가 1차다. 1차 PR 대상(base)이 main이 아니라 develop인지 PR 만들기 전에 확인한다.
 
-### 2차 순서 (1차 머지 후)
-1. 머지된 develop을 받아 feature/lee-audio를 새로 만든다.
-2. 개인 feature/lee-audio에서 2차 표의 파일을 복사한다(.meta 포함). 효과음을 이씨가 들어 확인한다.
-3. Azure Speech S0 리소스·환경 변수 준비 후 음성 22개 생성. 이씨가 들어 발음·속도 확인.
-4. Unity로 열어 검증, 의미 단위로 커밋, 팀 develop으로 PR. 김씨가 GuideManager·효과음 재생 위치에 연결.
-5. 머지된 develop 재검증. 개인 저장소 PR #1은 기록용으로 남긴다(머지 여부는 이씨가 정함).
+### 2차 순서 (1차 머지 후, 2026-11-23 바꿈)
+1차 팀 PR #1은 develop에 머지됐다(머지 커밋 a2938a7, 11/23 확인).
+
+개인 저장소(C:\GatePassVR_Lee, feature/lee-audio)
+1. Azure Speech S0 리소스·환경 변수 준비(이씨, 키는 커밋하지 않음).
+2. 음성 22개 생성, Unity로 열어 Import 경고·길이 0초·Console Error 확인, Play 모드 재생 확인.
+3. 이씨가 효과음 6개와 음성 22개를 들어 발음·속도 확인.
+4. 의미 단위로 커밋, 개인 GitHub에 푸시.
+
+팀 저장소(C:\GatePass_VR)
+5. 머지된 develop을 받아 feature/lee-audio를 새로 만든다.
+6. 개인 feature/lee-audio에서 2차 표의 파일을 복사한다(.meta 포함, 커밋 기록은 옮기지 않음).
+7. Unity로 열어 검증, 의미 단위로 커밋, 팀 develop으로 PR. 김씨가 GuideManager·효과음 재생 위치에 연결.
+8. 머지된 develop 재검증. 개인 저장소 PR #1은 기록용으로 남긴다(머지 여부는 이씨가 정함).
 
 ## 성공 조건과 검증
 | 성공 조건 | 검증 방법 |

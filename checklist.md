@@ -112,6 +112,23 @@ Unity에서 실제로 확인한 항목만 체크한다. 추측으로 체크하�
 
 ---
 
+# [21] 안내 음성·효과음 정리 - Checklist (담당 이씨, 김씨 시스템 연결)
+
+## Trello 완료 기준: 필요 음원 준비 및 재생
+- [x] 음성 서비스 결정: Azure Speech `ko-KR-InJoonNeural`, 유료 S0, AI 음성 고지(이씨 결정 11/13)
+- [x] 효과음 6개 합성 (`Tools/generate_sfx.py`), Unity Console Error 0개 (24kHz 모노, Vorbis, 11/13)
+- [x] 효과음 6개를 이씨가 직접 들어 확인 (11/23, 수정 없음)
+- [x] 음성 생성 스크립트 작성 (`Tools/generate_voice.py`), `--dry-run` 22줄 확인
+- [x] AI 음성 고지 문구 추가 (guide-texts.md C-AIVOICE, README 출처)
+- [x] Azure Speech S0 리소스 생성, 환경 변수 설정 (이씨, Azure for Students 구독, 11/23)
+- [x] 음성 22개 생성, 길이 0초 없음, Console Error·Warning 0개 (24kHz 모노, Vorbis, 합계 182.5초, 11/23)
+- [x] 이씨 프로젝트 Play 모드에서 재생 확인 (22개 로드, VO_START 재생 진행 확인, 11/23)
+- [x] 이씨가 직접 들어 발음·속도 확인 (11/23, 22개 모두 수정 없음)
+- [ ] feature/lee-audio → main 병합, GitHub Push
+- [ ] 김씨 연결: VO_<ID> → GuideManager.SetGuide, 효과음 재생 위치, 시작 화면 AI 음성 고지
+
+---
+
 # [이전] 팀 저장소 develop으로 옮기기 - Checklist (담당 이씨, 김씨 확인)
 
 ## 준비
@@ -148,15 +165,23 @@ Unity에서 실제로 확인한 항목만 체크한다. 추측으로 체크하�
 - [ ] 김씨 리뷰 후 머지, 머지된 develop 다시 열어 재검증
 - [ ] Editor 도구 7개 + GatePassVR.Editor asmdef PR, Validate Colliders·Dest Tour 확인
 
-## 2차 (음원, 1차 머지 후)
-- [ ] 머지된 develop에서 feature/lee-audio 새로 만들기
-- [ ] 효과음 6개, Tools/generate_sfx.py·generate_voice.py, C-AIVOICE·README 음원 출처 복사 (.meta 포함)
-- [ ] 효과음 6개 이씨 청취 — 미검증
-- [ ] Azure Speech S0 리소스 생성, 환경 변수 설정 (이씨, 키는 커밋하지 않음)
-- [ ] 음성 22개 생성, 길이 0초 없음, Console Error 0개
-- [ ] Play 모드 재생 확인, 이씨가 발음·속도 확인 — 미검증
-- [ ] Compile Error 0개, EditMode 테스트 통과
-- [ ] 의미 단위 커밋, 푸시, 팀 develop으로 PR
+## 2차 (음원, 1차 머지 후) — 개인 먼저, 팀에 복사 (이씨 결정 11/23)
+- [x] 1차 팀 PR #1 develop 머지 확인 (a2938a7, 11/23)
+- [x] 2차 순서 결정: 개인 저장소에서 음성 생성·청취·푸시 후 팀 저장소에 복사 (이씨 11/23, plan.md)
+
+### 개인 저장소 (C:\GatePassVR_Lee, feature/lee-audio)
+- [x] Azure Speech S0 리소스 생성, 환경 변수 설정 (이씨, 키는 커밋하지 않음, 11/23)
+- [x] 음성 22개 생성, 길이 0초 없음, Console Error 0개 (11/23)
+- [x] Play 모드 재생 확인 (11/23)
+- [x] 효과음 6개 이씨 청취 (11/23, 수정 없음)
+- [x] 음성 22개 이씨 청취, 발음·속도 확인 (11/23, 수정 없음)
+- [x] 의미 단위 커밋, 개인 GitHub 푸시 (feature/lee-audio, 11/23)
+
+### 팀 저장소 (C:\GatePass_VR)
+- [x] 머지된 develop(a2938a7)에서 feature/lee-audio 새로 만들기 (11/23)
+- [x] 효과음 6개·음성 22개, Tools/generate_sfx.py·generate_voice.py, C-AIVOICE·README 음원 출처 복사 (.meta 포함, 11/23)
+- [x] Compile Error 0개, EditMode 테스트 통과(20/20), Airport_Lee Play 모드 재생 확인 (11/23)
+- [x] 의미 단위 커밋 4개, 푸시, 팀 develop으로 PR (KJY-1204/GatePass_VR PR #2, base develop, 11/23)
 - [ ] 김씨 연결: VO_<ID> → GuideManager.SetGuide, 효과음 재생 위치, 시작 화면 AI 음성 고지
 - [ ] 머지된 develop 다시 열어 재검증
 - [ ] 개인 PR #1 처리 (기록용으로 둘지, 닫을지 이씨 결정)

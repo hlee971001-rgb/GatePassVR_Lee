@@ -284,6 +284,16 @@
 - 역할 이름표(머리 위 "체크인 직원" 등)는 유지한다(이씨 결정, 캡처 확인 후). 초보자가 누구에게 무엇을 하는지 바로 알 수 있다.
 - 김씨에게 공유: NPC Collider는 XRI 레이에 걸린다. 이동 표지판이 NPC 뒤에 있지 않게 배치했지만, 레이 마스크에서 NPC를 뺄지 김씨가 판단.
 
+## 2026-11-13 [21] 안내 음성·효과음
+
+- 음성은 Azure Speech `ko-KR-InJoonNeural`(성인 남성, 이씨 결정). 이 PC의 Windows TTS는 Heami(여성)뿐이라 쓰지 않았다.
+- 이용 조건 확인(11/13): Microsoft Product Terms의 TTS 출력물 사용권은 "paid tier TTS Service only"로 인용됨 → S0로 만든다.
+  Microsoft AI 서비스 행동강령 3항은 합성 음성임을 알리라고 요구 → 시작 화면·크레딧에 고지(C-AIVOICE). Microsoft 출처 표기 의무는 찾지 못함.
+  Google Cloud TTS는 생성형 AI 약관의 18세 미만 대상 서비스 제한 가능성 때문에 제외. Amazon Polly(Hyunduk)는 고지 의무가 명시되지 않은 대안.
+- Unity MCP의 generate_audio는 fal.ai 유료 키가 필요하고 설정되지 않아 쓰지 않았다. 효과음은 스크립트로 직접 합성.
+- 파일 이름을 guide-texts.md ID와 같게(VO_S2-1.wav) 해서 김씨가 Step마다 바로 연결하게 했다. 문구를 고치면 guide-texts.md → generate_voice.py 다시 실행.
+- GuideManager는 10초 무반응 때 같은 클립을 다시 재생하므로, 기내 안내방송 차임은 VO_S6-1 안에 붙였다(다시 재생될 때도 차임이 같이 나옴).
+
 ## 2026-11-20 팀 저장소 develop으로 옮기기 계획
 
 - 팀 저장소 KJY-1204/GatePass_VR의 CLAUDE.md·plan·checklist·context-notes를 다시 읽고 이씨 작업 기준으로 삼는다(이씨 지시).
@@ -343,3 +353,34 @@
   1차에 넣지 않았다. C:\Users\User-29\GatePass_VR는 예전 팀 사본(main 12c2b3b, 6000.3.23f1)이라 쓰지 않는다.
 - 팀 PR: KJY-1204/GatePass_VR PR #1 (feature/lee-content → develop, 커밋 8개, 파일 184개, 삭제 0). 김씨 리뷰·머지 대기.
 - 앞으로 팀 작업은 C:\GatePass_VR에서 한다. 개인 저장소 문서는 11/20 기준으로 팀 docs/lee와 맞춰 두었다.
+
+## 2026-11-23 2차(음원) 순서 바꿈: 개인 먼저, 팀에 복사
+
+- 확인: 1차 팀 PR #1(feature/lee-content → develop)이 머지됐다(팀 develop 머지 커밋 a2938a7).
+- 결정(이씨): 음성 22개를 개인 저장소 C:\GatePassVR_Lee의 feature/lee-audio에서 먼저 만들고, 들어 본 뒤 개인 GitHub에 푸시한다.
+  그다음 팀 저장소 C:\GatePass_VR에서 develop 기준 feature/lee-audio를 새로 만들어 파일을 .meta와 함께 복사하고 팀 develop으로 PR한다.
+- 이유: 개인 저장소에 완성본 백업이 남고, 확인을 마친 결과만 팀에 올릴 수 있다. 음원 파일은 다른 파일을 참조하지 않아서 복사가 단순하고,
+  .meta를 같이 옮기면 GUID가 유지된다.
+- 11/20 계획(팀 폴더에서 바로 생성)과 다른 점: 복사 단계가 하나 늘고, 팀 Scene에서의 재생 확인은 복사 후 다시 해야 한다.
+- 두 저장소는 Git 기록이 이어져 있지 않아서 개인 브랜치를 팀에 그대로 푸시·병합할 수 없다. 1차와 같이 파일만 복사해 새 커밋으로 올린다.
+- 11/23 기준 AZURE_SPEECH_KEY·AZURE_SPEECH_REGION 사용자 환경 변수는 아직 설정되지 않았다.
+
+## 2026-11-23 안내 음성 22개 생성 (개인 저장소 feature/lee-audio)
+
+- Azure Speech S0(Azure for Students 구독, koreacentral), `ko-KR-InJoonNeural`로 `Tools/generate_voice.py`를 실행해 VO_*.wav 22개를 만들었다.
+  스크립트는 고치지 않았다. 환경 변수는 사용자 범위에 있고, 실행할 때 그 값을 프로세스에 읽어 넣었다. 키는 출력·커밋하지 않았다.
+- 결과: 22개 모두 24kHz 모노 16bit, 0초나 무음 파일 없음, 합계 182.5초. 가장 긴 것은 VO_S6-1(차임 포함 14.25초), 가장 짧은 것은 VO_S4-2(3.83초).
+- Unity(GatePassVR_Lee, 6000.3.10f1) 가져오기: 효과음과 같은 기본 설정(Vorbis, Decompress On Load). Console Error·Warning 0개.
+- Play 모드: 22개 모두 로드됨, 임시 AudioSource로 VO_START를 재생해 재생 시간이 진행되는 것을 확인했다. Play 모드를 끄면서 임시 오브젝트는 사라졌다.
+- 이씨 청취(11/23): 22개 모두 수정 없음. 나중에 고칠 줄은 `python Tools/generate_voice.py --only <ID>`로 그 줄만 다시 만든다.
+
+## 2026-11-23 2차 이전 (팀 저장소 feature/lee-audio)
+
+- C:\GatePass_VR에서 develop(a2938a7, 1차 머지 포함)을 받아 feature/lee-audio를 만들었다.
+- 복사: Audio/SFX·Voice와 각 폴더 .meta(GUID 유지), Tools/generate_sfx.py·generate_voice.py, docs/lee의 plan·checklist·context-notes·guide-texts(개인 최신본).
+  docs/lee/README.md는 팀용 머리말을 두고 음원 출처 두 줄만 더했다. Audio.meta와 .gitkeep은 팀 것을 그대로 두었다.
+- 팀 저장소는 문구표가 docs/lee/guide-texts.md에 있어서 generate_voice.py가 docs/lee/와 루트를 차례로 찾게 고쳤다(개인 dd80a39). 양쪽에서 --dry-run 22줄 확인.
+- 검증(C:\GatePass_VR, Unity 6000.3.10f1): Console Error 0개(경고는 공항 모델 FBX 경고뿐), 효과음 6개·음성 22개 Import(모노, 길이 0초 없음),
+  EditMode 테스트 20/20 통과, Airport_Lee Play 모드에서 28개 모두 로드되고 VO_START 재생 진행 확인. Scene 파일은 바뀌지 않았다.
+- Unity가 자동으로 바꾼 팀 설정 파일 6개(OpenXRPackageSettings, MalgunGothic SDF, ProjectSettings 등)는 이번에도 커밋하지 않았다.
+- 팀 PR: KJY-1204/GatePass_VR PR #2 (feature/lee-audio → develop, 커밋 4개, 파일 65개). 남은 일: 김씨 리뷰·머지, 김씨 연결(VO_<ID> → GuideManager.SetGuide, 효과음 재생 위치, 시작 화면 AI 음성 고지), 머지 후 재검증.

@@ -3585,13 +3585,29 @@ PrefabInstance:
       value: GuideHUD
       objectReference: {fileID: 0}
     - target: {fileID: 2699592655169413057, guid: ab15751b7ec3b6744a2dfcf28fb4d8ee, type: 3}
+      propertyPath: onNoProgressLong.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2699592655169413057, guid: ab15751b7ec3b6744a2dfcf28fb4d8ee, type: 3}
       propertyPath: onNoProgressShort.m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2699592655169413057, guid: ab15751b7ec3b6744a2dfcf28fb4d8ee, type: 3}
+      propertyPath: onNoProgressLong.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 765944438}
+    - target: {fileID: 2699592655169413057, guid: ab15751b7ec3b6744a2dfcf28fb4d8ee, type: 3}
       propertyPath: onNoProgressShort.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 2014553414}
+    - target: {fileID: 2699592655169413057, guid: ab15751b7ec3b6744a2dfcf28fb4d8ee, type: 3}
+      propertyPath: onNoProgressLong.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2699592655169413057, guid: ab15751b7ec3b6744a2dfcf28fb4d8ee, type: 3}
+      propertyPath: onNoProgressLong.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ShowResetHint
+      objectReference: {fileID: 0}
     - target: {fileID: 2699592655169413057, guid: ab15751b7ec3b6744a2dfcf28fb4d8ee, type: 3}
       propertyPath: onNoProgressShort.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -3599,6 +3615,10 @@ PrefabInstance:
     - target: {fileID: 2699592655169413057, guid: ab15751b7ec3b6744a2dfcf28fb4d8ee, type: 3}
       propertyPath: onNoProgressShort.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: Escalate
+      objectReference: {fileID: 0}
+    - target: {fileID: 2699592655169413057, guid: ab15751b7ec3b6744a2dfcf28fb4d8ee, type: 3}
+      propertyPath: onNoProgressLong.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: GatePassVR.Guidance.StepFeedback, GatePassVR.Runtime
       objectReference: {fileID: 0}
     - target: {fileID: 2699592655169413057, guid: ab15751b7ec3b6744a2dfcf28fb4d8ee, type: 3}
       propertyPath: onNoProgressShort.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -3948,7 +3968,19 @@ MonoBehaviour:
         m_CallState: 2
   onWrongObject:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 765944438}
+        m_TargetAssemblyTypeName: GatePassVR.Guidance.StepFeedback, GatePassVR.Runtime
+        m_MethodName: ShowWrongHint
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!23 &198179236
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -10777,7 +10809,19 @@ MonoBehaviour:
         m_CallState: 2
   onWrongObject:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 765944438}
+        m_TargetAssemblyTypeName: GatePassVR.Guidance.StepFeedback, GatePassVR.Runtime
+        m_MethodName: ShowWrongHint
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!23 &682047795
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -12462,6 +12506,174 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 762009635}
   m_CullTransparentMesh: 1
+--- !u!1 &765944437
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 765944440}
+  - component: {fileID: 765944439}
+  - component: {fileID: 765944438}
+  m_Layer: 0
+  m_Name: StepFeedback
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &765944438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 765944437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3a0bbb25e604214490b9b0013053db5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GatePassVR.Runtime::GatePassVR.Guidance.StepFeedback
+  scenario: {fileID: 2014553412}
+  guideManager: {fileID: 181818581}
+  successClip: {fileID: 8300000, guid: a30a32e739578464384c022a1c924752, type: 3}
+  retryClip: {fileID: 8300000, guid: 528ac2f10f4632a4782c185ea106ec54, type: 3}
+  completeClip: {fileID: 8300000, guid: cd2e506705c23f444b80407abbb3a55d, type: 3}
+  completeStepId: END
+  wrongHints:
+  - stepId: S2-1
+    hint: "\uC5EC\uAD8C\uC744 \uCD08\uB85D \uCE78\uC5D0 \uB193\uC544 \uC8FC\uC138\uC694"
+  - stepId: S2-2
+    hint: "\uCE90\uB9AC\uC5B4\uB97C \uCD08\uB85D \uCE78\uC5D0 \uC62C\uB824 \uC8FC\uC138\uC694"
+  - stepId: S3-1
+    hint: "\uB178\uD2B8\uBD81\uC744 \uC67C\uCABD \uCD08\uB85D \uCE78\uC5D0 \uB123\uC5B4
+      \uC8FC\uC138\uC694"
+  - stepId: S3-2
+    hint: "\uAC00\uBC29\uC744 \uC624\uB978\uCABD \uCD08\uB85D \uCE78\uC5D0 \uB123\uC5B4
+      \uC8FC\uC138\uC694"
+  - stepId: S4-1
+    hint: "\uBA3C\uC800 \uC5EC\uAD8C\uC744 \uB300 \uC8FC\uC138\uC694"
+  - stepId: S4-2
+    hint: "\uC774\uBC88\uC5D0\uB294 \uD0D1\uC2B9\uAD8C\uC744 \uB300 \uC8FC\uC138\uC694"
+  - stepId: S8-1
+    hint: "\uC5EC\uAD8C\uC744 \uCD08\uB85D \uCE78\uC5D0 \uB193\uC544 \uC8FC\uC138\uC694"
+  resetHint: "\uB9C9\uD788\uBA74 B\uB098 Y \uBC84\uD2BC\uC73C\uB85C \uB2E4\uC2DC
+    \uD558\uC138\uC694"
+  retryCooldown: 1
+--- !u!82 &765944439
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 765944437}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!4 &765944440
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 765944437}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &767730663
 GameObject:
   m_ObjectHideFlags: 0
@@ -15981,7 +16193,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4704240698125147210, guid: 048249d9a15aa3c459399751e860bde7, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 91.91
       objectReference: {fileID: 0}
     - target: {fileID: 4704240698125147210, guid: 048249d9a15aa3c459399751e860bde7, type: 3}
       propertyPath: m_LocalPosition.x
@@ -16500,9 +16712,21 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5344470581829279260, guid: b94da97e7f23cfc47a3428e434851e8d, type: 3}
+      propertyPath: onWrongItem.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344470581829279260, guid: b94da97e7f23cfc47a3428e434851e8d, type: 3}
       propertyPath: onScanned.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 2014553412}
+    - target: {fileID: 5344470581829279260, guid: b94da97e7f23cfc47a3428e434851e8d, type: 3}
+      propertyPath: onWrongItem.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344470581829279260, guid: b94da97e7f23cfc47a3428e434851e8d, type: 3}
+      propertyPath: onWrongItem.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 765944438}
     - target: {fileID: 5344470581829279260, guid: b94da97e7f23cfc47a3428e434851e8d, type: 3}
       propertyPath: onScanned.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
       value: 2
@@ -16512,8 +16736,20 @@ PrefabInstance:
       value: ReportScanned
       objectReference: {fileID: 0}
     - target: {fileID: 5344470581829279260, guid: b94da97e7f23cfc47a3428e434851e8d, type: 3}
+      propertyPath: onWrongItem.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344470581829279260, guid: b94da97e7f23cfc47a3428e434851e8d, type: 3}
+      propertyPath: onWrongItem.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: ShowWrongHint
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344470581829279260, guid: b94da97e7f23cfc47a3428e434851e8d, type: 3}
       propertyPath: onScanned.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
       value: GatePassVR.Core.ScenarioManager, GatePassVR.Runtime
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344470581829279260, guid: b94da97e7f23cfc47a3428e434851e8d, type: 3}
+      propertyPath: onWrongItem.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: GatePassVR.Guidance.StepFeedback, GatePassVR.Runtime
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -20617,6 +20853,14 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6289787233623001307, guid: 0a90a66a7ba7457499c01f717f9081f7, type: 3}
+      propertyPath: onWrongObject.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6289787233623001307, guid: 0a90a66a7ba7457499c01f717f9081f7, type: 3}
+      propertyPath: onWrongObject.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6289787233623001307, guid: 0a90a66a7ba7457499c01f717f9081f7, type: 3}
       propertyPath: onHandedOver.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 2014553412}
@@ -20624,6 +20868,10 @@ PrefabInstance:
       propertyPath: onReturnTaken.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 2014553412}
+    - target: {fileID: 6289787233623001307, guid: 0a90a66a7ba7457499c01f717f9081f7, type: 3}
+      propertyPath: onWrongObject.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 765944438}
     - target: {fileID: 6289787233623001307, guid: 0a90a66a7ba7457499c01f717f9081f7, type: 3}
       propertyPath: onHandedOver.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -20637,8 +20885,16 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6289787233623001307, guid: 0a90a66a7ba7457499c01f717f9081f7, type: 3}
+      propertyPath: onWrongObject.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6289787233623001307, guid: 0a90a66a7ba7457499c01f717f9081f7, type: 3}
       propertyPath: onReturnTaken.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: ReportReturnTaken
+      objectReference: {fileID: 0}
+    - target: {fileID: 6289787233623001307, guid: 0a90a66a7ba7457499c01f717f9081f7, type: 3}
+      propertyPath: onWrongObject.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ShowWrongHint
       objectReference: {fileID: 0}
     - target: {fileID: 6289787233623001307, guid: 0a90a66a7ba7457499c01f717f9081f7, type: 3}
       propertyPath: onHandedOver.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -20647,6 +20903,10 @@ PrefabInstance:
     - target: {fileID: 6289787233623001307, guid: 0a90a66a7ba7457499c01f717f9081f7, type: 3}
       propertyPath: onReturnTaken.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: GatePassVR.Core.ScenarioManager, GatePassVR.Runtime
+      objectReference: {fileID: 0}
+    - target: {fileID: 6289787233623001307, guid: 0a90a66a7ba7457499c01f717f9081f7, type: 3}
+      propertyPath: onWrongObject.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: GatePassVR.Guidance.StepFeedback, GatePassVR.Runtime
       objectReference: {fileID: 0}
     - target: {fileID: 7108901997640452928, guid: 0a90a66a7ba7457499c01f717f9081f7, type: 3}
       propertyPath: m_Name
@@ -21598,7 +21858,19 @@ MonoBehaviour:
         m_CallState: 2
   onWrongObject:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 765944438}
+        m_TargetAssemblyTypeName: GatePassVR.Guidance.StepFeedback, GatePassVR.Runtime
+        m_MethodName: ShowWrongHint
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!23 &1313049140
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -23071,6 +23343,14 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6289787233623001307, guid: 0a90a66a7ba7457499c01f717f9081f7, type: 3}
+      propertyPath: onWrongObject.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6289787233623001307, guid: 0a90a66a7ba7457499c01f717f9081f7, type: 3}
+      propertyPath: onWrongObject.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6289787233623001307, guid: 0a90a66a7ba7457499c01f717f9081f7, type: 3}
       propertyPath: onHandedOver.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 2014553412}
@@ -23078,6 +23358,10 @@ PrefabInstance:
       propertyPath: onReturnTaken.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 2014553412}
+    - target: {fileID: 6289787233623001307, guid: 0a90a66a7ba7457499c01f717f9081f7, type: 3}
+      propertyPath: onWrongObject.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 765944438}
     - target: {fileID: 6289787233623001307, guid: 0a90a66a7ba7457499c01f717f9081f7, type: 3}
       propertyPath: onHandedOver.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -23091,8 +23375,16 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6289787233623001307, guid: 0a90a66a7ba7457499c01f717f9081f7, type: 3}
+      propertyPath: onWrongObject.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6289787233623001307, guid: 0a90a66a7ba7457499c01f717f9081f7, type: 3}
       propertyPath: onReturnTaken.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: ReportReturnTaken
+      objectReference: {fileID: 0}
+    - target: {fileID: 6289787233623001307, guid: 0a90a66a7ba7457499c01f717f9081f7, type: 3}
+      propertyPath: onWrongObject.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ShowWrongHint
       objectReference: {fileID: 0}
     - target: {fileID: 6289787233623001307, guid: 0a90a66a7ba7457499c01f717f9081f7, type: 3}
       propertyPath: onHandedOver.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -23101,6 +23393,10 @@ PrefabInstance:
     - target: {fileID: 6289787233623001307, guid: 0a90a66a7ba7457499c01f717f9081f7, type: 3}
       propertyPath: onReturnTaken.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: GatePassVR.Core.ScenarioManager, GatePassVR.Runtime
+      objectReference: {fileID: 0}
+    - target: {fileID: 6289787233623001307, guid: 0a90a66a7ba7457499c01f717f9081f7, type: 3}
+      propertyPath: onWrongObject.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: GatePassVR.Guidance.StepFeedback, GatePassVR.Runtime
       objectReference: {fileID: 0}
     - target: {fileID: 7108901997640452928, guid: 0a90a66a7ba7457499c01f717f9081f7, type: 3}
       propertyPath: m_Name
@@ -33108,7 +33404,7 @@ PrefabInstance:
       objectReference: {fileID: 121947984}
     - target: {fileID: 5088948093644291885, guid: 9a700d16c26073b4a99f424af962f7ee, type: 3}
       propertyPath: onStepEntered.m_PersistentCalls.m_Calls.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5088948093644291885, guid: 9a700d16c26073b4a99f424af962f7ee, type: 3}
       propertyPath: onStepEnteredId.m_PersistentCalls.m_Calls.Array.size
@@ -33123,6 +33419,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2014553413}
     - target: {fileID: 5088948093644291885, guid: 9a700d16c26073b4a99f424af962f7ee, type: 3}
+      propertyPath: onStepEntered.m_PersistentCalls.m_Calls.Array.data[2].m_Target
+      value: 
+      objectReference: {fileID: 765944438}
+    - target: {fileID: 5088948093644291885, guid: 9a700d16c26073b4a99f424af962f7ee, type: 3}
       propertyPath: onStepEnteredId.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1019110790}
@@ -33135,8 +33435,16 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5088948093644291885, guid: 9a700d16c26073b4a99f424af962f7ee, type: 3}
+      propertyPath: onStepEntered.m_PersistentCalls.m_Calls.Array.data[2].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5088948093644291885, guid: 9a700d16c26073b4a99f424af962f7ee, type: 3}
       propertyPath: onStepEntered.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
       value: SaveCheckpoint
+      objectReference: {fileID: 0}
+    - target: {fileID: 5088948093644291885, guid: 9a700d16c26073b4a99f424af962f7ee, type: 3}
+      propertyPath: onStepEntered.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
+      value: OnStepEntered
       objectReference: {fileID: 0}
     - target: {fileID: 5088948093644291885, guid: 9a700d16c26073b4a99f424af962f7ee, type: 3}
       propertyPath: onStepEnteredId.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
@@ -33169,6 +33477,10 @@ PrefabInstance:
     - target: {fileID: 5088948093644291885, guid: 9a700d16c26073b4a99f424af962f7ee, type: 3}
       propertyPath: onStepEntered.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
       value: GatePassVR.Core.ResetController, GatePassVR.Runtime
+      objectReference: {fileID: 0}
+    - target: {fileID: 5088948093644291885, guid: 9a700d16c26073b4a99f424af962f7ee, type: 3}
+      propertyPath: onStepEntered.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
+      value: GatePassVR.Guidance.StepFeedback, GatePassVR.Runtime
       objectReference: {fileID: 0}
     - target: {fileID: 5088948093644291885, guid: 9a700d16c26073b4a99f424af962f7ee, type: 3}
       propertyPath: onStepEnteredId.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -38463,3 +38775,4 @@ SceneRoots:
   - {fileID: 181818579}
   - {fileID: 363424094}
   - {fileID: 1205346889}
+  - {fileID: 765944440}

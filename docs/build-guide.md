@@ -1,8 +1,8 @@
 # GatePass VR 기술 설정과 빌드 방법 (업무 [28])
 
 - 원래 담당: 김씨. 김씨 부재에 대비해 이씨가 2026-11-23 현재 프로젝트 설정값을 읽어 작성했다.
-- 상태: **이 문서만 보고 다른 팀원이 다시 빌드할 수 있는지는 아직 확인하지 않았다**([28] 세 번째 항목). Quest 빌드를
-  실제로 해 본 뒤(이씨 5단계) 빠진 절차를 채운다.
+- 상태: 2026-11-24 이씨가 4-1의 배치 빌드로 Quest 3S에 설치·실행까지 확인했다. **이 문서만 보고 다른 팀원이 다시 빌드할 수
+  있는지는 아직 확인하지 않았다**([28] 세 번째 항목).
 
 ## 1. 사용 버전
 
@@ -49,8 +49,8 @@
 | Graphics API | Vulkan (자동 선택 끔) |
 | Color Space | Linear |
 | Version / Bundle Version Code | 1.0 / 1 |
-| Company / Product | DefaultCompany / GatePass_VR |
-| Package Name | `com.DefaultCompany.VRTemplate` (템플릿 기본값, 아래 5번 참고) |
+| Company / Product | GatePass / GatePass_VR |
+| Package Name | `com.gatepass.gatepassvr` (11/24 F2) |
 
 ### 품질
 - Android 기본 품질 단계: Low
@@ -63,9 +63,29 @@
 | `Assets/_GatePassVR/Scenes/SmokeTest_PointHoldFade.unity` | 컴포넌트 단위 시험 |
 | `Assets/Scenes/SampleScene.unity` | VR 템플릿 기본 Scene (쓰지 않음) |
 
-현재 Build Profile Scene 목록: `SampleScene`, `TestMap_Quest` (둘 다 켜짐). **본편 Airport_Lee가 들어 있지 않다.**
+현재 Build Profile Scene 목록(11/24 F1): 0번 `Airport_Lee`(켜짐), `SampleScene`·`TestMap_Quest`(꺼짐).
 
 ## 4. Quest 빌드 절차
+
+### 4-1. 배치 빌드 (권장, 11/24 확인)
+Unity를 모두 닫고 프로젝트 루트의 PowerShell에서 실행한다. 처음에는 Android 전환과 IL2CPP 컴파일로 약 15분 걸린다.
+
+```powershell
+& "C:\Program Files\Unity\Hub\Editor\6000.3.10f1\Editor\Unity.exe" -batchmode -quit -projectPath . -buildTarget Android -executeMethod GatePassVR.Editor.QuestBuild.BuildAndroid -logFile Logs/QuestBuild.log
+```
+
+- 결과: `Builds/GatePassVR.apk`(약 130MB, Git 제외). 로그의 `[QuestBuild] result: Succeeded`로 확인한다.
+- Scene은 Build Profile 목록에서 켜진 것만 들어간다(`Assets/_GatePassVR/Scripts/Editor/QuestBuild.cs`).
+- 설치는 Unity에 들어 있는 adb로 한다(헤드셋 USB 연결, USB 디버깅 허용 상태).
+
+```powershell
+& "C:\Program Files\Unity\Hub\Editor\6000.3.10f1\Editor\Data\PlaybackEngines\AndroidPlayer\SDK\platform-tools\adb.exe" install -r Builds/GatePassVR.apk
+```
+
+- 빌드·테스트 뒤 Unity가 URP 설정 3개, GraphicsSettings, UnityConnectSettings, ProjectSettings의 preloadedAssets,
+  OpenXRPackageSettings, 동적 글꼴 `.asset`을 바꿔 둔다. 빌드 때 자동으로 계산되는 값이라 커밋하지 않고 `git checkout`으로 되돌린다.
+
+### 4-2. 에디터에서 빌드
 
 1. Quest를 개발자 모드로 바꾼다(Meta Horizon 앱 → 기기 → 개발자 모드). USB-C로 PC에 연결하고 헤드셋 안에서 USB 디버깅을 허용한다.
 2. Unity: File → Build Profiles → Android 선택 → **Switch Platform**. 처음 전환은 오래 걸린다.
@@ -78,11 +98,11 @@
 
 | # | 내용 | 이유 |
 |---|---|---|
-| F1 | Build Profile Scene 목록에 `Airport_Lee`를 0번으로 추가하고 `SampleScene`은 끈다 | 지금은 앱을 켜면 템플릿 Scene이 먼저 뜬다 |
-| F2 | Package Name을 `com.DefaultCompany.VRTemplate`에서 팀 이름으로 바꾼다(예: `com.gatepass.gatepassvr`), Company도 바꾼다 | 템플릿 기본값. 다른 템플릿 앱과 겹쳐 덮어쓸 수 있다 |
-| F3 | `Airport_Lee`에 들어 있는 `XR Device Simulator` 오브젝트를 기기 빌드에서 빼거나 끈다 | 에디터 시험용이다. 빌드에 들어가면 실제 컨트롤러 입력과 섞일 수 있다(미검증) |
+| F1 | **11/24 완료**: Build Profile 0번 `Airport_Lee`, `SampleScene`·`TestMap_Quest` 끔 | 앱을 켜면 템플릿 Scene이 먼저 떴다 |
+| F2 | **11/24 완료**: Package Name `com.gatepass.gatepassvr`, Company `GatePass` | 템플릿 기본값은 다른 템플릿 앱과 겹쳐 덮어쓸 수 있다 |
+| F3 | **11/24 완료**: `Airport_Lee`의 `XR Device Simulator`에 `EditorOnly` 태그(빌드에서 빠지고 에디터 Play는 그대로) | 에디터 시험용이다 |
 | F4 | Bundle Version Code를 빌드할 때마다 1씩 올린다 | 같은 기기에 덮어 설치할 때 필요 |
-| F5 | 한글 글꼴: 안내 HUD·시작 화면은 `Assets/Fonts/NotoSansKR-Medium SDF Dynamic.asset`(ttf 포함), 표지판은 `NotoSansKR-Medium SDF Signs`(정적) | 맑은 고딕(Windows 전용)은 11/23에 모두 교체했다. Quest에서 한글이 보이는지 확인 |
+| F5 | 한글 글꼴: 안내 HUD·시작 화면은 `Assets/Fonts/NotoSansKR-Medium SDF Dynamic.asset`(ttf 포함), 표지판은 `NotoSansKR-Medium SDF Signs`(정적) | 11/24 Quest 3S 화면 캡처에서 안내 HUD 한글 정상. 표지판·시작 화면 글씨는 착용해서 확인 필요 |
 
 ## 6. 에디터에서 시험하기 (기기 없이)
 - `Airport_Lee`를 열고 Play. Scene 안의 XR Device Simulator로 조작한다(Tab: 조작 대상 전환, 마우스: 방향, WASD: 이동).

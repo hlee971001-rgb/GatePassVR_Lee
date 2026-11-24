@@ -216,14 +216,17 @@ Unity에서 실제로 확인한 항목만 체크한다. 추측으로 체크하�
 - [x] 시작 화면 AI 음성 고지 (C-AIVOICE, 2단계에서 StartScreen에 넣음)
 - [x] 한글 폰트 Noto Sans KR 교체: GuideHUD Prefab MainGuideText·HintText → NotoSansKR-Medium SDF Dynamic, 맑은 고딕 참조 0 (11/23)
 - [ ] 이씨 음성 청취 (VO_C-RESET 새로 만듦)
-- [ ] Quest 실기기에서 한글 표시 확인 (5단계)
+- [ ] Quest 실기기에서 한글 표시 확인 (5단계. 11/24 첫 화면 캡처에서 안내 HUD 한글 정상, 표지판·시작 화면은 착용 확인 남음)
 
 ## 4~7
 - [x] [23] 기능 테스트 목록 docs/lee/test-cases.md, 시뮬레이터로 25개 항목 확인 (11/23)
 - [x] [24] 시뮬레이터 START→END 완주 3회, 3회차는 표지판 실제 Ray·손으로 놓기 (11/23)
 - [x] [26] 막힘 수정: 돌려준 여권 날아감(B5), 원거리 잡기 물건이 칸에 저절로 들어감(B6), 두고 온 서류(B7) (11/23)
 - [ ] [24] 조씨·김씨와 공동 완주, Quest 완주
-- [ ] [25] Quest 빌드·실기기 확인
+- [x] [25] 빌드 전 F1(Airport_Lee 0번)·F2(com.gatepass.gatepassvr)·F3(시뮬레이터 EditorOnly) (11/24)
+- [x] [25] 배치 빌드 스크립트 QuestBuild, APK 빌드 성공, Quest 3S 설치·실행, 예외 0, 첫 화면 캡처 (11/24)
+- [ ] [25] Quest 착용 완주: 실제 손잡이·B/Y 버튼, 표지판 Hold, 한글, 프레임, 소리 (이씨가 착용)
+- [ ] [25] 시작 직후 "missing script" 경고 2줄(Game Object '<null>', 에셋 쪽) 원인 확인
 - [x] [28] 기술 설정·빌드 문서 `docs/build-guide.md` 초안 (11/23, 현재 설정값을 Unity에서 읽어 작성)
 - [x] [29] 에셋·라이선스·테스트 결과 `docs/lee/assets-and-tests.md` (11/23)
 - [ ] [28] 다른 팀원이 문서만 보고 다시 빌드 확인, Quest 빌드 후 빠진 절차 채우기

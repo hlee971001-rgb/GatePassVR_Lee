@@ -510,3 +510,20 @@
 - **주의(편집 코드)**: 부모가 일반 Transform인 TextMeshPro(RectTransform)는 코드에서 `transform.position`을 바꿔도 저장할 때
   `m_AnchoredPosition`이 따라가지 않아 위치가 되돌아갔다. SerializedObject로 `m_AnchoredPosition`(x,y)과 `m_LocalPosition`을
   직접 넣어야 저장된다. 처음 만든 CreditsText가 (0, 0, z)로 저장된 원인이다.
+
+## 2026-11-24 — [25] Quest 빌드·설치 (5단계)
+
+- 기기: Quest 3S가 이 PC에 USB로 연결되어 있다(Unity 내장 adb로 확인). 이씨 PC에서 바로 설치할 수 있다.
+- 빌드 전 수정: F1 Build Profile 0번 Airport_Lee(SampleScene·TestMap_Quest 끔), F2 Package `com.gatepass.gatepassvr`·
+  Company `GatePass`(이씨 결정), F3 XR Device Simulator 프리팹 인스턴스에 `EditorOnly` 태그. 태그는 빌드에서만 빠지므로
+  에디터 Play 조작은 그대로다. 오브젝트를 끄거나 지우는 것보다 바뀌는 것이 적다.
+- `QuestBuild.BuildAndroid`(Scripts/Editor)와 Editor 전용 asmdef `GatePassVR.Editor`를 추가했다. Scripts 폴더 전체가
+  `GatePassVR.Runtime` asmdef에 속해 있어서 Editor 폴더 이름만으로는 런타임에서 빠지지 않는다. Editor asmdef가 꼭 필요하다.
+- 결과: 배치 빌드 성공(처음 약 15분), APK 129MB, `adb install -r` 성공. 실행하면 OpenXR 세션 FOCUSED, Scene 로드, 예외 0.
+  `adb shell screencap`으로 헤드셋 화면(양눈)을 캡처할 수 있다. START 화면에서 공항 모델·안내 HUD 한글·화살표 정상.
+- 로그 관찰: 시작 직후(Scene 로드 전) `The referenced script ... is missing!` 경고 2줄, Game Object가 `<null>`이라 Scene
+  오브젝트가 아니라 에셋(Preloaded XR 설정 등) 쪽으로 보인다. 진행에는 영향 없음, 원인 미확인. `xrDiscoverSpacesMETA` 실패는
+  Meta OpenXR이 지원 안 되는 확장을 찾는 로그로 무시해도 된다.
+- **주의**: 배치 빌드는 Library를 Android로 바꾼다. 다음에 Unity를 열면 Android 플랫폼으로 열린다. 빌드·테스트 뒤 Unity가
+  바꾸는 설정 파일(URP 3개, GraphicsSettings, UnityConnectSettings, preloadedAssets, OpenXRPackageSettings, 동적 글꼴)은 되돌렸다.
+- **미검증**: 착용 상태의 완주(손잡이·B/Y 버튼, 표지판 Hold, 시작 화면·표지판 한글, 프레임, 소리 크기).

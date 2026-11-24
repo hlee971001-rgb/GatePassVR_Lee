@@ -545,3 +545,7 @@
 - 시작 직후 "missing script" 경고 2줄은 손을 지운 뒤에도 그대로라 손 모델과는 무관하다.
 - **미검증**: 기본 컨트롤러 모델 상태에서 잡기·표지판 Hold를 다시 해 보지는 않았다(손 모델은 보이는 것만 바꾸는 부분이라
   상호작용 영향은 없을 것으로 보지만 확인 전).
+- (11/24 추가) 기본 컨트롤러 모델 상태에서 시작 버튼 Hold, 여권 잡기, 표지판 Hold 이동이 정상(이씨 Quest 확인).
+- 시작 직후 잠깐 보이는 손은 PolyOne이 아니라 XRI 샘플 `XR Origin Hands (XR Rig)`의 핸드 트래킹 손(`Left/RightHandQuestVisual`,
+  Unity Companion License)이다. `XRInputModalityManager`가 컨트롤러를 쥐지 않으면 맨손, 쥐면 컨트롤러로 바꾼다. 템플릿 기본 동작이라 그대로 둔다.
+  맨손으로는 손잡이·B/Y 버튼을 못 쓰므로 컨트롤러 전용으로 하려면 OpenXR Hand Tracking을 끄는 방법이 있다(결정 안 함).

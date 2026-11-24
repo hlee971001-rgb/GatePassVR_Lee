@@ -14,7 +14,7 @@
 | VR 템플릿 에셋 | `Assets/VRTemplateAssets/` (Torus Cut 모델, Inter 글꼴 등) | Unity VR Template | Unity Companion License (Inter 글꼴은 OFL) | 예 | 없음 |
 | XRI 샘플 | `Assets/Samples/XR Interaction Toolkit/3.5.1/` (Starter Assets, XR Device Simulator) | Unity XR Interaction Toolkit | Unity Companion License | 예 | 없음 |
 | TextMesh Pro 기본 리소스 | `Assets/TextMesh Pro/` (LiberationSans) | Unity | Unity Companion License, LiberationSans는 OFL | 예 | 없음 |
-| VR 손 모델 "Free VR Hands" | `Assets/PolyOne/Free VR Hands/` | PolyOne (김씨가 9/4 추가) | **확인 필요** (Unity Asset Store 무료 에셋으로 보임, 표준 EULA면 프로젝트 안 사용 가능) | 예 | 확인 후 결정 |
+| ~~VR 손 모델 "Free VR Hands"~~ | ~~`Assets/PolyOne/Free VR Hands/`~~ | PolyOne (김씨가 9/4 추가) | 출처 확인 못 함 | **11/24 제거** | XRI 기본 컨트롤러 모델로 되돌림(이씨 결정) |
 | 임시 물건·NPC·표지판 | `Airport_Lee`의 TempObjects, MoveSigns, ZoneSigns | 이씨가 기본 도형·TMP로 제작 | 팀 제작 | 예 | 없음 |
 
 ### 크레딧에 넣을 문구 (안)
@@ -26,7 +26,7 @@
 (2026-11-23 이씨 결정) END 화면에 작게 넣었다. Airport_Lee `StartScreen/CreditsText`, 시작 버튼 오른쪽, END Step에서만 보인다(`ShowDuringSteps`). 위 세 줄에 "효과음: GatePass VR 팀 제작"을 더했다. 팀원 이름은 넣지 않았다.
 
 ### 남은 확인
-- [ ] PolyOne Free VR Hands 라이선스 원문(김씨가 받은 곳)
+- [x] PolyOne Free VR Hands: 출처를 확인하지 못해 11/24 프로젝트에서 제거(공개 저장소에 원본이 올라가 있던 문제도 함께 해소)
 - [x] 크레딧 위치: END 화면 (11/23)
 - [ ] Sketchfab Free Standard의 표기 의무 여부 원문 확인(지금은 표기하는 쪽으로 정리)
 - [ ] NPC를 실제 사람 모델로 바꿀지(바꾸면 라이선스 다시 정리)

@@ -527,3 +527,21 @@
 - **주의**: 배치 빌드는 Library를 Android로 바꾼다. 다음에 Unity를 열면 Android 플랫폼으로 열린다. 빌드·테스트 뒤 Unity가
   바꾸는 설정 파일(URP 3개, GraphicsSettings, UnityConnectSettings, preloadedAssets, OpenXRPackageSettings, 동적 글꼴)은 되돌렸다.
 - **미검증**: 착용 상태의 완주(손잡이·B/Y 버튼, 표지판 Hold, 시작 화면·표지판 한글, 프레임, 소리 크기).
+
+## 2026-11-24 — PolyOne 손 제거, 기본 컨트롤러 모델로 되돌림 (김씨 부재로 이씨 수정)
+
+- 이유(이씨 결정): 김씨가 9/4 넣은 PolyOne "Free VR Hands"는 출처·라이선스 원문을 확인하지 못했다. Asset Store 에셋이라면
+  게임 안 사용은 되지만 원본 파일을 공개 저장소에 올리는 것은 보통 허용되지 않는다. 손 모델은 기획 요구사항이 아니다.
+- 방법: 공용 Rig `Complete XR Origin Set Up Hands Variant.prefab`을 처음 커밋 `73f4c76`(템플릿 원본)으로 되돌린 뒤,
+  손과 무관한 `51c8997`의 "Affordance Callouts Left/Right 끄기"만 다시 적용했다. 그 사이 커밋(64aa4a9~cbff6e8)은 모두 손 관련
+  (손 배치, 방향, 손목 캡, updateWhenOffscreen, 손가락 굽힘)이다. 결과: UniversalController(XRI Starter Assets 컨트롤러 모델)가
+  다시 보이고 버튼 말풍선은 꺼진 상태.
+- 함께 지움: `Assets/PolyOne` 전체, `Scripts/VR/FingerCurlAnimator.cs`·`HandGripInputDriver.cs`(이 프리팹에서만 쓰였고 테스트 없음,
+  git 기록에서 되살릴 수 있다).
+- 그대로 둠: TestMap_Quest의 PolyOne 머티리얼 덮어쓰기 2줄. 김씨 노트(9/11)의 "지워진 손목 캡 잔재"로 이미 없는 대상을 가리켜
+  아무 역할이 없다. 김씨 Scene이라 손대지 않았다.
+- 검증: 배치 컴파일 오류 0, EditMode 56/56, 로그에 Missing 경고 없음. APK 다시 빌드·설치, Unity 예외 0.
+  Quest 3S 착용: 이씨가 "컨트롤러 모양만 보이고 손은 안 보임"을 직접 확인(11/24). adb 캡처는 헤드셋 재부팅·벗음으로 실패.
+- 시작 직후 "missing script" 경고 2줄은 손을 지운 뒤에도 그대로라 손 모델과는 무관하다.
+- **미검증**: 기본 컨트롤러 모델 상태에서 잡기·표지판 Hold를 다시 해 보지는 않았다(손 모델은 보이는 것만 바꾸는 부분이라
+  상호작용 영향은 없을 것으로 보지만 확인 전).

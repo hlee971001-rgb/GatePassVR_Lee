@@ -38,7 +38,8 @@ namespace GatePassVR.Guidance
             var cam = Camera.main.transform;
             Vector3 toGoal = goal.position - cam.position;
             toGoal.y = 0f;
-            Vector3 forward = cam.forward;
+            // 화살표가 붙은 패널이 바라보는 방향 기준으로 돈다. 머리에 딱 붙은 HUD면 카메라 방향과 같고, 느슨하게 따라오는 HUD에서도 맞다 (이씨 11/24)
+            Vector3 forward = transform.forward;
             forward.y = 0f;
 
             if (toGoal.sqrMagnitude < 0.0001f || forward.sqrMagnitude < 0.0001f)

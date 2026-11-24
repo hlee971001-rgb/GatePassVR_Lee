@@ -571,3 +571,22 @@
   놓은 순간의 맨손 손만 찍혀 쥔 손을 화면으로 보지는 못했다.
 - **미검증**: 쥔 손 상태에서 잡기·Hold 재확인(보이는 것만 바뀐 변경), 엄지 위치·손 크기의 어색함.
 - **주의**: 빌드 때 Unity가 `Unity_Hand_Medium.mat`의 투명 키워드를 다시 계산해 저장한다. 다른 빌드 부산물처럼 되돌린다.
+
+## 시작 화면 정리 (11/24, 이씨 의견 → Claude 추천 → 이씨 승인)
+- 이씨가 말한 "안내 음성 문구"는 AI 음성 고지(`AiVoiceNotice`, "안내 음성은 AI로 합성한 음성입니다")였다. 바닥 쪽(시작 지점 바닥+0.4m)에 흐린 글씨라 안 보였다. 지금은 버튼 바로 아래, 남색 바탕 흰 글씨.
+- 시작 지점 바닥은 y=0.43, 버튼은 예전 y=1.2(바닥+0.77m, 허리 아래)라서 HUD에 가려졌다. 버튼을 바닥+1.25m, 제목 카드를 바닥+1.77m로 올렸다. 플레이어와 버튼 거리는 1.3m.
+- 시작 버튼: 공용 `PointHoldPad` 프리팹은 그대로 두고 씬의 Pad_Start만 바꿨다. 원판 MeshRenderer 끔(콜라이더는 그대로라 누르는 판정 동일), `StartButtonFace` 캔버스(빛·파란 원·흰 트랙·"시작")를 붙이고 게이지를 트랙 크기로 키움. 패드가 옆으로 90도 눕혀 있어 캔버스는 월드 회전으로 플레이어를 향하게 맞췄다(로컬 회전으로 맞추면 글자가 눕거나 뒤집힘).
+- 버튼 이미지 3장(`Art/UI/StartButton_*.png`)은 스크립트로 직접 만든 흰 원·빛·고리라 라이선스 문제 없음. 빛은 `PulseGraphic`으로 2초 주기로 숨 쉬듯 밝아진다.
+- 보이고 숨기기는 모두 StartScreen에 붙인 `ShowDuringSteps`(onStepEntered → Refresh)로 한다.
+  - StartTitle(제목+설명): START에만.
+  - StartButtonGroup(버튼+AI 고지): START·END에만. END에서 다시 하기에 버튼이 필요하다.
+  - 안내 HUD 글씨 패널(GuideHUD/Canvas): START 동안 숨김. GuideHUD 루트를 끄면 GuideManager·음성까지 꺼지므로 Canvas만 끈다. 화살표도 Canvas 아래라 같이 숨는다.
+  - 시작 지점 체크인 표지판은 `MoveSign_Dest_Start`(목표 ID Sign_Start)다. `MoveSign_Dest_CheckIn`이 아니니 헷갈리지 말 것. START·S1-0 동안 숨기고 S1-1부터 보인다.
+- 예전 "시작" 글자(StartLabel)는 버튼 글자가 대신해서 지웠다.
+- 안내 HUD: 공용 GuideHUD 프리팹은 그대로, 씬 오버라이드로 Canvas 크기 0.0018→0.0013, localOffset (0,-0.27,1.5)(눈높이 약 10도 아래), lazyAngle 30.
+- 공용 스크립트 변경(김씨에게 알릴 것). 모두 기본값이면 예전과 같게 동작한다.
+  - `GuideUIFollow`: lazyAngle·recenterSpeed 옵션. 0이면 예전처럼 딱 붙음. 켜면 좌우만 따라오고 위아래 고개에는 흔들리지 않는다.
+  - `ShowDuringSteps`: hideDuringSteps 옵션.
+  - `GoalIndicatorArrow`: 기준 방향을 카메라에서 화살표 자신의 forward로 바꿨다. 딱 붙은 HUD에서는 둘이 같아서 결과가 같다.
+- 씬 작업은 임시 에디터 스크립트를 배치 모드로 한 번 실행해서 했고, 스크립트는 지웠다. 미리보기는 같은 방식으로 Camera.Render 캡처. 편집 모드 미리보기에서는 게이지·화살표가 흰 네모로 보인다. 실행 때 Awake에서 모양이 만들어지기 때문이다.
+- 미검증: 에디터 Play(시뮬레이터)와 Quest에서 시작 버튼 Hold → 여권 단계 진행, HUD 다시 보임, END에서 버튼 다시 보임. 이씨 확인 필요.

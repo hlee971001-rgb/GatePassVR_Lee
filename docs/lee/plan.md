@@ -412,3 +412,30 @@ ResetController·공통 Prefab은 **다시 만들지 않고 그대로 쓴다**(�
 
 ## 범위 밖
 - 김씨 기능 재구현, NPC Animation, 새 상호작용 종류 추가.
+
+---
+
+# 컨트롤러를 쥔 손 모양 (Unity XR Hands 기본 손) - Plan (담당 이씨, 2026-11-24)
+
+## 무엇을 하는가
+PolyOne 손(출처 표기 필요 CC BY 4.0)을 뺀 뒤, 컨트롤러를 쥔 상태에서도 손 모양이 보이게 한다. 모델은 이미 프로젝트에 있는
+XR Hands 샘플 `LeftHand.fbx`/`RightHand.fbx`(출처 표기 조항 없음)와 XRI 샘플 머티리얼 `Unity_Hand_Medium`(맨손 핸드 트래킹 손과 같은 모습)을 쓴다.
+
+## 왜 (이씨 결정)
+"여권을 잡으세요" 같은 장면은 손 모양이 더 자연스럽다. 새 에셋을 받지 않아 라이선스 확인과 저장소 문제가 없다.
+
+## 방법
+- 손가락은 고정 자세로 굽힌다(버튼에 따라 움직이지 않음, 마감 고려). Quest 런타임이 컨트롤러로 손 모양을 만들어 주는 기능
+  (XR_EXT_hand_tracking_data_source)은 설치된 패키지에 없다.
+- `ControllerHandPose`(Scripts/VR): 시작할 때 한 번 손가락 관절을 각자 X축으로 굽힌다. 각도는 Inspector에서 조정.
+- 손 프리팹 2개(Prefabs/VR)를 공용 Rig의 `Left/Right Controller` 바로 아래에 붙이고 `UniversalController`를 끈다.
+  `Controller Visual`은 오른쪽이 X 스케일 -1이라 그 아래에 두지 않는다(김씨 "오른손이 왼손처럼 보임" 원인).
+- 맨손일 때는 기존 핸드 트래킹 손이 그대로 보인다(XRInputModalityManager).
+
+## 성공 조건과 검증
+- 컴파일 오류 0, EditMode 전체 통과(자세를 두 번 적용해도 한 번만 굽는지 테스트 추가).
+- 에디터 렌더 캡처로 손이 컨트롤러를 감싼 모습 확인 → Quest 착용 확인(손 방향·위치, 잡기·Hold 그대로).
+- 공용 프리팹은 김씨 소유라 변경 목적을 김씨에게 알린다(이씨).
+
+## 범위 밖
+- 버튼 입력에 따른 손가락 움직임, 손과 물체의 접촉 자세 맞추기.

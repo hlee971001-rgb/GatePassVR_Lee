@@ -549,3 +549,25 @@
 - 시작 직후 잠깐 보이는 손은 PolyOne이 아니라 XRI 샘플 `XR Origin Hands (XR Rig)`의 핸드 트래킹 손(`Left/RightHandQuestVisual`,
   Unity Companion License)이다. `XRInputModalityManager`가 컨트롤러를 쥐지 않으면 맨손, 쥐면 컨트롤러로 바꾼다. 템플릿 기본 동작이라 그대로 둔다.
   맨손으로는 손잡이·B/Y 버튼을 못 쓰므로 컨트롤러 전용으로 하려면 OpenXR Hand Tracking을 끄는 방법이 있다(결정 안 함).
+
+## 2026-11-24 — 컨트롤러를 쥔 손 모양 (XR Hands 기본 손, 김씨 부재로 이씨가 공용 Rig 수정)
+
+- 후보 조사: 무료·출처 표기 불필요 조건으로 XR Hands 샘플 손(Unity Package Distribution License, 출처 표기 조항 없음)을 골랐다.
+  CC0 후보(BlendSwap 22269·2429, itch PSX FPS Hands)는 변환이 필요하거나 화풍이 맞지 않았다. PolyOne 손 출처는 Sketchfab
+  "Free Pack - VR Hands (Rigged)" CC BY 4.0(출처 표기 필요)으로 확인했다.
+- 모델 `Samples/XR Hands/1.8.1/HandVisualizer/Models/Left·RightHand.fbx` + 머티리얼 `Unity_Hand_Medium`(XRI Hands Demo).
+  Quest 맨손 핸드 트래킹 손과 같은 조합이라 쥘 때와 놓을 때 모습이 같다.
+- 뼈 규칙: 모델 +Z 손가락, +Y 손등, -Y 손바닥, 관절 로컬 X로 굽히면 손바닥 쪽으로 굽는다. 왼손은 X 대칭(L_ 접두사).
+- `ControllerHandPose`(Scripts/VR): Awake에서 한 번만 굽힘(검지 55/55/30, 나머지 90/95/55, 엄지 20/25, 엄지 뿌리 -30° 회전).
+  Inspector에서 조정. 테스트 `ControllerHandPoseTests`(손가락만 굽힘, 두 번 불러도 한 번).
+- 프리팹 `Prefabs/VR/ControllerHand_Left·Right`: 루트(위치 0) 아래 손 모델에 위치·회전을 넣었다. 공용 Rig의 `Camera Offset/Left·Right
+  Controller` 바로 아래에 붙이고 `Left·Right Controller Visual/UniversalController`를 껐다. `Right Controller Visual`은 X 스케일 -1·
+  Y 180°라 그 아래에 두면 좌우가 뒤집힌다(김씨 9/11 문제의 원인).
+- 컨트롤러 기준점은 링(앞 위)이고 손잡이는 뒤(-Z)로 약 20° 내려간다. 손바닥 뼈를 (±0.032, -0.032, -0.085)에, 손가락이 아래로,
+  손등이 바깥, 검지 쪽이 앞을 향하게 놓았다. 위치·각도는 임시 배치 스크립트로 프리팹을 만들고 4방향 렌더(배치 모드에서
+  -nographics 없이 Camera.Render)로 확인하며 맞췄다. 임시 스크립트는 지웠다(만든 값은 프리팹에 남아 있다).
+- 맨손일 때는 기존 핸드 트래킹 손이 보인다(XRInputModalityManager, 바꾸지 않음).
+- 검증: 컴파일 오류 0, EditMode 58/58, APK 빌드·설치, Quest 3S에서 이씨가 "쥔 손이 보인다" 확인. adb 캡처에는 컨트롤러를
+  놓은 순간의 맨손 손만 찍혀 쥔 손을 화면으로 보지는 못했다.
+- **미검증**: 쥔 손 상태에서 잡기·Hold 재확인(보이는 것만 바뀐 변경), 엄지 위치·손 크기의 어색함.
+- **주의**: 빌드 때 Unity가 `Unity_Hand_Medium.mat`의 투명 키워드를 다시 계산해 저장한다. 다른 빌드 부산물처럼 되돌린다.

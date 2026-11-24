@@ -236,3 +236,13 @@ Unity에서 실제로 확인한 항목만 체크한다. 추측으로 체크하�
 - [x] 기본 컨트롤러 모델 Quest 착용 확인: 컨트롤러만 보이고 손 없음 (11/24 이씨 확인)
 - [x] 기본 컨트롤러 모델 상태에서 시작 버튼 Hold·여권 잡기·표지판 Hold 이동 정상 (11/24 이씨 Quest 확인)
 - [ ] [30] 최종 빌드와 백업
+
+# 컨트롤러를 쥔 손 모양 (XR Hands 기본 손) - Checklist (담당 이씨, 11/24)
+- [x] 후보 조사: 무료·출처 표기 불필요 → XR Hands 샘플 손 선택 (PolyOne 출처는 Sketchfab CC BY 4.0으로 확인)
+- [x] ControllerHandPose 컴포넌트와 EditMode 테스트 2개
+- [x] 손 프리팹 2개(Prefabs/VR) 만들고 공용 Rig의 Left/Right Controller에 붙이기, UniversalController 끄기
+- [x] 에디터 렌더 캡처(4방향)로 자세·위치 조정, 양손 대칭 확인
+- [x] 컴파일 오류 0, EditMode 58/58, APK 빌드·설치
+- [x] Quest 착용: 쥔 손이 보임 (11/24 이씨 확인, adb 캡처에는 맨손 손만 찍혀 직접 보지는 못함)
+- [ ] 쥔 손 상태에서 잡기·Hold 다시 확인, 엄지·크기 어색함 여부
+- [ ] 김씨에게 공용 프리팹 변경 알림 (이씨)

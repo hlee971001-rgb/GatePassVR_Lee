@@ -15,6 +15,7 @@
 | XRI 샘플 | `Assets/Samples/XR Interaction Toolkit/3.5.1/` (Starter Assets, XR Device Simulator) | Unity XR Interaction Toolkit | Unity Companion License | 예 | 없음 |
 | TextMesh Pro 기본 리소스 | `Assets/TextMesh Pro/` (LiberationSans) | Unity | Unity Companion License, LiberationSans는 OFL | 예 | 없음 |
 | ~~VR 손 모델 "Free VR Hands"~~ | ~~`Assets/PolyOne/Free VR Hands/`~~ | PolyOne (김씨가 9/4 추가) | 출처 확인 못 함 | **11/24 제거** | XRI 기본 컨트롤러 모델로 되돌림(이씨 결정) |
+| 여권 겉모양 (표지 그림·상자 메시·머티리얼) | `Assets/_GatePassVR/Art/Props/Passport/` | 이씨가 `PassportArtBuilder.cs`로 직접 제작(11/25). 글자는 Noto Sans KR, 나라 문장 대신 지구본 문양 | 팀 제작(OFL 글꼴로 만든 결과물은 제한 없음) | 예 | 없음 |
 | 임시 물건·NPC·표지판 | `Airport_Lee`의 TempObjects, MoveSigns, ZoneSigns | 이씨가 기본 도형·TMP로 제작 | 팀 제작 | 예 | 없음 |
 
 ### 크레딧에 넣을 문구 (안)

@@ -275,3 +275,10 @@ Unity에서 실제로 확인한 항목만 체크한다. 추측으로 체크하�
 - [x] APK 빌드·설치, Quest에서 카드가 버튼 바로 위에 있음 (11/25 이씨 확인)
 - [ ] 보안검색 표지판(MoveSign_Dest_CheckIn)을 S2-4에만 보이게 — 계획 확정, 다음 작업
 
+# 여권 겉모양 직접 제작 - Checklist (담당 이씨, 11/25)
+- [x] 후보 검토: Sketchfab "passport"(Cyber king, Free Standard·미국 여권·glTF 변환 필요), "Passport"(FrancescoMilanese, Editorial·다운로드 불가) → 직접 제작으로 결정
+- [x] PassportArtBuilder: 표지 아틀라스(앞표지·뒤표지·책등·속지), 상자 메시, M_Passport 머티리얼
+- [x] Airport_Lee: Obj_Passport_Start 메시·머티리얼만 교체 (크기·잡기·물리·충돌·건네기 연결 그대로)
+- [x] 컴파일 오류 0, EditMode 66/66 (11/25, Mac)
+- [x] APK 빌드·설치, Quest에서 표지·글자·건네기 확인 (11/25 이씨 확인)
+

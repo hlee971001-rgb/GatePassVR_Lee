@@ -617,3 +617,15 @@
 - 다른 오브젝트(버튼, AI 음성 고지 1.30~1.60m)는 그대로다.
 - 다음 작업으로 정한 것: 체크인 카운터 뒤 "보안검색" 표지판은 MoveSign_Dest_CheckIn(Sign_CheckIn, S2-4 성공 ID)이다. 표지판 이름은 목적지가 아니라 서 있는 지점 기준이다. ShowDuringSteps(stepIds S2-4)를 StartScreen에 붙여 S2-4에만 보이게 할 계획.
 
+## 여권 겉모양 직접 제작 (11/25)
+- 이씨가 임시 빨간 상자 여권을 바꾸고 싶어 했다. 검토한 후보와 버린 이유:
+  - Sketchfab "passport"(Cyber king): Free Standard라 쓸 수는 있지만 미국 여권(사증면 독수리)이라 한국인 출국 체험과 맞지 않고, 원본 파일이 없어 glTF→FBX 변환이 필요, 재배포 금지라 Git 제외·각자 다운로드.
+  - Sketchfab "Passport"(FrancescoMilanese): Editorial 라이선스(보도·비평 전용)이고 다운로드도 막혀 있어 사용 불가.
+  - 한국 여권 이미지 + meshy.ai: 사진 저작권·나라문장 규정·AI 결과물 라이선스와 얇은 물건·글자 품질 문제로 추천하지 않음.
+- 결정: 상자 여권은 그대로 두고 겉모양만 직접 만든다. `Scripts/Editor/PassportArtBuilder.cs`(메뉴 GatePassVR/Build Passport Art)가 만든다.
+  - T_Passport.png(2048, Quest 최대 1024로 import): 남색 바탕, 금색 "여권 / PASSPORT", 이중 테두리, 지구본 문양(나라문장 대신), "체험용 · NOT A TRAVEL DOCUMENT". 아래쪽 띠는 책등(남색)과 속지 옆면(종이색 줄, 위아래 끝은 표지 두께).
+  - 글자는 빈 Preview Scene에 TMP(Noto Dynamic)와 LineRenderer를 놓고 정사영 카메라로 찍어 만든다. 그래서 에디터 asmdef에 Unity.TextMeshPro 참조를 추가했다.
+  - Passport_Mesh: 단위 상자에 면별 UV. 윗면(+y)=앞표지(위쪽이 +z), 아랫면=뒤표지, -x=책등, 나머지=속지. 오브젝트 크기 (0.088, 0.005, 0.125)로 실제 크기가 된다.
+- Scene에서는 Obj_Passport_Start의 MeshFilter·MeshRenderer 참조 2줄만 바뀌었다. 강조 표시는 _BaseColor 색을 곱하므로 텍스처 위에도 보인다(Quest 확인).
+- M_TempPassport는 이제 쓰는 곳이 없지만 지우지 않았다.
+

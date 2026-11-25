@@ -682,3 +682,9 @@
 - GrabPoint: 배낭은 메시 맨 위(손잡이 고리) 가운데를 오브젝트 좌표로 옮겨 쥔다. 고리가 오브젝트 기준 좌우로 놓여서 기준 프레임은 오브젝트로 둔다.
 - SuitcaseBuilder의 메시 도우미(CleanCopy·CenterOnBounds·TriCount·ExtractLod)를 internal로 바꿔 함께 쓴다.
 
+## 보안검색에서 여권·탑승권 가져오지 않기 (11/25)
+- 이씨 의견: 3단계(보안검색)에서는 여권·탑승권이 필요 없는데 바닥에 놓여 있다.
+- 원인: B7 CarryAlong이 이동이 끝날 때마다 4m 넘게 떨어진 여권·탑승권을 플레이어 오른쪽 발옆으로 옮긴다. 보안검색 도착 때도 작동해 가방 옆 바닥에 놓였다.
+- 수정: CarryAlong에 `scenario`와 `skipOnSteps`(기본 S3-1·S3-2·S3-3)를 두고, 도착한 Step이 목록에 있으면 가져오지 않는다(`ShouldBring`, 테스트 3개). 이동이 끝날 때는 이미 다음 Step에 들어가 있으므로(ScenarioManager.ReportSuccess가 MoveTo 직후 EnterCurrentStep) CurrentStep으로 도착 구역을 판단한다.
+- 결과: 체크인에서 내려놓은 여권·탑승권은 그 자리에 있다가 탑승구(S4-1) 도착 때 발옆으로 온다. 보안검색에서 손에 들고 있다가 직접 내려놓은 것은 그대로 바닥에 있다(직접 놓은 것이라 자연스러움).
+

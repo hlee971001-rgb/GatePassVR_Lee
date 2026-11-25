@@ -325,3 +325,11 @@ Unity에서 실제로 확인한 항목만 체크한다. 추측으로 체크하�
 - [x] 컴파일 오류 0, EditMode 테스트, APK 빌드·설치
 - [x] Quest 확인: 바닥의 배낭 모습, 손잡이를 쥔 모습, 트레이 오른쪽 칸 넣기(S3-2) (11/25 이씨 확인)
 
+# 보안검색에서 여권·탑승권 가져오지 않기 - Checklist (담당 이씨, 11/25)
+- [x] 원인: CarryAlong이 모든 이동 뒤 4m 넘게 떨어진 여권·탑승권을 발옆으로 가져와, 필요 없는 보안검색 바닥(가방 옆)에도 놓였다
+- [x] CarryAlong: scenario·skipOnSteps(S3-1~S3-3) 추가, 그 Step에 도착하면 가져오지 않음. 탑승구(S4) 도착 때 가져옴
+- [x] Airport_Lee: StepSuccessRelay의 CarryAlong에 ScenarioManager 연결
+- [x] EditMode 테스트 3개 추가(CarryAlongTests), 69/69
+- [x] Quest 확인: 보안검색 바닥에 여권·탑승권 없음 (11/25 이씨 확인)
+- [ ] Quest 확인: 탑승구 도착 때 발옆에 옴, 스캔(S4-1·S4-2) 진행
+

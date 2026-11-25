@@ -18,11 +18,21 @@ namespace GatePassVR.Core
         [Tooltip("물건끼리 겹치지 않게 벌리는 간격(m)")]
         [SerializeField] private float sideSpacing = 0.25f;
         [SerializeField] private float dropHeight = 0.15f;
+        [Tooltip("현재 Step을 읽을 ScenarioManager")]
+        [SerializeField] private ScenarioManager scenario;
+        [Tooltip("이 Step에 도착했을 때는 가져오지 않는다. 보안검색(S3)에서는 여권·탑승권이 필요 없어 바닥에 놓이면 헷갈린다(11/25 이씨). 다음 이동(탑승구)에서 가져온다.")]
+        [SerializeField] private string[] skipOnSteps = { "S3-1", "S3-2", "S3-3" };
 
         // FadeMoveController.onMoveCompleted에 연결한다. ResetController.SaveCheckpoint보다 먼저 불러야 Reset 위치도 발밑이 된다.
         public void BringFarItems()
         {
             if (player == null)
+            {
+                return;
+            }
+
+            var step = scenario != null ? scenario.CurrentStep : null;
+            if (!ShouldBring(step?.stepId, skipOnSteps))
             {
                 return;
             }
@@ -64,6 +74,16 @@ namespace GatePassVR.Core
 
                 placed++;
             }
+        }
+
+        // 도착한 Step이 건너뛸 목록에 있으면 가져오지 않는다. Step을 모르면(시작 전·완료 후) 가져온다.
+        public static bool ShouldBring(string currentStepId, string[] skipOnSteps)
+        {
+            if (currentStepId == null || skipOnSteps == null)
+            {
+                return true;
+            }
+            return System.Array.IndexOf(skipOnSteps, currentStepId) < 0;
         }
     }
 }

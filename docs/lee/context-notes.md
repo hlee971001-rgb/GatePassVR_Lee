@@ -641,3 +641,13 @@
 - 보안검색의 "가방"(Obj_Bag_Security)에는 쓰지 않는다. 캐리어(맡기는 짐)와 가방(들고 타는 짐)을 모양으로도 구분하기 위해서다.
 - END 크레딧에 `캐리어 모델: "Suitcase" by moh1t (Sketchfab, CC BY 4.0, 색·폴리곤 수정)` 한 줄을 넣었다.
 
+## 잡은 물건이 손에 쥔 모습으로 보이게 (11/25)
+- 이씨 Quest 의견: 여권을 잡으면 손에 쥔 게 아니라 엄지 위에 얹혀 있다.
+- 원인: 물건의 XRGrabInteractable에 Attach Transform이 없어 물건 가운데가 Near-Far Interactor 기준점에 붙는다(Match Attach Position·Rotation 켜짐). 그 기준점은 손바닥보다 약 9cm 앞, 엄지 위다.
+- 손 관절 위치(ControllerHandPose 적용 후)를 기준점 공간에서 재서 주먹 안쪽 빈 곳을 (0, -0.05, -0.075)m로 잡았다. 좌우 손이 x로 대칭이라 x=0이면 양손 모두 맞는다.
+- `Scripts/Editor/GrabPointBuilder.cs`(메뉴 GatePassVR/Build Grab Points): 물건을 그 빈 곳에 원하는 방향으로 놓았을 때 기준점이 오는 자리에 `GrabPoint` 자식을 만들고 attachTransform에 연결한다(물건 위치는 원래대로 되돌림).
+  - 여권·탑승권(Card): 길이 방향을 위로 조금 앞으로 세워 아래쪽 끝을 쥠. 노트북(HangFlat): 한쪽 가장자리를 쥐고 아래로 늘어뜨림. 가방(손잡이 없는 상자): 윗면 2.5cm 위. 캐리어: 손잡이 맨 위 막대(메시에서 계산)를 주먹 축(앞뒤)을 따라 쥠.
+  - 확인용 `CaptureOnly`는 손가락을 굽혀(ControllerHandPose.Apply) 찍기 때문에 씬을 저장하지 않는다. 저장은 `BuildAndApply`로만 한다.
+- 손가락이 물건 모양대로 감싸지는 것은 아니다(고정된 주먹 안에 끼워 넣는 방식). 가까이 보면 조금 겹칠 수 있다.
+- 에디터 asmdef에 GatePassVR.Runtime·Unity.XR.Interaction.Toolkit 참조를 추가했다.
+

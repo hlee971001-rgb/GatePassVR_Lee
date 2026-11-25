@@ -20558,6 +20558,11 @@ MonoBehaviour:
   sideOffset: 0.35
   sideSpacing: 0.25
   dropHeight: 0.15
+  scenario: {fileID: 2014553412}
+  skipOnSteps:
+  - S3-1
+  - S3-2
+  - S3-3
 --- !u!1 &1210921447
 GameObject:
   m_ObjectHideFlags: 0

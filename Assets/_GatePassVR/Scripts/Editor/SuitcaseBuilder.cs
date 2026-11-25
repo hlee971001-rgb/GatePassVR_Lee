@@ -223,7 +223,7 @@ namespace GatePassVR.Editor
             EditorSceneManager.SaveScene(scene);
         }
 
-        static Mesh CleanCopy(Mesh src)
+        internal static Mesh CleanCopy(Mesh src)
         {
             var m = new Mesh { indexFormat = src.vertexCount > 65000 ? IndexFormat.UInt32 : IndexFormat.UInt16 };
             m.vertices = src.vertices;
@@ -235,7 +235,7 @@ namespace GatePassVR.Editor
             return m;
         }
 
-        static void CenterOnBounds(Mesh m)
+        internal static void CenterOnBounds(Mesh m)
         {
             var c = m.bounds.center;
             var v = m.vertices;
@@ -244,14 +244,14 @@ namespace GatePassVR.Editor
             m.RecalculateBounds();
         }
 
-        static int TriCount(Mesh m)
+        internal static int TriCount(Mesh m)
         {
             int n = 0;
             for (int s = 0; s < m.subMeshCount; s++) n += (int)m.GetIndexCount(s) / 3;
             return n;
         }
 
-        static Mesh ExtractLod(Mesh src, int lod)
+        internal static Mesh ExtractLod(Mesh src, int lod)
         {
             using var data = Mesh.AcquireReadOnlyMeshData(src);
             // 작은 부품은 CombineMeshes가 16비트 인덱스로 만든다. 형식에 맞춰 읽어야 한다.

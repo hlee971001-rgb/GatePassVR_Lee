@@ -63,11 +63,18 @@ namespace GatePassVR.Editor
                 var go = GameObject.Find(objName);
                 if (go == null) { Debug.LogError("[GrabPoint] not found " + objName); continue; }
                 var item = go.transform;
-                var visual = item.Find("SuitcaseVisual");
+                var visual = item.Find("SuitcaseVisual") ?? item.Find(BackpackBuilder.VisualName);
                 var refT = style == Style.HangUpright && visual != null ? visual : item;
                 var grip = gripIn;
                 if (objName.StartsWith("Obj_Carrier") || objName.StartsWith("Obj_BaggageBag"))
                     grip = CarrierHandleTop(visual.GetComponent<MeshFilter>().sharedMesh);
+                else if (objName == "Obj_Bag_Security" && visual != null)
+                {
+                    // 배낭 모델은 90도 돌려 붙였고 손잡이 고리는 오브젝트 기준 좌우(x)로 놓여 있다.
+                    // 그래서 기준 프레임은 오브젝트로 두고, 손잡이 위치만 메시에서 구해 오브젝트 좌표로 옮긴다.
+                    refT = item;
+                    grip = visual.localPosition + visual.localRotation * TopHandle(visual.GetComponent<MeshFilter>().sharedMesh);
+                }
 
                 // 기준 프레임이 손(기준점) 공간에서 가질 방향
                 Quaternion refInHand = style switch
@@ -131,6 +138,16 @@ namespace GatePassVR.Editor
             var idx = mesh.GetTriangles(1).Distinct().Select(i => verts[i]).ToArray();
             float top = idx.Max(v => v.y);
             var near = idx.Where(v => v.y > top - 0.02f).ToArray();
+            var c = near.Aggregate(Vector3.zero, (a, v) => a + v) / near.Length;
+            return c + Vector3.down * 0.01f;
+        }
+
+        // 메시 맨 위 1.5cm 안쪽 정점들의 가운데(손잡이 고리), 그보다 1cm 아래를 쥔다.
+        static Vector3 TopHandle(Mesh mesh)
+        {
+            var verts = mesh.vertices;
+            float top = verts.Max(v => v.y);
+            var near = verts.Where(v => v.y > top - 0.015f).ToArray();
             var c = near.Aggregate(Vector3.zero, (a, v) => a + v) / near.Length;
             return c + Vector3.down * 0.01f;
         }

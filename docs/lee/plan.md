@@ -462,3 +462,18 @@ XR Hands 샘플 `LeftHand.fbx`/`RightHand.fbx`(출처 표기 조항 없음)와 X
 
 ## 범위 밖
 - 다른 단계의 표지판·HUD 문구 변경, 새 효과음.
+
+# 안내 HUD 화살표 끄기와 가려짐 해결 (담당 이씨, 11/25)
+
+## 왜
+- Quest 확인에서 이씨가 두 가지를 지적했다. HUD 위 화살표(GoalArrow)가 무슨 뜻인지 헷갈리고, 체크인 위치에서 안내 박스가 정면의 물체에 가려진다.
+- 화살표는 목표 방향을 몸 기준으로 가리키는데, 정면일 때 "위쪽"이라 "위를 보라"로 읽히기 쉽다. 목표 안내는 하이라이트·표지판·문구가 이미 한다.
+- HUD는 1.5m 앞 실제 공간에 떠 있어서, 그보다 가까운 카운터·직원 뒤로 들어가 가려진다(코드로 추정, 캡처 확인 못 함).
+
+## 방법 (Claude 추천, 이씨 승인 11/25)
+- Airport_Lee에서만 GoalArrow를 끈다. ScenarioManager의 goalArrow 연결을 비우고 GoalArrow 오브젝트를 꺼 둔다. 공용 프리팹·스크립트는 그대로.
+- 새 컴포넌트 UIAlwaysOnTop을 Airport_Lee의 GuideHUD Canvas에 붙인다. 글자·배경 머티리얼 사본의 깊이 검사를 끄고(unity_GUIZTestMode=Always) Overlay 순서로 그려 다른 물체보다 항상 앞에 보이게 한다.
+
+## 성공 조건과 검증
+- 컴파일 오류 0, EditMode 테스트 통과(UIAlwaysOnTop 테스트 2개 포함).
+- Quest에서 화살표가 안 보이고, 체크인 위치에서 안내 박스가 가려지지 않는다(이씨 확인).

@@ -254,3 +254,10 @@ Unity에서 실제로 확인한 항목만 체크한다. 추측으로 체크하�
 - [x] 씬: 시작 묶음(제목·설명·버튼·AI 고지) 새로 만들기, 기존 "시작" 글자 정리, START 끝나면 숨기기
 - [x] 컴파일 오류 0, EditMode 64/64, 눈높이 렌더 캡처 확인 (11/24)
 - [ ] 이씨 에디터·Quest 확인
+
+# 안내 HUD 화살표 끄기와 가려짐 해결 - Checklist (담당 이씨, 11/25)
+- [x] UIAlwaysOnTop 컴포넌트와 EditMode 테스트 2개
+- [x] Airport_Lee: GoalArrow 끄기(goalArrow 연결 비우기 + 오브젝트 끄기)
+- [x] Airport_Lee: GuideHUD Canvas에 UIAlwaysOnTop 붙이기
+- [x] 컴파일 오류 0, EditMode 66/66 (11/25)
+- [x] APK 빌드·설치, Quest에서 화살표 없음·체크인에서 박스 안 가려짐 (11/25 이씨 확인)

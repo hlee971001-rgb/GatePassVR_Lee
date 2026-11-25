@@ -590,3 +590,13 @@
   - `GoalIndicatorArrow`: 기준 방향을 카메라에서 화살표 자신의 forward로 바꿨다. 딱 붙은 HUD에서는 둘이 같아서 결과가 같다.
 - 씬 작업은 임시 에디터 스크립트를 배치 모드로 한 번 실행해서 했고, 스크립트는 지웠다. 미리보기는 같은 방식으로 Camera.Render 캡처. 편집 모드 미리보기에서는 게이지·화살표가 흰 네모로 보인다. 실행 때 Awake에서 모양이 만들어지기 때문이다.
 - 미검증: 에디터 Play(시뮬레이터)와 Quest에서 시작 버튼 Hold → 여권 단계 진행, HUD 다시 보임, END에서 버튼 다시 보임. 이씨 확인 필요.
+
+## 안내 HUD 화살표 끄기와 가려짐 해결 (11/25)
+- 이씨 Quest 확인 의견: HUD 위 화살표(GoalArrow)가 헷갈린다, 체크인 위치에서 안내 박스가 정면 물체에 가려진다.
+- 화살표: Airport_Lee에서만 끔. ScenarioManager.goalArrow 연결을 비우고(SetGoal이 오브젝트를 다시 켜기 때문) GoalArrow 오브젝트를 꺼 두었다. 공용 GuideHUD 프리팹과 GoalIndicatorArrow 스크립트는 그대로라 TestMap_Quest는 예전과 같다.
+- 가려짐: HUD가 1.5m 앞 실제 공간에 있어 더 가까운 카운터·직원 뒤로 들어간다고 보았다(캡처 확인 못 함, Unity가 열려 있었음). HUD 위치를 위치마다 맞추는 대신 항상 앞에 그리는 방식을 골랐다.
+  - 새 컴포넌트 `UIAlwaysOnTop`을 Airport_Lee의 GuideHUD/Canvas에 씬 오버라이드(AddedComponent)로 붙였다.
+  - Awake에서 자식 Graphic마다 머티리얼 사본을 만들어 `unity_GUIZTestMode=Always`, renderQueue=Overlay로 둔다. TMP 글자는 `fontMaterial`(글자별 사본)을 쓰므로 같은 글꼴을 쓰는 표지판에는 영향이 없다.
+  - 알려진 부작용: 잡은 여권을 박스 쪽으로 들면 글자가 여권 위에 겹쳐 보인다.
+- 검증: 컴파일 오류 0, EditMode 66/66(새 테스트 2개 포함). Quest에서 화살표 없음, 체크인 위치에서 박스 안 가려짐을 이씨가 확인(11/25).
+- Unity를 연 동안·빌드 중 저절로 바뀐 파일(글꼴 2개, 손 머티리얼, OpenXR, URP 설정 3개, GraphicsSettings, ProjectSettings, UnityConnectSettings)은 되돌리기 명령이 승인되지 않아 작업 트리에 남겨 두고 커밋에서만 뺐다.

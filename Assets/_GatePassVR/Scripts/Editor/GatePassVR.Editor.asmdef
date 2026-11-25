@@ -2,7 +2,9 @@
     "name": "GatePassVR.Editor",
     "rootNamespace": "GatePassVR.Editor",
     "references": [
-        "Unity.TextMeshPro"
+        "Unity.TextMeshPro",
+        "GatePassVR.Runtime",
+        "Unity.XR.Interaction.Toolkit"
     ],
     "includePlatforms": [
         "Editor"

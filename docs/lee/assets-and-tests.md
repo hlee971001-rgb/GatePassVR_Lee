@@ -16,6 +16,8 @@
 | TextMesh Pro 기본 리소스 | `Assets/TextMesh Pro/` (LiberationSans) | Unity | Unity Companion License, LiberationSans는 OFL | 예 | 없음 |
 | ~~VR 손 모델 "Free VR Hands"~~ | ~~`Assets/PolyOne/Free VR Hands/`~~ | PolyOne (김씨가 9/4 추가) | 출처 확인 못 함 | **11/24 제거** | XRI 기본 컨트롤러 모델로 되돌림(이씨 결정) |
 | 캐리어 모델 "Suitcase" | `Assets/_GatePassVR/Art/Props/Suitcase/` (원본 `Suitcase.fbx`, 정리본 `Suitcase_Mesh.asset`, `M_Suitcase_*` 5개) | moh1t, Sketchfab (https://sketchfab.com/3d-models/suitcase-af389b9c83c146dd88c3f91246f1fb97) | CC BY 4.0 (출처 표기 필수, 상업 사용·수정·재배포 가능) | 예 (CC BY는 공유 허용) | 크레딧·README에 표기, 수정 사실 함께 표기 |
+| 가방 모델 "Large Backpack - White Texture (Mockup)" | `Assets/_GatePassVR/Art/Props/Backpack/` (변환본 `Backpack.obj`, 텍스처 2장, 정리본 `Backpack_Mesh.asset`, `M_Backpack`) | kane_sk06, Sketchfab (https://sketchfab.com/3d-models/large-backpack-white-texture-mockup-52cf030883e74170b47cd64f349aa7ce) | CC BY 4.0 (출처 표기 필수, 상업 사용·수정·재배포 가능) | 예 | 크레딧·README에 표기, 수정 사실 함께 표기 |
+| 노트북 모양 (닫힌 노트북 메시·색 머티리얼 5개) | `Assets/_GatePassVR/Art/Props/Laptop/` | 이씨가 `LaptopBuilder.cs`로 코드로 직접 제작(11/25). 브랜드 로고 없이 가운데 둥근 무늬만 | 팀 제작 | 예 | 없음 |
 | 탑승권 겉모양 (세로형 탑승권 그림·카드 메시·머티리얼) | `Assets/_GatePassVR/Art/Props/BoardingPass/` | 이씨가 `BoardingPassArtBuilder.cs`로 직접 제작(11/25). 가상 항공사 "GATEPASS AIR", 장식 바코드 | 팀 제작 | 예 | 없음 |
 | 여권 겉모양 (표지 그림·상자 메시·머티리얼) | `Assets/_GatePassVR/Art/Props/Passport/` | 이씨가 `PassportArtBuilder.cs`로 직접 제작(11/25). 글자는 Noto Sans KR, 나라 문장 대신 지구본 문양 | 팀 제작(OFL 글꼴로 만든 결과물은 제한 없음) | 예 | 없음 |
 | 임시 물건·NPC·표지판 | `Airport_Lee`의 TempObjects, MoveSigns, ZoneSigns | 이씨가 기본 도형·TMP로 제작 | 팀 제작 | 예 | 없음 |
@@ -26,6 +28,8 @@
 글꼴: Noto Sans KR (SIL Open Font License 1.1)
 안내 음성: Microsoft Azure AI Speech로 합성한 AI 음성입니다
 ```
+(2026-11-25 추가) 가방 줄: `가방 모델: "Large Backpack - White Texture (Mockup)" by kane_sk06 (Sketchfab, CC BY 4.0, 폴리곤·크기 수정)`
+
 (2026-11-25 추가) 캐리어 줄: `캐리어 모델: "Suitcase" by moh1t (Sketchfab, CC BY 4.0, 색·폴리곤 수정)`
 
 (2026-11-23 이씨 결정) END 화면에 작게 넣었다. Airport_Lee `StartScreen/CreditsText`, 시작 버튼 오른쪽, END Step에서만 보인다(`ShowDuringSteps`). 위 세 줄에 "효과음: GatePass VR 팀 제작"을 더했다. 팀원 이름은 넣지 않았다.

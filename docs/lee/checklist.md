@@ -307,3 +307,21 @@ Unity에서 실제로 확인한 항목만 체크한다. 추측으로 체크하�
 - [x] 컴파일 오류 0, EditMode 테스트, APK 빌드·설치
 - [x] Quest 확인: 카운터 위 모습, 손에 든 모습, 스캐너(S4-2) (11/25 이씨 확인)
 
+# 노트북 모양 직접 제작 - Checklist (담당 이씨, 11/25)
+- [x] 후보 검토: Sketchfab "notebook"(ostrich, CC BY 4.0, OBJ) — 열린 상태라 닫으려면 덮개 분리 확인이 필요해 이씨가 직접 만들기로 결정
+- [x] LaptopBuilder: 모서리 둥근 닫힌 노트북(덮개·본체 사이 틈, 경첩, 손가락 홈, 포트, 고무발, 가운데 둥근 무늬), 842 삼각형, 머티리얼 5개
+- [x] Airport_Lee: Obj_Laptop_Security 메시·머티리얼만 교체 (크기·잡기·GrabPoint·트레이 왼쪽 칸 연결 그대로)
+- [x] 캡처: 벨트 위 모습, 가장자리를 쥐고 늘어뜨린 모습
+- [x] 컴파일 오류 0, EditMode 테스트, APK 빌드·설치
+- [x] (이씨 Quest 의견) 경첩 띠가 노트북보다 길던 것 수정(반지름 값 실수), 손가락 홈 6cm
+- [x] Quest 확인: 벨트 위 모습, 손에 든 모습, 트레이 왼쪽 칸 넣기(S3-1) (11/25 이씨 확인)
+
+# 보안검색 가방 모델 교체 - Checklist (담당 이씨, 11/25)
+- [x] 후보 검토: "Backpack"(Maxim Dorokhov) — 다운로드 불가·라이선스 없음, 옆주머니 큰 물병(액체 반입 교육과 충돌)으로 제외
+- [x] "Large Backpack - White Texture (Mockup)"(kane_sk06, CC BY 4.0) 1K 텍스처 GLB를 Tools/glb_to_obj.py로 OBJ 변환(glTF 패키지 추가 없이)
+- [x] BackpackBuilder: 높이 0.42m, Mesh LOD 81,679 → 22,458 삼각형, M_Backpack(베이스 컬러·노멀 맵)
+- [x] Airport_Lee: Obj_Bag_Security 스케일 1·원래 렌더러 끔·BackpackVisual(앞주머니가 플레이어 쪽)·충돌 상자 모델 크기
+- [x] GrabPoint를 위쪽 손잡이 고리로 다시 계산, END 크레딧·README·assets-and-tests에 출처
+- [x] 컴파일 오류 0, EditMode 테스트, APK 빌드·설치
+- [x] Quest 확인: 바닥의 배낭 모습, 손잡이를 쥔 모습, 트레이 오른쪽 칸 넣기(S3-2) (11/25 이씨 확인)
+

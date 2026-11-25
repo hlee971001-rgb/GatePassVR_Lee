@@ -658,3 +658,27 @@
 - 내용: 가상 항공사 "GATEPASS AIR"(실제 항공사 이름·로고 안 씀), ICN(서울/인천)→NRT(도쿄/나리타), 편명 GP 101, 좌석 12A, 탑승구 15, 탑승 10:20, 승객 GATEPASS / TRAVELER, 읽히지 않는 장식 바코드, 절취선, "체험용 · NOT A REAL TICKET". 문서·씬에 정해진 목적지·탑승구가 없어 제안안대로 정함(안내 문구는 "목적지 공항"이라 충돌 없음).
 - 씬에서는 Obj_BoardingPass_CheckIn의 MeshFilter·MeshRenderer 참조 2줄만 바뀌었다. S2-3 힌트 "카운터 위 흰 탑승권"은 바탕이 흰색이라 그대로 둔다.
 
+## 노트북 모양 직접 제작 (11/25)
+- 이씨 요청: 임시 남색 상자 노트북을 바꾼다. Sketchfab "notebook"(ostrich, CC BY 4.0)도 확인했지만 열린 모델이라 보안검색(닫아서 트레이에 넣음)에 맞추려면 덮개가 따로 떨어진 부품인지부터 확인해야 했다. 이씨가 직접 만들기를 골랐다.
+- `Scripts/Editor/LaptopBuilder.cs`(메뉴 GatePassVR/Build Laptop): 텍스처 없이 코드로 메시를 만든다.
+  - 22×2×30cm, 모서리 반지름 1.4cm, 윗면·아랫면 가장자리 1.2mm 깎임, 덮개·본체 사이 틈(1.8mm, 1.6mm 안쪽), 뒤쪽 경첩 띠, 앞쪽 손가락 홈, 오른쪽 옆 포트 3개, 바닥 고무발 4개, 덮개 가운데 둥근 무늬(브랜드 로고 아님).
+  - 오브젝트 크기(0.22, 0.02, 0.30)를 그대로 두려고 메시를 단위 상자 공간에서 만든다. 정점은 실제 크기를 스케일로 나누고, 법선은 스케일을 곱해 정규화한다(둥근 모서리가 늘어나지 않게). 그래서 충돌 상자·GrabPoint·트레이 칸을 바꿀 필요가 없다.
+  - 틈의 위아래 계단 면은 법선 방향을 위/아래로 직접 정해 뒷면으로 그려져 구멍처럼 보이지 않게 했다.
+- 씬에서는 Obj_Laptop_Security의 메시 참조와 머티리얼 목록(1개 → 5개)만 바뀌었다.
+- (이씨 Quest 의견) 뒤쪽 경첩 띠가 노트북보다 길었다. Plate()는 반지름(절반 크기)을 받는데 폭의 62%를 그대로 넣어 27cm가 됐다. 반지름 31%(13.6cm)로 고치고 손가락 홈도 10cm→6cm로 줄였다. 빈 장면 4방향 캡처로 모든 띠가 노트북 안쪽인 것 확인.
+
+## Quest에서 안내 음성이 안 들렸던 일 (11/25 조사)
+- 이씨: 안내 음성도 효과음도 안 들린다(다른 앱은 들림).
+- 확인한 것(모두 정상): 음성 WAV 24개와 씬 연결, GuideHUD AudioSource(켜짐, 볼륨 1, 2D), StepFeedback AudioSource, Main Camera의 AudioListener, 믹서 없음, ProjectSettings/AudioManager(Disable Audio 꺼짐), Quest 미디어 채널(음소거 아님, 8/15, 스피커).
+- 임시 진단 컴포넌트(1초마다 AudioListener·AudioSource 상태 로그 + 3초 뒤 테스트음)를 넣어 PC(adb)로 켠 상태에서 확인: 출력 24000Hz 스테레오, 일시정지 아님, VO_START 재생 진행, 테스트음 재생. 이씨가 헤드셋을 쓰고 들림을 확인. 같은 18:15 빌드도 이씨가 라이브러리에서 직접 켰을 때 들렸다.
+- 결론: 앱 쪽 설정·코드 문제는 찾지 못했고 다시 재현되지 않았다. 안 들렸던 때는 설치 직후 PC로 실행해 헤드셋을 벗은 채 시작한 뒤 앱이 뒤로 갔다 돌아온 경우라, 그때의 일시적 상태로 추정한다. 다시 생기면 앱을 Meta 메뉴로 종료하고 라이브러리에서 다시 켜 본다.
+- 진단 컴포넌트와 임시 스크립트는 지웠다(씬이 진단 전과 같은 것 확인).
+
+## 보안검색 가방 모델 교체 (11/25)
+- 이씨가 고른 첫 후보 "Backpack"(Maxim Dorokhov)은 다운로드가 막혀 있고 라이선스 표시가 없어 쓸 수 없었다. 옆주머니에 큰 물병이 있어 "100ml 넘는 액체는 기내 반입 불가"와도 맞지 않는다. 앞으로 가방 후보를 볼 때 액체가 보이는 모델은 뺀다.
+- 쓴 모델: "Large Backpack - White Texture (Mockup)" by kane_sk06(https://sketchfab.com/3d-models/large-backpack-white-texture-mockup-52cf030883e74170b47cd64f349aa7ce), CC BY 4.0. 원본은 GLB(120MB)라 1K 텍스처판(약 6MB)을 받았다.
+- Unity가 GLB를 바로 못 읽어서 glTFast 패키지를 늘리는 대신 `Tools/glb_to_obj.py`(표준 라이브러리만, 노드 변환·UV 뒤집기 처리)로 OBJ+MTL+텍스처로 바꿨다. 금속성/거칠기 텍스처는 glTF(G=거칠기, B=금속성)와 URP 채널 배치가 달라 쓰지 않고 Metallic 0·Smoothness 0.2로 정했다.
+- `Scripts/Editor/BackpackBuilder.cs`(메뉴 GatePassVR/Build Backpack): 높이 0.42m로 줄이고(원본 단위는 cm 규모), Mesh LOD 3단계(22,458)를 뽑는다. 한 덩어리 메시라 캐리어처럼 부품 사이가 메워지는 문제는 없었다. 모델 앞면이 플레이어 쪽을 보게 Y 90도로 붙였다(캡처로 확인).
+- GrabPoint: 배낭은 메시 맨 위(손잡이 고리) 가운데를 오브젝트 좌표로 옮겨 쥔다. 고리가 오브젝트 기준 좌우로 놓여서 기준 프레임은 오브젝트로 둔다.
+- SuitcaseBuilder의 메시 도우미(CleanCopy·CenterOnBounds·TriCount·ExtractLod)를 internal로 바꿔 함께 쓴다.
+

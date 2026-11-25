@@ -25,6 +25,7 @@
 
 - Airport model: "Airport Final Big Scene" by assetfactory on Sketchfab, Sketchfab Free Standard License
 - Suitcase model: "Suitcase" by moh1t on Sketchfab (https://sketchfab.com/3d-models/suitcase-af389b9c83c146dd88c3f91246f1fb97), CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). 수정: 부품을 머티리얼별로 합치고 삼각형 16만→약 6.3만으로 줄임, 머티리얼 색을 새로 정함(몸통은 Sketchfab 미리보기와 같은 민트색)
+- Backpack model: "Large Backpack - White Texture (Mockup)" by kane_sk06 on Sketchfab (https://sketchfab.com/3d-models/large-backpack-white-texture-mockup-52cf030883e74170b47cd64f349aa7ce), CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). 수정: GLB(1K 텍스처판)를 OBJ로 바꾸고 높이 약 0.42m로 줄임, 삼각형 8.2만→약 2.2만으로 줄임
 - Font: Noto Sans KR, SIL Open Font License
 - 안내 음성(24개): Microsoft Azure Speech 미리 만들어진 음성 `ko-KR-InJoonNeural`로 합성(AI 합성 음성, 유료 S0 등급). 생성 스크립트 `Tools/generate_voice.py`
 - 효과음: `Tools/generate_sfx.py`로 직접 합성

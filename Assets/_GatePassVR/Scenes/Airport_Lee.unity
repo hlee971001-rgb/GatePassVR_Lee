@@ -7275,7 +7275,7 @@ Transform:
   m_GameObject: {fileID: 443578660}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0.26785648, y: 0.69757897, z: 0}
+  m_LocalPosition: {x: 0.11177635, y: 0.24388981, z: -0.0047416687}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10853,6 +10853,96 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &672245878
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 672245879}
+  - component: {fileID: 672245881}
+  - component: {fileID: 672245880}
+  m_Layer: 0
+  m_Name: BackpackVisual
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &672245879
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 672245878}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1257700557}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &672245880
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 672245878}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: c7101a909666744d0989aaaa4831c469, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &672245881
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 672245878}
+  m_Mesh: {fileID: 4300000, guid: 1400993b7a5514190946e543f756048a, type: 2}
 --- !u!1 &673799324
 GameObject:
   m_ObjectHideFlags: 0
@@ -15052,8 +15142,10 @@ MonoBehaviour:
   m_text: "<mark=#000000B0 padding=\"20,20,10,10\"><b>\uC790\uB8CC \uCD9C\uCC98</b>\n\uACF5\uD56D
     \uBAA8\uB378: \"Airport Final Big Scene\" by assetfactory (Sketchfab)\n\uCE90\uB9AC\uC5B4
     \uBAA8\uB378: \"Suitcase\" by moh1t (Sketchfab, CC BY 4.0, \uC0C9\xB7\uD3F4\uB9AC\uACE4
-    \uC218\uC815)\n\uAE00\uAF34: Noto Sans KR (SIL Open Font License 1.1)\n\uC548\uB0B4
-    \uC74C\uC131: Microsoft Azure AI Speech\uB85C \uD569\uC131\uD55C AI \uC74C\uC131\n\uD6A8\uACFC\uC74C:
+    \uC218\uC815)\n\uAC00\uBC29 \uBAA8\uB378: \"Large Backpack - White Texture (Mockup)\"
+    by kane_sk06 (Sketchfab, CC BY 4.0, \uD3F4\uB9AC\uACE4\xB7\uD06C\uAE30 \uC218\uC815)\n\uAE00\uAF34:
+    Noto Sans KR (SIL Open Font License 1.1)\n\uC548\uB0B4 \uC74C\uC131: Microsoft
+    Azure AI Speech\uB85C \uD569\uC131\uD55C AI \uC74C\uC131\n\uD6A8\uACFC\uC74C:
     GatePass VR \uD300 \uC81C\uC791</mark>"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6ee0f31dfb66f994b896438c84622511, type: 2}
@@ -21896,11 +21988,12 @@ Transform:
   m_GameObject: {fileID: 1257700556}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -1.8599815, y: 0.6270557, z: -41.93027}
-  m_LocalScale: {x: 0.28, y: 0.38, z: 0.15}
+  m_LocalPosition: {x: -1.8599815, y: 0.65705574, z: -41.93027}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 443578661}
+  - {fileID: 672245879}
   m_Father: {fileID: 2133149076}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1257700558
@@ -22067,7 +22160,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1257700556}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -22128,7 +22221,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 0.3647663, y: 0.42000002, z: 0.3584665}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!33 &1257700562
 MeshFilter:
@@ -28015,7 +28108,11 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 2c1ce60006b546f499fd414f2a78aab3, type: 2}
+  - {fileID: 2100000, guid: 1569e6b04a6ea4206b141a8d03c3555e, type: 2}
+  - {fileID: 2100000, guid: 02cbc12e27879455bb44e9ff7055ff5c, type: 2}
+  - {fileID: 2100000, guid: 8c13e6e8dd59442c2aa19c75b1e0c672, type: 2}
+  - {fileID: 2100000, guid: e5f2803079f79420aba57d6fd919ec9d, type: 2}
+  - {fileID: 2100000, guid: 56ef34160cc1e4e139b8810883e97dc0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -28067,7 +28164,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1638056973}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 4300000, guid: cfb1394e411e047e184ff6b87d635b5e, type: 2}
 --- !u!1 &1645451340
 GameObject:
   m_ObjectHideFlags: 0

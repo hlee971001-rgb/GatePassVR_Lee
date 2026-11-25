@@ -282,3 +282,13 @@ Unity에서 실제로 확인한 항목만 체크한다. 추측으로 체크하�
 - [x] 컴파일 오류 0, EditMode 66/66 (11/25, Mac)
 - [x] APK 빌드·설치, Quest에서 표지·글자·건네기 확인 (11/25 이씨 확인)
 
+# 캐리어 모델 교체 - Checklist (담당 이씨, 11/25)
+- [x] 라이선스 확인: "Suitcase" by moh1t, CC BY 4.0(출처 표기 필수), 원본 FBX
+- [x] SuitcaseBuilder: 부품 130여 개 → 머티리얼별 서브메시 5개 한 메시, 부품별 Mesh LOD로 161,152 → 62,932 삼각형, 몸통 민트색(이씨 요청으로 주황에서 원래 색으로)
+- [x] Airport_Lee: Obj_Carrier_CheckIn(세움)·Obj_BaggageBag_Baggage(눕힘)에 SuitcaseVisual 자식, 스케일 1·충돌 상자를 모델 크기로
+- [x] END 크레딧·README·assets-and-tests에 출처와 수정 사실 표기
+- [x] 컴파일 오류 0, EditMode 테스트, APK 빌드·설치
+- [x] (이씨 Quest 의견) 한꺼번에 줄였을 때 손잡이가 판처럼, 바퀴가 가시처럼 깨짐 → 부품마다 따로 줄이도록 수정
+- [x] S9-1 힌트 "주황 캐리어" → "민트색 캐리어" (씬·guide-texts)
+- [x] Quest 확인: 손잡이·바퀴 모양, 체크인 벨트 올리기(S2-2), 수하물 찾는 곳 집기(S9-1) (11/25 이씨 확인)
+

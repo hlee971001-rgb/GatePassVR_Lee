@@ -300,3 +300,10 @@ Unity에서 실제로 확인한 항목만 체크한다. 추측으로 체크하�
 - [x] 컴파일 오류 0, EditMode 66/66, APK 빌드·설치
 - [x] Quest 확인: 잡았을 때 손에 쥔 모습, 놓기·건네기·스캔 (11/25 이씨 확인)
 
+# 탑승권 겉모양 직접 제작 - Checklist (담당 이씨, 11/25)
+- [x] BoardingPassArtBuilder: 세로형 탑승권 그림(GATEPASS AIR, ICN→NRT, GP 101, 12A, 탑승구 15, 10:20, 장식 바코드, 절취선, "체험용 · NOT A REAL TICKET"), 카드 메시, M_BoardingPass
+- [x] Airport_Lee: Obj_BoardingPass_CheckIn 메시·머티리얼만 교체 (크기·잡기·GrabPoint·스캐너 연결 그대로)
+- [x] 캡처: 카운터 위에서 플레이어 쪽으로 바로 읽힘, 주먹에 세워 쥔 모습
+- [x] 컴파일 오류 0, EditMode 테스트, APK 빌드·설치
+- [x] Quest 확인: 카운터 위 모습, 손에 든 모습, 스캐너(S4-2) (11/25 이씨 확인)
+

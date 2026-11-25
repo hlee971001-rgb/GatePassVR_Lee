@@ -651,3 +651,10 @@
 - 손가락이 물건 모양대로 감싸지는 것은 아니다(고정된 주먹 안에 끼워 넣는 방식). 가까이 보면 조금 겹칠 수 있다.
 - 에디터 asmdef에 GatePassVR.Runtime·Unity.XR.Interaction.Toolkit 참조를 추가했다.
 
+## 탑승권 겉모양 직접 제작 (11/25)
+- 이씨 요청: 임시 흰 상자 탑승권을 바꾼다. 여권과 같은 방식(직접 그림)으로 결정.
+- `Scripts/Editor/BoardingPassArtBuilder.cs`(메뉴 GatePassVR/Build Boarding Pass Art)가 만든다. 빈 Preview Scene에 TMP(Noto Dynamic)·Unlit 사각형을 놓고 정사영으로 찍어 2048 아틀라스(Quest 1024)로 저장.
+- 세로형으로 그렸다. 카운터 위에서 탑승권 길이(z)가 플레이어 앞뒤로 놓이고, GrabPoint(Card)도 길이를 위로 세워 쥐기 때문에 두 경우 모두 바로 읽힌다.
+- 내용: 가상 항공사 "GATEPASS AIR"(실제 항공사 이름·로고 안 씀), ICN(서울/인천)→NRT(도쿄/나리타), 편명 GP 101, 좌석 12A, 탑승구 15, 탑승 10:20, 승객 GATEPASS / TRAVELER, 읽히지 않는 장식 바코드, 절취선, "체험용 · NOT A REAL TICKET". 문서·씬에 정해진 목적지·탑승구가 없어 제안안대로 정함(안내 문구는 "목적지 공항"이라 충돌 없음).
+- 씬에서는 Obj_BoardingPass_CheckIn의 MeshFilter·MeshRenderer 참조 2줄만 바뀌었다. S2-3 힌트 "카운터 위 흰 탑승권"은 바탕이 흰색이라 그대로 둔다.
+

@@ -3686,6 +3686,10 @@ PrefabInstance:
       propertyPath: onNoProgressShort.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: GatePassVR.Guidance.HighlightController, GatePassVR.Runtime
       objectReference: {fileID: 0}
+    - target: {fileID: 3091446947868060625, guid: ab15751b7ec3b6744a2dfcf28fb4d8ee, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7919775408394188270, guid: ab15751b7ec3b6744a2dfcf28fb4d8ee, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.0013
@@ -3713,19 +3717,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6539887102497495131, guid: ab15751b7ec3b6744a2dfcf28fb4d8ee, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 181818583}
   m_SourcePrefab: {fileID: 100100000, guid: ab15751b7ec3b6744a2dfcf28fb4d8ee, type: 3}
---- !u!114 &181818580 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3779105033350269616, guid: ab15751b7ec3b6744a2dfcf28fb4d8ee, type: 3}
-  m_PrefabInstance: {fileID: 181818579}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 397daa5e895e812468df1ddc48496d94, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: GatePassVR.Runtime::GatePassVR.Guidance.GoalIndicatorArrow
 --- !u!114 &181818581 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2699592655169413057, guid: ab15751b7ec3b6744a2dfcf28fb4d8ee, type: 3}
@@ -3742,6 +3738,18 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6539887102497495131, guid: ab15751b7ec3b6744a2dfcf28fb4d8ee, type: 3}
   m_PrefabInstance: {fileID: 181818579}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &181818583
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 181818582}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d158810b86ea47642b582905e1d9899c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GatePassVR.Runtime::GatePassVR.UI.UIAlwaysOnTop
 --- !u!1 &182236020
 GameObject:
   m_ObjectHideFlags: 0
@@ -33868,7 +33876,7 @@ PrefabInstance:
     - target: {fileID: 5088948093644291885, guid: 9a700d16c26073b4a99f424af962f7ee, type: 3}
       propertyPath: goalArrow
       value: 
-      objectReference: {fileID: 181818580}
+      objectReference: {fileID: 0}
     - target: {fileID: 5088948093644291885, guid: 9a700d16c26073b4a99f424af962f7ee, type: 3}
       propertyPath: guideManager
       value: 
